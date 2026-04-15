@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>현대모비스</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#003087;--accent:#00a0e9;--dark:#111214;--gray-deep:#1c1e22;--white:#fff;--off:#f4f5f7;--border:rgba(255,255,255,0.1)}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--white);color:var(--dark);overflow-x:hidden}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);transition:background .3s}
+header.scrolled{background:rgba(0,0,0,.97)}
+.hi{max-width:1400px;margin:0 auto;padding:0 40px;height:72px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer}
+.lmark{width:36px;height:36px;background:var(--blue);display:flex;align-items:center;justify-content:center;border-radius:4px}
+.ltxt{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700;color:#fff;letter-spacing:.05em;line-height:1}
+.lsub{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.15em;text-transform:uppercase;display:block;margin-top:2px}
+nav{display:flex}
+.ni{position:relative;padding:0 20px;height:72px;display:flex;align-items:center;cursor:pointer;color:rgba(255,255,255,.8);font-size:13.5px;font-weight:500;transition:color .2s;white-space:nowrap;user-select:none}
+.ni:hover,.ni.on{color:var(--accent)}
+.ni::after{content:'';position:absolute;bottom:0;left:20px;right:20px;height:2px;background:var(--accent);transform:scaleX(0);transition:transform .25s}
+.ni:hover::after,.ni.on::after{transform:scaleX(1)}
+.hr{display:flex;align-items:center;gap:12px}
+.lb{font-size:11px;color:rgba(255,255,255,.5);cursor:pointer;letter-spacing:.08em;padding:5px 10px;border:1px solid rgba(255,255,255,.2);border-radius:2px;transition:all .2s}
+.lb:hover,.lb.on{color:#fff;border-color:var(--accent);background:rgba(0,160,233,.1)}
+.sb{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(255,255,255,.2);cursor:pointer;transition:all .2s;color:rgba(255,255,255,.6)}
+.sb:hover{border-color:var(--accent);color:var(--accent)}
+
+/* MEGA MENU */
+.mega{position:fixed;top:72px;left:0;right:0;background:rgba(10,12,16,.98);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.06);border-bottom:2px solid var(--accent);padding:40px 0;z-index:999;opacity:0;pointer-events:none;transform:translateY(-10px);transition:opacity .25s,transform .25s}
+.mega.open{opacity:1;pointer-events:all;transform:translateY(0)}
+.mi{max-width:1400px;margin:0 auto;padding:0 40px;display:flex;gap:60px}
+.mc{min-width:180px}
+.mct{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.07)}
+.ml{display:block;font-size:14px;color:rgba(255,255,255,.55);padding:8px 0;cursor:pointer;transition:all .2s;border-bottom:1px solid rgba(255,255,255,.04);text-decoration:none}
+.ml:last-child{border-bottom:none}
+.ml:hover{color:#fff;padding-left:6px}
+
+/* SEARCH */
+.sov{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.96);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.sov.open{opacity:1;pointer-events:all}
+.sc{position:absolute;top:32px;right:48px;font-size:28px;color:rgba(255,255,255,.5);cursor:pointer;transition:color .2s;line-height:1}
+.sc:hover{color:var(--accent)}
+.sf{width:100%;max-width:700px;padding:0 24px}
+.sl{font-size:11px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:20px;display:block}
+.siw{display:flex;border-bottom:2px solid rgba(255,255,255,.25);padding-bottom:12px}
+.sin{flex:1;background:none;border:none;outline:none;font-family:'Noto Sans KR',sans-serif;font-size:28px;font-weight:300;color:#fff;caret-color:var(--accent)}
+.sin::placeholder{color:rgba(255,255,255,.2)}
+.ssub{background:none;border:none;cursor:pointer;color:var(--accent);font-size:22px;padding:0 8px;transition:transform .2s}
+.ssub:hover{transform:translateX(4px)}
+.stags{margin-top:28px;display:flex;gap:10px;flex-wrap:wrap}
+.stag{padding:6px 14px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.45);font-size:12px;cursor:pointer;border-radius:20px;transition:all .2s}
+.stag:hover{border-color:var(--accent);color:var(--accent)}
+
+/* PAGE SYSTEM */
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+.ptwrap{padding-top:72px;min-height:100vh;animation:fiu .4s ease both}
+@keyframes fiu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.subhero{background:var(--dark);padding:80px 0 70px;position:relative;overflow:hidden}
+.subhero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(0,80,179,.2),transparent 60%)}
+.shi{max-width:1400px;margin:0 auto;padding:0 40px;position:relative;z-index:1}
+.bc{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.bc span{font-size:12px;color:rgba(255,255,255,.35);cursor:pointer;transition:color .2s}
+.bc span:hover{color:var(--accent)}
+.bc .sep{color:rgba(255,255,255,.2);font-size:10px}
+.bc span.cur{color:rgba(255,255,255,.6);cursor:default}
+.subhero h1{font-family:'Rajdhani',sans-serif;font-size:clamp(40px,5vw,68px);font-weight:700;color:#fff;line-height:1.05;letter-spacing:-.02em}
+.subhero h1 em{font-style:normal;color:var(--accent)}
+.subhero p{font-size:15px;color:rgba(255,255,255,.5);margin-top:14px;font-weight:300;line-height:1.8;max-width:540px}
+.subc{max-width:1400px;margin:0 auto;padding:80px 40px}
+
+/* TAB */
+.tnav{display:flex;border-bottom:2px solid #eee;margin-bottom:40px}
+.tb{padding:14px 24px;font-size:14px;font-weight:500;color:#9aa0b0;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap}
+.tb.on{color:var(--blue);border-bottom-color:var(--blue)}
+.tp{display:none}
+.tp.on{display:block}
+
+/* CARD GRID */
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#e0e2e8;margin-top:48px}
+.gc{background:#fff;padding:44px 36px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;border-bottom:3px solid transparent}
+.gc:hover{background:#f6f8ff;border-bottom-color:var(--accent)}
+.gcn{font-family:'Rajdhani',sans-serif;font-size:44px;font-weight:700;color:#edf0f6;line-height:1;margin-bottom:16px}
+.gct{font-size:18px;font-weight:700;color:var(--dark);margin-bottom:10px;letter-spacing:-.01em}
+.gcd{font-size:13.5px;color:#7a8090;line-height:1.7;font-weight:300}
+
+/* IR TABLE */
+.irt{width:100%;border-collapse:collapse;margin-top:48px}
+.irt th{background:var(--dark);color:#fff;font-size:12px;letter-spacing:.1em;padding:16px 20px;text-align:left;font-weight:500}
+.irt td{padding:16px 20px;border-bottom:1px solid #eee;font-size:14px;color:#444}
+.irt tr:hover td{background:#f8f9ff}
+.irt td.num{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;color:var(--dark)}
+.irt td.up{color:#e03030;font-weight:600}
+.irt td.dn{color:#0050b3;font-weight:600}
+
+/* NEWS LIST */
+.nlist{margin-top:48px;display:flex;flex-direction:column;gap:1px;background:#e0e2e8}
+.nr{background:#fff;padding:28px 32px;display:flex;gap:32px;align-items:flex-start;cursor:pointer;transition:all .2s;border-left:3px solid transparent}
+.nr:hover{background:#f6f8ff;border-left-color:var(--accent)}
+.nrd{font-size:12px;color:#aaa;white-space:nowrap;margin-top:4px;min-width:90px}
+.ntag{background:var(--accent);color:#fff;font-size:10px;padding:3px 8px;letter-spacing:.1em;margin-bottom:8px;display:inline-block}
+.ntit{font-size:16px;font-weight:700;color:var(--dark);letter-spacing:-.01em}
+.nexc{font-size:13px;color:#7a8090;margin-top:6px;font-weight:300;line-height:1.6}
+
+/* SUSTAIN CARDS */
+.sgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:#e0e2e8;margin-top:48px}
+.sc2{background:#fff;padding:44px}
+.sc2.dk{background:var(--dark)}
+.sc2 .mv{font-family:'Rajdhani',sans-serif;font-size:52px;font-weight:700;color:var(--dark);line-height:1}
+.sc2.dk .mv{color:#fff}
+.sc2 .mv span{color:var(--accent);font-size:30px}
+.sc2 .ml2{font-size:14px;color:#8a8f9a;margin-top:8px}
+.sc2.dk .ml2{color:rgba(255,255,255,.4)}
+.sc2 .md{font-size:13px;color:#9aa0b0;margin-top:14px;line-height:1.6;font-weight:300}
+.sc2.dk .md{color:rgba(255,255,255,.3)}
+.pbw{margin-top:20px;height:4px;background:#eee;border-radius:2px;overflow:hidden}
+.pb{height:100%;background:linear-gradient(90deg,var(--blue),var(--accent));border-radius:2px;transition:width 1.2s ease}
+
+/* ═══ HOME HERO ═══ */
+.hero{position:relative;height:100vh;min-height:700px;overflow:hidden;background:var(--dark)}
+.hslides{width:100%;height:100%;position:relative}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
+.slide.active{opacity:1}
+.sbg{position:absolute;inset:0;transform:scale(1.05);transition:transform 8s ease}
+.slide.active .sbg{transform:scale(1)}
+.s1 .sbg{background:linear-gradient(135deg,#03080f,#061830 30%,#0a2040 60%,#051525)}
+.s2 .sbg{background:linear-gradient(135deg,#0a0a0a,#1a1a2e 40%,#16213e)}
+.s3 .sbg{background:linear-gradient(135deg,#050510,#0d1b2a 50%,#1b2a3b)}
+.sart{position:absolute;right:0;bottom:0;width:65%;height:100%;overflow:hidden}
+.sovl{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.75),rgba(0,0,0,.3) 50%,transparent)}
+.scnt{position:absolute;left:10%;top:50%;transform:translateY(-50%);max-width:580px;z-index:10}
+.sey{font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;opacity:0;transform:translateY(20px);transition:all .8s ease .3s}
+.slide.active .sey{opacity:1;transform:translateY(0)}
+.stit{font-family:'Rajdhani',sans-serif;font-size:clamp(42px,5.5vw,76px);font-weight:700;color:#fff;line-height:1.05;letter-spacing:-.02em;margin-bottom:24px;opacity:0;transform:translateY(30px);transition:all .8s ease .5s}
+.slide.active .stit{opacity:1;transform:translateY(0)}
+.stit em{font-style:normal;color:var(--accent)}
+.sdsc{font-size:15px;line-height:1.8;color:rgba(255,255,255,.6);font-weight:300;margin-bottom:36px;opacity:0;transform:translateY(20px);transition:all .8s ease .7s}
+.slide.active .sdsc{opacity:1;transform:translateY(0)}
+.scta{display:inline-flex;align-items:center;gap:12px;padding:14px 28px;background:transparent;border:1.5px solid rgba(255,255,255,.4);color:#fff;font-size:13px;letter-spacing:.08em;cursor:pointer;text-transform:uppercase;font-family:'Noto Sans KR',sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s ease .9s,transform .8s ease .9s,background .3s,border-color .3s}
+.slide.active .scta{opacity:1;transform:translateY(0)}
+.scta:hover{background:var(--accent);border-color:var(--accent)}
+.hnav{position:absolute;bottom:48px;left:10%;z-index:20;display:flex;align-items:center;gap:24px}
+.hcnt{font-family:'Rajdhani',sans-serif;font-size:13px;color:rgba(255,255,255,.4);letter-spacing:.1em}
+.hcnt span{color:var(--accent);font-size:20px}
+.hdots{display:flex;gap:8px}
+.hd{width:28px;height:2px;background:rgba(255,255,255,.25);cursor:pointer;transition:all .3s}
+.hd.on{background:var(--accent);width:44px}
+.hscr{position:absolute;bottom:48px;right:48px;z-index:20;display:flex;flex-direction:column;align-items:center;gap:10px;color:rgba(255,255,255,.3);font-size:9px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.scrl{width:1px;height:50px;background:linear-gradient(to bottom,var(--accent),transparent);animation:sp 2s ease infinite}
+@keyframes sp{0%,100%{opacity:.3;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.1)}}
+
+/* VALUES BAR */
+.vbar{background:var(--blue)}
+.vin{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.vi{padding:28px 32px;display:flex;align-items:center;gap:14px;border-right:1px solid rgba(255,255,255,.15);cursor:pointer;transition:background .2s}
+.vi:last-child{border-right:none}
+.vi:hover{background:rgba(255,255,255,.1)}
+.vnum{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:rgba(255,255,255,.2);line-height:1;flex-shrink:0}
+.vtxt{color:#fff}
+.vlbl{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:3px}
+.vtit{font-size:16px;font-weight:700;letter-spacing:-.01em}
+
+/* SECTIONS */
+section{padding:100px 0}
+.cnt{max-width:1400px;margin:0 auto;padding:0 40px}
+.eye{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.stitle{font-family:'Rajdhani',sans-serif;font-size:clamp(32px,3.5vw,52px);font-weight:700;color:var(--dark);line-height:1.1;letter-spacing:-.02em;margin-bottom:18px}
+.sdesc{font-size:15px;line-height:1.85;color:#5a6070;font-weight:300;max-width:560px}
+.tsec{background:var(--off);padding:100px 0}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:60px}
+.tmain{position:relative;background:var(--dark);padding:64px 56px;overflow:hidden}
+.tmain::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--blue))}
+.tmbg{position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(0,160,233,.08),transparent 60%);pointer-events:none}
+.tmain .eye{color:var(--accent)}
+.tmain .stitle{color:#fff}
+.tmain .sdesc{color:rgba(255,255,255,.5)}
+.tcards{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e0e2e8}
+.tcard{background:#fff;padding:44px 36px;position:relative;overflow:hidden;cursor:pointer;transition:all .3s}
+.tcard::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:3px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+.tcard:hover::after{transform:scaleX(1)}
+.tcard:hover{background:#fafbff}
+.cion{width:48px;height:48px;background:var(--off);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;color:var(--blue);transition:all .3s}
+.tcard:hover .cion{background:var(--blue);color:#fff}
+.ctit{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:10px;letter-spacing:-.01em}
+.cdsc{font-size:13px;line-height:1.7;color:#8a8f9a;font-weight:300}
+.carr{position:absolute;bottom:20px;right:24px;color:var(--accent);opacity:0;transform:translateX(-8px);transition:all .3s;font-size:18px}
+.tcard:hover .carr{opacity:1;transform:translateX(0)}
+.stsec{background:var(--dark);padding:100px 0;overflow:hidden}
+.stin{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.stl .eye{color:var(--accent)}
+.stl .stitle{color:#fff}
+.stl .sdesc{color:rgba(255,255,255,.5);margin-bottom:40px}
+.stmet{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08)}
+.met{background:var(--gray-deep);padding:28px 24px}
+.metv{font-family:'Rajdhani',sans-serif;font-size:36px;font-weight:700;color:#fff;line-height:1;margin-bottom:6px}
+.metv span{color:var(--accent);font-size:22px}
+.metl{font-size:12px;color:rgba(255,255,255,.4);letter-spacing:.05em}
+.stvis{position:relative;height:420px}
+.rw{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.ring{width:340px;height:340px;border-radius:50%;border:1.5px solid rgba(0,160,233,.2);position:relative;animation:spin 25s linear infinite}
+.ring2{width:260px;height:260px;border-radius:50%;border:1.5px solid rgba(0,48,135,.4);animation:spin 18s linear infinite reverse}
+.ring3{width:180px;height:180px;border-radius:50%;border:1.5px solid rgba(0,160,233,.35);animation:spin 12s linear infinite}
+.rdot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 16px var(--accent);top:-5px;left:50%;transform:translateX(-50%)}
+.cbadge{position:absolute;width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--accent));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:10}
+.cbadge span{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:#fff;letter-spacing:.08em;text-transform:uppercase;line-height:1.4}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.irsec{background:#fff;padding:100px 0}
+.irgrid{display:grid;grid-template-columns:1fr 1.6fr;gap:60px;align-items:start;margin-top:60px}
+.stcard{background:var(--dark);border-radius:4px;padding:44px 40px;color:#fff;position:relative;overflow:hidden}
+.stcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--blue))}
+.stlbl{font-size:11px;letter-spacing:.18em;color:rgba(255,255,255,.4);text-transform:uppercase;margin-bottom:10px}
+.stprc{font-family:'Rajdhani',sans-serif;font-size:52px;font-weight:700;color:#fff;line-height:1;margin-bottom:6px}
+.stchg{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(0,200,100,.12);color:#00c87f;font-size:14px;font-family:'Rajdhani',sans-serif;font-weight:600;border-radius:2px;margin-bottom:32px}
+.stdiv{height:1px;background:rgba(255,255,255,.08);margin:28px 0}
+.stmet2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.stmet2 label{display:block;font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.1em;margin-bottom:4px}
+.stmet2 strong{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:600;color:rgba(255,255,255,.9)}
+.irlinks{display:flex;flex-direction:column;gap:1px;background:#e8eaed}
+.irl{background:#fff;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all .25s;border-left:3px solid transparent}
+.irl:hover{background:#f4f6fa;border-left-color:var(--accent)}
+.irll{font-size:10px;letter-spacing:.15em;color:var(--accent);text-transform:uppercase;margin-bottom:5px}
+.irlt{font-size:16px;font-weight:700;color:var(--dark);letter-spacing:-.01em}
+.irla{width:36px;height:36px;border:1.5px solid #dde0e8;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#b0b4be;flex-shrink:0;transition:all .25s}
+.irl:hover .irla{background:var(--accent);border-color:var(--accent);color:#fff}
+.nsec{background:var(--off);padding:100px 0}
+.nhdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:52px}
+.va{display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);font-weight:500;cursor:pointer;padding-bottom:2px;border-bottom:1.5px solid var(--blue);transition:all .2s}
+.va:hover{color:var(--accent);border-color:var(--accent)}
+.ngrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2px;background:#dde0e8}
+.nc{background:#fff;overflow:hidden;cursor:pointer;transition:all .3s}
+.nc:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.12)}
+.nth{height:200px;position:relative;overflow:hidden}
+.nc.ft .nth{height:280px}
+.ntb{position:absolute;inset:0;transition:transform .6s ease}
+.nc:hover .ntb{transform:scale(1.05)}
+.n1{background:linear-gradient(135deg,#061830,#0050b3 80%,#00a0e9)}
+.n2{background:linear-gradient(135deg,#0a0a14,#1a2a4a)}
+.n3{background:linear-gradient(135deg,#0f1a2e,#1e3354)}
+.ntg{position:absolute;top:16px;left:16px;background:var(--accent);color:#fff;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;font-weight:600}
+.nb{padding:28px 28px 32px}
+.nd{font-size:11px;color:#9aa0b0;margin-bottom:10px;letter-spacing:.05em}
+.ntit2{font-size:16px;font-weight:700;color:var(--dark);line-height:1.5;letter-spacing:-.01em}
+.nc.ft .ntit2{font-size:20px}
+.nexc2{font-size:13px;color:#7a8090;line-height:1.7;margin-top:10px;font-weight:300}
+.gsec{background:var(--blue);padding:80px 0;overflow:hidden;position:relative}
+.gbg{position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='1' fill='rgba(255,255,255,.06)'/%3E%3C/svg%3E") 60px 60px}
+.gin{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:40px}
+.gl .eye{color:rgba(255,255,255,.5)}
+.gl .stitle{color:#fff;margin-bottom:14px}
+.gl .sdesc{color:rgba(255,255,255,.55)}
+.gsts{display:flex;gap:48px;flex-wrap:wrap}
+.gsv{font-family:'Rajdhani',sans-serif;font-size:48px;font-weight:700;color:#fff;line-height:1}
+.gsv span{color:rgba(255,255,255,.5);font-size:28px}
+.gsl{font-size:12px;color:rgba(255,255,255,.45);letter-spacing:.1em;margin-top:4px}
+
+footer{background:#0d0e10;border-top:1px solid rgba(255,255,255,.05);padding:60px 0 32px}
+.ftop{display:grid;grid-template-columns:1.5fr repeat(4,1fr);gap:48px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:32px}
+.fbrand{padding-right:24px}
+.flogo{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#fff;letter-spacing:.04em;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.flm{width:30px;height:30px;background:var(--blue);border-radius:3px;display:flex;align-items:center;justify-content:center}
+.ftag{font-size:12px;line-height:1.7;color:rgba(255,255,255,.3);font-weight:300;margin-bottom:24px}
+.fsoc{display:flex;gap:10px}
+.fsbtn{width:34px;height:34px;border:1px solid rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);font-size:13px;cursor:pointer;transition:all .2s}
+.fsbtn:hover{border-color:var(--accent);color:var(--accent)}
+.fcol h5{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.fcol ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.fcol ul li a{font-size:13px;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s;font-weight:300;cursor:pointer}
+.fcol ul li a:hover{color:var(--accent)}
+.fbot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.flegal{display:flex;gap:20px;flex-wrap:wrap}
+.flegal a{font-size:11px;color:rgba(255,255,255,.22);text-decoration:none;transition:color .2s}
+.flegal a:hover{color:rgba(255,255,255,.55)}
+.fcopy{font-size:11px;color:rgba(255,255,255,.18);letter-spacing:.04em}
+
+.qa{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:500;display:flex;flex-direction:column;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,.12)}
+.qab{padding:16px 14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;writing-mode:vertical-rl;color:#3a3d44;cursor:pointer;border-bottom:1px solid #eee;transition:all .2s;font-weight:500}
+.qab:last-child{border-bottom:none}
+.qab:hover{background:var(--blue);color:#fff}
+.qab.bl{background:var(--blue);color:#fff}
+.qab.bl:hover{background:var(--accent)}
+
+[data-a]{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+[data-a].vis{opacity:1;transform:translateY(0)}
+[data-a="r"]{transform:translateX(-32px)}
+[data-a="r"].vis{transform:translateX(0)}
+[data-a="l"]{transform:translateX(32px)}
+[data-a="l"].vis{transform:translateX(0)}
+
+.pft{position:fixed;inset:0;background:var(--dark);z-index:3000;pointer-events:none;opacity:0;transition:opacity .2s}
+.pft.fl{opacity:1}
+.btop{position:fixed;bottom:32px;right:80px;width:42px;height:42px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;border-radius:2px;opacity:0;pointer-events:none;transition:all .3s;z-index:400;box-shadow:0 4px 16px rgba(0,48,135,.4)}
+.btop.show{opacity:1;pointer-events:all}
+.btop:hover{background:var(--accent);transform:translateY(-3px)}
+</style>
+</head>
+<body>
+<div class="pft" id="pft"></div>
+
+<!-- SEARCH OVERLAY -->
+<div class="sov" id="sov">
+  <div class="sc" onclick="closeSearch()">✕</div>
+  <div class="sf">
+    <span class="sl">검색어를 입력하세요</span>
+    <div class="siw">
+      <input class="sin" id="sinp" type="text" placeholder="현대모비스 검색...">
+      <button class="ssub" onclick="doSearch()">→</button>
+    </div>
+    <div class="stags">
+      <span class="stag" onclick="stag('채용')">채용</span>
+      <span class="stag" onclick="stag('보도자료')">보도자료</span>
+      <span class="stag" onclick="stag('지속가능보고서')">지속가능보고서</span>
+      <span class="stag" onclick="stag('사업보고서')">사업보고서</span>
+      <span class="stag" onclick="stag('투자정보')">투자정보</span>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header id="hdr">
+  <div class="hi">
+    <a class="logo" onclick="gp('home')">
+      <div class="lmark"><svg viewBox="0 0 22 22" fill="none" width="22" height="22"><path d="M3 11L11 3L19 11L11 19Z" fill="white" opacity=".9"/><path d="M7 11L11 7L15 11L11 15Z" fill="#003087"/></svg></div>
+      <div><span class="ltxt">HYUNDAI MOBIS</span><span class="lsub">현대모비스</span></div>
+    </a>
+    <nav>
+      <div class="ni" id="n0" onclick="tm(0)">회사정보</div>
+      <div class="ni" id="n1" onclick="tm(1)">모빌리티 기술</div>
+      <div class="ni" id="n2" onclick="tm(2)">지속가능경영</div>
+      <div class="ni" id="n3" onclick="tm(3)">투자정보</div>
+    </nav>
+    <div class="hr">
+      <div class="lb on">KOR</div>
+      <div class="lb" onclick="alert('영문 페이지로 이동합니다.')">ENG</div>
+      <div class="sb" onclick="openSearch()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+    </div>
+  </div>
+  <!-- Mega 0: 회사정보 -->
+  <div class="mega" id="m0"><div class="mi">
+    <div class="mc"><div class="mct">회사개요</div><a class="ml" onclick="gp('about')">현대모비스 소개</a><a class="ml" onclick="gp('about')">경영철학 및 비전</a><a class="ml" onclick="gp('about')">CI 소개</a><a class="ml" onclick="gp('about')">CEO 인사말</a><a class="ml" onclick="gp('about')">E역사관</a><a class="ml" onclick="gp('about')">스포츠단</a></div>
+    <div class="mc"><div class="mct">뉴스룸</div><a class="ml" onclick="gp('news')">보도자료</a><a class="ml" onclick="gp('news')">광고</a><a class="ml" onclick="gp('news')">MOBIS LIVE</a></div>
+    <div class="mc"><div class="mct">글로벌 네트워크</div><a class="ml" onclick="gp('global')">전체</a><a class="ml" onclick="gp('global')">한국</a><a class="ml" onclick="gp('global')">아시아태평양</a><a class="ml" onclick="gp('global')">북미</a><a class="ml" onclick="gp('global')">유럽</a></div>
+    <div class="mc"><div class="mct">인재채용</div><a class="ml" onclick="gp('recruit')">채용 안내</a><a class="ml" onclick="gp('recruit')">공채 일정</a><a class="ml" onclick="gp('recruit')">인재상</a></div>
+  </div></div>
+  <!-- Mega 1: 모빌리티 기술 -->
+  <div class="mega" id="m1"><div class="mi">
+    <div class="mc"><div class="mct">제품</div><a class="ml" onclick="gp('tech')">시스템 솔루션</a><a class="ml" onclick="gp('tech')">모듈 제조</a><a class="ml" onclick="gp('tech')">A/S부품·용품</a></div>
+    <div class="mc"><div class="mct">R&amp;D</div><a class="ml" onclick="gp('tech')">R&amp;D 네트워크</a><a class="ml" onclick="gp('tech')">주행시험장</a><a class="ml" onclick="gp('tech')">S/W 센서와 제어</a><a class="ml" onclick="gp('tech')">오픈소스</a></div>
+    <div class="mc"><div class="mct">오픈이노베이션</div><a class="ml" onclick="gp('tech')">모비스 벤처스 소개</a><a class="ml" onclick="gp('tech')">포트폴리오</a><a class="ml" onclick="gp('tech')">오픈 이노베이션 거점</a></div>
+  </div></div>
+  <!-- Mega 2: 지속가능경영 -->
+  <div class="mega" id="m2"><div class="mi">
+    <div class="mc"><div class="mct">지속가능경영</div><a class="ml" onclick="gp('sustain')">지속가능경영 지향점</a><a class="ml" onclick="gp('sustain')">ESG 정책</a><a class="ml" onclick="gp('sustain')">지속가능성 보고서</a></div>
+    <div class="mc"><div class="mct">환경경영</div><a class="ml" onclick="gp('sustain')">중장기 로드맵</a><a class="ml" onclick="gp('sustain')">탄소중립</a><a class="ml" onclick="gp('sustain')">환경관리</a></div>
+    <div class="mc"><div class="mct">컴플라이언스</div><a class="ml" onclick="gp('sustain')">컴플라이언스 경영 체계</a><a class="ml" onclick="gp('sustain')">윤리·반부패</a><a class="ml" onclick="gp('sustain')">인권</a></div>
+    <div class="mc"><div class="mct">사회공헌</div><a class="ml" onclick="gp('sustain')">사업소개</a><a class="ml" onclick="gp('sustain')">사회공헌활동</a></div>
+  </div></div>
+  <!-- Mega 3: 투자정보 -->
+  <div class="mega" id="m3"><div class="mi">
+    <div class="mc"><div class="mct">일반정보</div><a class="ml" onclick="gp('ir')">이사회 및 위원회</a><a class="ml" onclick="gp('ir')">주주</a><a class="ml" onclick="gp('ir')">외부감사</a><a class="ml" onclick="gp('ir')">정관</a></div>
+    <div class="mc"><div class="mct">재무정보</div><a class="ml" onclick="gp('ir')">요약재무제표</a><a class="ml" onclick="gp('ir')">재무그래프</a><a class="ml" onclick="gp('ir')">신용등급</a></div>
+    <div class="mc"><div class="mct">주가 정보</div><a class="ml" onclick="gp('ir')">실시간 주가</a><a class="ml" onclick="gp('ir')">지수정보</a></div>
+    <div class="mc"><div class="mct">공시·보고서</div><a class="ml" onclick="gp('ir')">감사 보고서</a><a class="ml" onclick="gp('ir')">정기 보고서</a><a class="ml" onclick="gp('ir')">경영실적발표</a><a class="ml" onclick="gp('ir')">경영전략·주주환원</a></div>
+  </div></div>
+</header>
+
+<!-- ═══ HOME ═══ -->
+<div class="page active" id="page-home">
+<div class="hero">
+  <div class="hslides">
+    <div class="slide active s1">
+      <div class="sbg"></div>
+      <div class="sart"><svg viewBox="0 0 800 700" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="g1" cx="50%" cy="50%"><stop offset="0%" stop-color="#00a0e9" stop-opacity=".15"/><stop offset="100%" stop-color="#003087" stop-opacity="0"/></radialGradient></defs><ellipse cx="500" cy="400" rx="400" ry="280" fill="url(#g1)"/><g stroke="#00a0e9" stroke-width=".5" opacity=".2"><line x1="200" y1="200" x2="600" y2="200"/><line x1="150" y1="300" x2="650" y2="300"/><line x1="300" y1="150" x2="300" y2="550"/><line x1="500" y1="100" x2="500" y2="600"/></g><g stroke="#003087" stroke-width="1" fill="none" opacity=".25"><polygon points="600,180 630,196 630,228 600,244 570,228 570,196"/><polygon points="680,260 710,276 710,308 680,324 650,308 650,276"/><polygon points="540,280 570,296 570,328 540,344 510,328 510,296"/></g></svg></div>
+      <div class="sovl"></div>
+      <div class="scnt">
+        <p class="sey">Future Mobility Solution Provider</p>
+        <h1 class="stit">미래 모빌리티를<br><em>선도합니다</em></h1>
+        <p class="sdsc">소프트웨어와 하드웨어 역량을 융합하여<br>고객 요구에 최적화된 솔루션을 제공합니다.</p>
+        <button class="scta" onclick="gp('tech')">모빌리티 기술 →</button>
+      </div>
+    </div>
+    <div class="slide s2">
+      <div class="sbg"></div>
+      <div class="sart"><svg viewBox="0 0 800 700" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="g2" cx="60%" cy="45%"><stop offset="0%" stop-color="#003087" stop-opacity=".3"/><stop offset="100%" stop-color="transparent" stop-opacity="0"/></radialGradient></defs><ellipse cx="500" cy="380" rx="380" ry="260" fill="url(#g2)"/><g stroke="#0050b3" stroke-width=".8" fill="none" opacity=".3"><circle cx="500" cy="350" r="200"/><circle cx="500" cy="350" r="150"/><circle cx="500" cy="350" r="100"/></g></svg></div>
+      <div class="sovl"></div>
+      <div class="scnt">
+        <p class="sey">Green Transformation to 2045</p>
+        <h1 class="stit">2045 탄소중립,<br><em>Net-Zero</em></h1>
+        <p class="sdsc">더 깨끗하고 안전한 이동 환경을 위해<br>지속가능한 미래를 만들어 갑니다.</p>
+        <button class="scta" onclick="gp('sustain')">지속가능경영 →</button>
+      </div>
+    </div>
+    <div class="slide s3">
+      <div class="sbg"></div>
+      <div class="sart"><svg viewBox="0 0 800 700" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00a0e9" stop-opacity=".1"/><stop offset="100%" stop-color="#003087" stop-opacity=".05"/></linearGradient></defs><rect x="200" y="150" width="500" height="400" rx="4" fill="url(#g3)" stroke="rgba(0,160,233,.2)" stroke-width="1"/><g stroke="rgba(0,160,233,.15)" stroke-width="1" fill="none"><line x1="300" y1="150" x2="300" y2="550"/><line x1="400" y1="150" x2="400" y2="550"/><line x1="500" y1="150" x2="500" y2="550"/><line x1="200" y1="250" x2="700" y2="250"/><line x1="200" y1="350" x2="700" y2="350"/><line x1="200" y1="450" x2="700" y2="450"/></g></svg></div>
+      <div class="sovl"></div>
+      <div class="scnt">
+        <p class="sey">Open Innovation</p>
+        <h1 class="stit">글로벌 혁신<br><em>오픈 이노베이션</em></h1>
+        <p class="sdsc">북미, 유럽, 아시아 전동화 신규 거점을 구축하며<br>글로벌 Top Player로 도약합니다.</p>
+        <button class="scta" onclick="gp('global')">글로벌 네트워크 →</button>
+      </div>
+    </div>
+  </div>
+  <div class="hnav">
+    <div class="hcnt"><span id="snum">01</span> / 03</div>
+    <div class="hdots"><div class="hd on" onclick="gs(0)"></div><div class="hd" onclick="gs(1)"></div><div class="hd" onclick="gs(2)"></div></div>
+  </div>
+  <div class="hscr" onclick="document.getElementById('vals').scrollIntoView({behavior:'smooth'})">
+    <div class="scrl"></div><span>Scroll</span>
+  </div>
+</div>
+
+<div id="vals">
+<div class="vbar"><div class="vin">
+  <div class="vi" onclick="gp('about')"><div class="vnum">01</div><div class="vtxt"><div class="vlbl">Core Value</div><div class="vtit">Collaboration</div></div></div>
+  <div class="vi" onclick="gp('about')"><div class="vnum">02</div><div class="vtxt"><div class="vlbl">Core Value</div><div class="vtit">Customer</div></div></div>
+  <div class="vi" onclick="gp('about')"><div class="vnum">03</div><div class="vtxt"><div class="vlbl">Core Value</div><div class="vtit">Globality</div></div></div>
+  <div class="vi" onclick="gp('about')"><div class="vnum">04</div><div class="vtxt"><div class="vlbl">Core Value</div><div class="vtit">Passion</div></div></div>
+</div></div>
+</div>
+
+<section class="tsec" id="tsec">
+  <div class="cnt">
+    <div class="tgrid">
+      <div class="tmain" data-a="r">
+        <div class="tmbg"></div>
+        <p class="eye">Mobility Technology</p>
+        <h2 class="stitle">모빌리티<br>기술 혁신</h2>
+        <p class="sdesc">SW 및 연관 하드웨어를 통합한 플랫폼을 공급하여 스마트 모빌리티 시대를 선도합니다.</p>
+        <br><br>
+        <button class="scta" onclick="gp('tech')">기술 전체 보기 →</button>
+      </div>
+      <div class="tcards">
+        <div class="tcard" data-a onclick="gp('tech')"><div class="cion"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21L16 21M12 17L12 21"/></svg></div><div class="ctit">시스템 솔루션</div><div class="cdsc">전동화·자율주행 핵심 모듈 및 통합 소프트웨어 솔루션</div><span class="carr">→</span></div>
+        <div class="tcard" data-a onclick="gp('tech')"><div class="cion"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div class="ctit">모듈 제조</div><div class="cdsc">프론트엔드·샤시·칵핏 등 3대 핵심 자동차 모듈 생산</div><span class="carr">→</span></div>
+        <div class="tcard" data-a onclick="gp('tech')"><div class="cion"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/><path d="M15.54 8.46a5 5 0 010 7.07M8.46 8.46a5 5 0 000 7.07"/></svg></div><div class="ctit">R&amp;D 네트워크</div><div class="cdsc">글로벌 R&amp;D 거점과 주행시험장을 통한 기술 개발</div><span class="carr">→</span></div>
+        <div class="tcard" data-a onclick="gp('tech')"><div class="cion"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="7.5 4.21 12 6.81 16.5 4.21"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div><div class="ctit">오픈이노베이션</div><div class="cdsc">모비스 벤처스를 통한 스타트업 투자·협업 프로그램</div><span class="carr">→</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stsec" id="stsec">
+  <div class="cnt">
+    <div class="stin">
+      <div class="stl" data-a="r">
+        <p class="eye">Sustainability</p>
+        <h2 class="stitle">지속가능경영<br>KEY ISSUE</h2>
+        <p class="sdesc">Green Transformation to 2045 Net-Zero — 탄소중립 달성을 위한 의지·미래상·방향·속도를 담았습니다.</p>
+        <br>
+        <div class="stmet">
+          <div class="met"><div class="metv">2045<span>년</span></div><div class="metl">탄소중립 목표</div></div>
+          <div class="met"><div class="metv">48<span>%</span></div><div class="metl">온실가스 감축</div></div>
+          <div class="met"><div class="metv">30<span>+</span></div><div class="metl">국가 거점</div></div>
+          <div class="met"><div class="metv">100<span>%</span></div><div class="metl">재생에너지 전환</div></div>
+        </div>
+        <br><br>
+        <button class="scta" onclick="gp('sustain')">지속가능경영 전체 →</button>
+      </div>
+      <div class="stvis" data-a="l">
+        <div class="rw">
+          <div class="ring" style="position:absolute"><div class="rdot"></div></div>
+          <div class="ring2" style="position:absolute"><div class="rdot"></div></div>
+          <div class="ring3" style="position:absolute"><div class="rdot"></div></div>
+          <div class="cbadge"><span>NET<br>ZERO<br>2045</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="irsec" id="irsec">
+  <div class="cnt">
+    <div data-a><p class="eye">Investor Relations</p><h2 class="stitle">투자정보</h2></div>
+    <div class="irgrid">
+      <div class="stcard" data-a>
+        <div class="stlbl">실시간 주가 · KOSPI A012330</div>
+        <div class="stprc">241,500</div>
+        <div class="stchg">▲ +1,500 &nbsp;(+0.63%)</div>
+        <div class="stdiv"></div>
+        <div class="stmet2">
+          <div><label>시가총액</label><strong>22.8조원</strong></div>
+          <div><label>52주 최고</label><strong>275,000</strong></div>
+          <div><label>PER</label><strong>9.89</strong></div>
+          <div><label>52주 최저</label><strong>185,000</strong></div>
+        </div>
+      </div>
+      <div class="irlinks" data-a="l">
+        <div class="irl" onclick="gp('ir')"><div><div class="irll">Financial</div><div class="irlt">재무정보</div></div><div class="irla">→</div></div>
+        <div class="irl" onclick="gp('ir')"><div><div class="irll">Report</div><div class="irlt">주요보고서 · 감사/사업보고서</div></div><div class="irla">→</div></div>
+        <div class="irl" onclick="gp('ir')"><div><div class="irll">Disclosure</div><div class="irlt">전자공고 &amp; 공시</div></div><div class="irla">→</div></div>
+        <div class="irl" onclick="gp('ir')"><div><div class="irll">Governance</div><div class="irlt">이사회 및 경영전략</div></div><div class="irla">→</div></div>
+        <div class="irl" onclick="gp('ir')"><div><div class="irll">Results</div><div class="irlt">분기별 경영실적 발표</div></div><div class="irla">→</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="nsec" id="nsec">
+  <div class="cnt">
+    <div class="nhdr">
+      <div data-a><p class="eye">Newsroom</p><h2 class="stitle">최신 소식</h2></div>
+      <div class="va" onclick="gp('news')">보도자료 전체보기 →</div>
+    </div>
+    <div class="ngrid" data-a>
+      <div class="nc ft" onclick="gp('news')"><div class="nth"><div class="ntb n1"></div><span class="ntg">보도자료</span></div><div class="nb"><div class="nd">2026.04.10</div><div class="ntit2">현대모비스, 獨 프리미엄 브랜드에 대규모 섀시모듈 추가 공급… 헝가리 공장 본격 가동!</div><div class="nexc2">현대모비스가 독일 프리미엄 자동차 브랜드에 섀시모듈 대량 공급 계약을 체결하고 헝가리 신규 생산거점을 가동하기 시작했다.</div></div></div>
+      <div class="nc" onclick="gp('news')"><div class="nth"><div class="ntb n2"></div><span class="ntg">기술</span></div><div class="nb"><div class="nd">2026.03.28</div><div class="ntit2">현대모비스, 스웨덴 동계시험장에 글로벌 10개 고객사 초청</div></div></div>
+      <div class="nc" onclick="gp('news')"><div class="nth"><div class="ntb n3"></div><span class="ntg">지속가능</span></div><div class="nb"><div class="nd">2026.03.22</div><div class="ntit2">현대모비스, '세계 물의 날' 맞아 미호강 정화활동 나서</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="gsec" id="gsec">
+  <div class="gbg"></div>
+  <div class="cnt">
+    <div class="gin">
+      <div class="gl" data-a="r">
+        <p class="eye">Global Network</p>
+        <h2 class="stitle">글로벌 네트워크</h2>
+        <p class="sdesc">북미, 유럽, 아시아를 아우르는 글로벌 생산·R&D 거점으로 세계 시장을 선도합니다.</p>
+        <br><br>
+        <button class="scta" onclick="gp('global')" style="border-color:rgba(255,255,255,.3)">네트워크 전체 보기 →</button>
+      </div>
+      <div class="gsts" data-a="l">
+        <div><div class="gsv">30<span>+</span></div><div class="gsl">국가 거점</div></div>
+        <div><div class="gsv">40<span>+</span></div><div class="gsl">생산 법인</div></div>
+        <div><div class="gsv">38,000<span>+</span></div><div class="gsl">글로벌 임직원</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="cnt">
+  <div class="ftop">
+    <div class="fbrand">
+      <div class="flogo"><div class="flm"><svg width="16" height="16" viewBox="0 0 22 22" fill="none"><path d="M3 11L11 3L19 11L11 19Z" fill="white" opacity=".9"/></svg></div>HYUNDAI MOBIS</div>
+      <p class="ftag">미래 모빌리티 솔루션 프로바이더.<br>소프트웨어와 하드웨어를 결합한<br>차별화된 모빌리티 솔루션을 제공합니다.</p>
+      <div class="fsoc"><div class="fsbtn">f</div><div class="fsbtn">N</div><div class="fsbtn">K</div><div class="fsbtn">▶</div></div>
+    </div>
+    <div class="fcol"><h5>회사정보</h5><ul><li><a onclick="gp('about')">현대모비스 소개</a></li><li><a onclick="gp('about')">경영철학 및 비전</a></li><li><a onclick="gp('about')">CEO 인사말</a></li><li><a onclick="gp('global')">글로벌 네트워크</a></li><li><a onclick="gp('recruit')">인재채용</a></li></ul></div>
+    <div class="fcol"><h5>모빌리티 기술</h5><ul><li><a onclick="gp('tech')">시스템 솔루션</a></li><li><a onclick="gp('tech')">모듈 제조</a></li><li><a onclick="gp('tech')">R&D 네트워크</a></li><li><a onclick="gp('tech')">오픈이노베이션</a></li><li><a onclick="gp('tech')">A/S 부품·용품</a></li></ul></div>
+    <div class="fcol"><h5>지속가능경영</h5><ul><li><a onclick="gp('sustain')">ESG 정책</a></li><li><a onclick="gp('sustain')">환경경영</a></li><li><a onclick="gp('sustain')">안전보건경영</a></li><li><a onclick="gp('sustain')">사회공헌</a></li><li><a onclick="gp('sustain')">컴플라이언스</a></li></ul></div>
+    <div class="fcol"><h5>투자정보</h5><ul><li><a onclick="gp('ir')">실시간 주가</a></li><li><a onclick="gp('ir')">재무정보</a></li><li><a onclick="gp('ir')">주요보고서</a></li><li><a onclick="gp('ir')">전자공고&공시</a></li><li><a onclick="gp('ir')">경영실적발표</a></li></ul></div>
+  </div>
+  <div class="fbot">
+    <div class="flegal"><a href="#">개인정보 처리방침</a><a href="#">이용약관</a><a href="#">영상정보 처리방침</a><a href="#">사이버 감사실</a></div>
+    <p class="fcopy">© 2026 Hyundai Mobis Co., Ltd. All rights reserved.</p>
+  </div>
+</div></footer>
+</div><!-- /home -->
+
+<!-- ═══ ABOUT ═══ -->
+<div class="page" id="page-about"><div class="ptwrap">
+  <div class="subhero"><div class="shi">
+    <div class="bc"><span onclick="gp('home')">홈</span><span class="sep">›</span><span class="cur">회사정보</span></div>
+    <h1>현대모비스 <em>소개</em></h1>
+    <p>미래 모빌리티 솔루션 프로바이더로서 소프트웨어와 하드웨어를 결합한 차별화된 솔루션을 제공합니다.</p>
+  </div></div>
+  <div class="subc">
+    <div class="tnav">
+      <div class="tb on" onclick="st(this,'ab1')">현대모비스 소개</div>
+      <div class="tb" onclick="st(this,'ab2')">경영철학 및 비전</div>
+      <div class="tb" onclick="st(this,'ab3')">CEO 인사말</div>
+      <div class="tb" onclick="st(this,'ab4')">역사</div>
+    </div>
+    <div class="tp on" id="ab1">
+      <div class="cgrid">
+        <div class="gc"><div class="gcn">01</div><div class="gct">핵심 부품</div><div class="gcd">프론트엔드, 샤시, 칵핏 등 자동차 3대 핵심 모듈을 전 세계에 공급합니다.</div></div>
+        <div class="gc"><div class="gcn">02</div><div class="gct">전동화</div><div class="gcd">구동 모터, 배터리 시스템 등 친환경 자동차의 핵심 부품을 개발·생산합니다.</div></div>
+        <div class="gc"><div class="gcn">03</div><div class="gct">자율주행</div><div class="gcd">자율 주행 주차 및 ADAS 솔루션 분야에서 핵심 기술을 보유합니다.</div></div>
+        <div class="gc"><div class="gcn">04</div><div class="gct">스마트 모빌리티</div><div class="gcd">UAM, 로보틱스 등 차세대 모빌리티 사업 분야를 적극 확대합니다.</div></div>
+        <div class="gc"><div class="gcn">05</div><div class="gct">글로벌 네트워크</div><div class="gcd">30개국 이상의 거점을 통해 글로벌 고객사에 솔루션을 공급합니다.</div></div>
+        <div class="gc"><div class="gcn">06</div><div class="gct">R&amp;D 투자</div><div class="gcd">매출의 약 7%를 R&amp;D에 투자하며 기술 경쟁력을 지속 강화합니다.</div></div>
+      </div>
+    </div>
+    <div class="tp" id="ab2">
+      <div style="padding:48px;background:#f8f9ff;border-left:4px solid var(--blue)">
+        <p style="font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:12px">Vision</p>
+        <h2 style="font-family:'Rajdhani',sans-serif;font-size:42px;font-weight:700;color:var(--dark);margin-bottom:20px">Future Mobility<br>Solution Provider</h2>
+        <p style="font-size:15px;line-height:1.9;color:#5a6070;font-weight:300;max-width:600px">소프트웨어와 하드웨어를 결합한 통합 솔루션을 통해 스마트하고 지속가능한 모빌리티 생태계를 만들어 나갑니다. 핵심 가치인 Collaboration, Customer, Globality, Passion을 바탕으로 미래 모빌리티 시장의 글로벌 Top Player로 도약합니다.</p>
+      </div>
+    </div>
+    <div class="tp" id="ab3">
+      <div style="max-width:800px;line-height:2;color:#3a4050;font-size:15px;font-weight:300">
+        <p style="font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px">CEO Message</p>
+        <h3 style="font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:var(--dark);margin-bottom:24px">이규석 사장</h3>
+        <p style="margin-bottom:16px">주주 여러분, 안녕하십니까. 현대모비스 이규석 사장입니다. 올 한 해 보내주신 주주 여러분의 성원과 격려에 감사드립니다.</p>
+        <p style="margin-bottom:16px">글로벌 자동차 시장이 미래 모빌리티 산업으로 빠르게 재편되고 있습니다. 우리 현대모비스는 전동화와 핵심 부품을 중심으로 기술 경쟁력을 강화하고, 신규 사업 기회를 창출하기 위해 전사적 노력을 기울여 왔습니다.</p>
+        <p>소프트웨어와 하드웨어 역량을 융합하고, 고객 요구에 최적화된 솔루션을 제공하고자 합니다. 미래 모빌리티 시장에서 글로벌 '톱 플레이어'로 도약할 토대를 든든히 다지겠습니다.</p>
+      </div>
+    </div>
+    <div class="tp" id="ab4">
+      <div style="margin-top:20px;display:flex;flex-direction:column;gap:1px;background:#eee">
+        <div style="background:#fff;padding:24px 32px;display:grid;grid-template-columns:120px 1fr;gap:24px;border-left:3px solid var(--accent)"><strong style="font-family:'Rajdhani',sans-serif;font-size:22px;color:var(--blue)">2024</strong><span style="color:#444;font-size:14px;line-height:1.7">글로벌 전동화 거점 확대 — 북미, 유럽, 아시아 신규 생산기지 구축</span></div>
+        <div style="background:#fff;padding:24px 32px;display:grid;grid-template-columns:120px 1fr;gap:24px"><strong style="font-family:'Rajdhani',sans-serif;font-size:22px;color:var(--blue)">2022</strong><span style="color:#444;font-size:14px;line-height:1.7">자율주행 솔루션 사업 본격화, 소프트웨어 조직 확대</span></div>
+        <div style="background:#fff;padding:24px 32px;display:grid;grid-template-columns:120px 1fr;gap:24px"><strong style="font-family:'Rajdhani',sans-serif;font-size:22px;color:var(--blue)">2019</strong><span style="color:#444;font-size:14px;line-height:1.7">전동화 사업 본격 진출, 수소연료전지 부품 개발 착수</span></div>
+        <div style="background:#fff;padding:24px 32px;display:grid;grid-template-columns:120px 1fr;gap:24px"><strong style="font-family:'Rajdhani',sans-serif;font-size:22px;color:var(--blue)">2000</strong><span style="color:#444;font-size:14px;line-height:1.7">현대모비스 법인 설립, 자동차 3대 핵심모듈 생산 체계 구축</span></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══ TECH ═══ -->
+<div class="page" id="page-tech"><div class="ptwrap">
+  <div class="subhero"><div class="shi">
+    <div class="bc"><span onclick="gp('home')">홈</span><span class="sep">›</span><span class="cur">모빌리티 기술</span></div>
+    <h1>모빌리티 <em>기술</em></h1>
+    <p>SW 및 연관 하드웨어를 통합한 플랫폼으로 스마트 모빌리티 시대를 선도합니다.</p>
+  </div></div>
+  <div class="subc">
+    <div class="tnav">
+      <div class="tb on" onclick="st(this,'t1')">시스템 솔루션</div>
+      <div class="tb" onclick="st(this,'t2')">모듈 제조</div>
+      <div class="tb" onclick="st(this,'t3')">R&amp;D</div>
+      <div class="tb" onclick="st(this,'t4')">오픈이노베이션</div>
+    </div>
+    <div class="tp on" id="t1"><div class="cgrid">
+      <div class="gc"><div class="gcn">01</div><div class="gct">전동화 시스템</div><div class="gcd">구동 모터, 인버터, 배터리 시스템 등 전동화 핵심 부품 통합 솔루션</div></div>
+      <div class="gc"><div class="gcn">02</div><div class="gct">자율주행 솔루션</div><div class="gcd">카메라, 레이더, 라이다 센서 융합 기반 ADAS 및 자율주행 시스템</div></div>
+      <div class="gc"><div class="gcn">03</div><div class="gct">커넥티드 카</div><div class="gcd">차량 내·외부 연결성을 강화하는 통합 커넥티비티 솔루션</div></div>
+      <div class="gc"><div class="gcn">04</div><div class="gct">조명 시스템</div><div class="gcd">고효율 LED·레이저 헤드램프, 리어콤비네이션 램프 등 첨단 조명</div></div>
+      <div class="gc"><div class="gcn">05</div><div class="gct">제동·조향</div><div class="gcd">IDB, 전동 조향장치 등 차세대 섀시 제어 시스템</div></div>
+      <div class="gc"><div class="gcn">06</div><div class="gct">에어백 시스템</div><div class="gcd">다중 에어백, 커튼 에어백 등 탑승자 안전 보호 시스템</div></div>
+    </div></div>
+    <div class="tp" id="t2"><div class="cgrid">
+      <div class="gc"><div class="gcn">01</div><div class="gct">프론트엔드 모듈</div><div class="gcd">라디에이터, 헤드램프, 범퍼 등 차량 전면부를 통합한 핵심 모듈</div></div>
+      <div class="gc"><div class="gcn">02</div><div class="gct">샤시 모듈</div><div class="gcd">프론트 서스펜션, 브레이크, 조향 등 섀시 시스템 통합 모듈</div></div>
+      <div class="gc"><div class="gcn">03</div><div class="gct">칵핏 모듈</div><div class="gcd">계기판, 에어백, 센터페시아를 통합한 실내 인테리어 모듈</div></div>
+    </div></div>
+    <div class="tp" id="t3"><div style="padding:40px;background:#f4f5f7"><p style="font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:12px">R&amp;D Network</p><h3 style="font-family:'Rajdhani',sans-serif;font-size:32px;color:var(--dark);margin-bottom:16px">글로벌 R&amp;D 거점</h3><p style="font-size:14px;color:#5a6070;line-height:1.8;max-width:640px">한국 기술연구소를 중심으로 독일, 미국, 중국, 인도 등 전 세계 주요 거점에 R&amp;D 센터를 운영합니다. 매년 매출의 약 7%를 R&amp;D에 투자하며 전동화·자율주행·소프트웨어 핵심 기술을 개발합니다.</p></div></div>
+    <div class="tp" id="t4"><div style="padding:40px;background:#f4f5f7"><p style="font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:12px">Open Innovation</p><h3 style="font-family:'Rajdhani',sans-serif;font-size:32px;color:var(--dark);margin-bottom:16px">모비스 벤처스</h3><p style="font-size:14px;color:#5a6070;line-height:1.8;max-width:640px">모비스 벤처스를 통해 모빌리티 분야 유망 스타트업에 투자하고 협업합니다. 전동화, 자율주행, 커넥티드카, UAM 등 다양한 분야의 기술 혁신을 함께 만들어갑니다.</p></div></div>
+  </div>
+</div></div>
+
+<!-- ═══ SUSTAIN ═══ -->
+<div class="page" id="page-sustain"><div class="ptwrap">
+  <div class="subhero"><div class="shi">
+    <div class="bc"><span onclick="gp('home')">홈</span><span class="sep">›</span><span class="cur">지속가능경영</span></div>
+    <h1>지속가능경영 <em>ESG</em></h1>
+    <p>성장과 나눔의 균형을 통해 글로벌 기업의 역할을 다하겠습니다.</p>
+  </div></div>
+  <div class="subc">
+    <div class="sgrid">
+      <div class="sc2 dk"><div class="mv">2045<span>년</span></div><div class="ml2">탄소중립 목표</div><div class="md">과학기반 감축목표 이니셔티브(SBTi) 가입, 순배출 제로 달성</div><div class="pbw"><div class="pb" style="width:42%"></div></div></div>
+      <div class="sc2"><div class="mv">48<span>%</span></div><div class="ml2">2030년 온실가스 감축 목표</div><div class="md">2019년 대비 Scope 1, 2 온실가스 배출량 절대적 감축</div><div class="pbw"><div class="pb" style="width:48%"></div></div></div>
+      <div class="sc2"><div class="mv">100<span>%</span></div><div class="ml2">재생에너지 전환 목표</div><div class="md">RE100 가입, 2040년까지 전 사업장 재생에너지 100% 전환</div><div class="pbw"><div class="pb" style="width:31%"></div></div></div>
+      <div class="sc2 dk"><div class="mv">30<span>+</span></div><div class="ml2">글로벌 ESG 거점</div><div class="md">전 세계 30개국 이상에서 환경경영·안전보건 시스템 운영</div><div class="pbw"><div class="pb" style="width:75%"></div></div></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══ IR ═══ -->
+<div class="page" id="page-ir"><div class="ptwrap">
+  <div class="subhero"><div class="shi">
+    <div class="bc"><span onclick="gp('home')">홈</span><span class="sep">›</span><span class="cur">투자정보</span></div>
+    <h1>투자정보 <em>IR</em></h1>
+    <p>현대모비스의 재무정보, 주가정보, 공시자료를 제공합니다.</p>
+  </div></div>
+  <div class="subc">
+    <div class="tnav">
+      <div class="tb on" onclick="st(this,'ir1')">주가 정보</div>
+      <div class="tb" onclick="st(this,'ir2')">재무정보</div>
+      <div class="tb" onclick="st(this,'ir3')">주요보고서</div>
+    </div>
+    <div class="tp on" id="ir1">
+      <table class="irt">
+        <thead><tr><th>일자</th><th>종가</th><th>전일대비</th><th>등락률</th><th>거래량</th></tr></thead>
+        <tbody>
+          <tr><td>2026.04.15</td><td class="num">241,500</td><td class="up">▲ 1,500</td><td class="up">+0.63%</td><td class="num">312,450</td></tr>
+          <tr><td>2026.04.14</td><td class="num">240,000</td><td class="dn">▼ 1,000</td><td class="dn">-0.41%</td><td class="num">287,210</td></tr>
+          <tr><td>2026.04.13</td><td class="num">241,000</td><td class="up">▲ 2,500</td><td class="up">+1.05%</td><td class="num">421,870</td></tr>
+          <tr><td>2026.04.10</td><td class="num">238,500</td><td class="dn">▼ 500</td><td class="dn">-0.21%</td><td class="num">198,430</td></tr>
+          <tr><td>2026.04.09</td><td class="num">239,000</td><td class="up">▲ 3,000</td><td class="up">+1.27%</td><td class="num">532,100</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tp" id="ir2">
+      <table class="irt">
+        <thead><tr><th>구분</th><th>2025년</th><th>2024년</th><th>2023년</th><th>2022년</th></tr></thead>
+        <tbody>
+          <tr><td>매출액 (억원)</td><td class="num">621,473</td><td class="num">598,240</td><td class="num">562,891</td><td class="num">521,340</td></tr>
+          <tr><td>영업이익 (억원)</td><td class="num">24,580</td><td class="num">22,140</td><td class="num">19,870</td><td class="num">17,230</td></tr>
+          <tr><td>영업이익률</td><td class="num">3.96%</td><td class="num">3.70%</td><td class="num">3.53%</td><td class="num">3.30%</td></tr>
+          <tr><td>순이익 (억원)</td><td class="num">18,420</td><td class="num">16,890</td><td class="num">14,980</td><td class="num">13,210</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tp" id="ir3">
+      <div class="nlist">
+        <div class="nr"><div class="nrd">2026.03.28</div><div><div class="ntag">사업보고서</div><div class="ntit">2025년 사업보고서 (제49기)</div></div></div>
+        <div class="nr"><div class="nrd">2026.02.14</div><div><div class="ntag">실적발표</div><div class="ntit">2025년 4분기 및 연간 경영실적 발표</div></div></div>
+        <div class="nr"><div class="nrd">2025.11.12</div><div><div class="ntag">실적발표</div><div class="ntit">2025년 3분기 경영실적 발표</div></div></div>
+        <div class="nr"><div class="nrd">2025.08.09</div><div><div class="ntag">실적발표</div><div class="ntit">2025년 2분기 경영실적 발표</div></div></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══ NEWS ═══ -->
+<div class="page" id="page-news"><div class="ptwrap">
+  <div class="subhero"><div class="shi">
+    <div class="bc"><span onclick="gp('home')">홈</span><span class="sep">›</span><span class="cur">뉴스룸</span></div>
+    <h1>뉴스룸 <em>Newsroom</em></h1>
+    <p>현대모비스의 최신 소식을 전해드립니다.</p>
+  </div></div>
+  <div class="subc">
+    <div class="nlist">
+      <div class="nr"><div class="nrd">2026.04.10</div><div><div class="ntag">보도자료</div><div class="ntit">현대모비스, 獨 프리미엄 브랜드에 대규모 섀시모듈 추가 공급… 헝가리 공장 본격 가동!</div><div class="nexc">현대모비스가 독일 프리미엄 자동차 브랜드에 섀시모듈 대량 공급 계약을 체결하고 헝가리 신규 생산거점을 가동하기 시작했다.</div></div></div>
+      <div class="nr"><div class="nrd">2026.03.28</div><div><div class="ntag">기술</div><div class="ntit">현대모비스, 스웨덴 동계시험장에 글로벌 10개 고객사 초청… 혹한 환경에서 핵심기술 공개</div></div></div>
+      <div class="nr"><div class="nrd">2026.03.22</div><div><div class="ntag">지속가능</div><div class="ntit">현대모비스, 지역 생태계 지킨다! '세계 물의 날' 맞아 미호강 정화활동 나서</div></div></div>
+      <div class="nr"><div class="nrd">2026.02.20</div><div><div class="ntag">보도자료</div><div class="ntit">현대모비스, 2025년 연간 매출 62조원 돌파… 역대 최대 실적</div></div></div>
+      <div class="nr"><div class="nrd">2026.01.15</div><div><div class="ntag">수상</div><div class="ntit">현대모비스, CES 2026에서 '미래 모빌리티 비전' 공개</div></div></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══ GLOBAL ═══ -->
+<div class="page" id="page-global"><div class="ptwrap">
+  <div class="subhero"><div class="shi">
+    <div class="bc"><span onclick="gp('home')">홈</span><span class="sep">›</span><span class="cur">글로벌 네트워크</span></div>
+    <h1>글로벌 <em>네트워크</em></h1>
+    <p>30개국 이상의 글로벌 거점에서 미래 모빌리티를 선도합니다.</p>
+  </div></div>
+  <div class="subc"><div class="cgrid">
+    <div class="gc"><div class="gcn">🇰🇷</div><div class="gct">한국</div><div class="gcd">서울 본사, 기술연구소, 전주·아산·울산 생산 거점</div></div>
+    <div class="gc"><div class="gcn">🇺🇸</div><div class="gct">북미</div><div class="gcd">미국·멕시코·캐나다 생산 및 R&D 거점, 전동화 신규 공장 건설</div></div>
+    <div class="gc"><div class="gcn">🇩🇪</div><div class="gct">유럽</div><div class="gcd">독일 R&D센터, 체코·슬로바키아·헝가리 생산 법인</div></div>
+    <div class="gc"><div class="gcn">🇨🇳</div><div class="gct">중국</div><div class="gcd">베이징·광저우·충칭 등 생산·영업 거점 운영</div></div>
+    <div class="gc"><div class="gcn">🇮🇳</div><div class="gct">인도</div><div class="gcd">첸나이 생산 거점 및 R&D 센터</div></div>
+    <div class="gc"><div class="gcn">🌏</div><div class="gct">기타 아시아</div><div class="gcd">베트남, 인도네시아, 태국 등 아시아태평양 거점</div></div>
+  </div></div>
+</div></div>
+
+<!-- ═══ RECRUIT ═══ -->
+<div class="page" id="page-recruit"><div class="ptwrap">
+  <div class="subhero"><div class="shi">
+    <div class="bc"><span onclick="gp('home')">홈</span><span class="sep">›</span><span class="cur">인재채용</span></div>
+    <h1>인재채용 <em>Careers</em></h1>
+    <p>현대모비스와 함께 미래 모빌리티를 만들어갈 인재를 찾습니다.</p>
+  </div></div>
+  <div class="subc"><div class="cgrid">
+    <div class="gc"><div class="gcn">01</div><div class="gct">신입 공채</div><div class="gcd">매년 상·하반기 정기 공개채용을 통해 미래 인재를 선발합니다.</div></div>
+    <div class="gc"><div class="gcn">02</div><div class="gct">경력 채용</div><div class="gcd">전문 분야별 경력직 수시 채용을 진행합니다.</div></div>
+    <div class="gc"><div class="gcn">03</div><div class="gct">인턴십</div><div class="gcd">현장 실습 기회를 통해 현대모비스를 미리 경험해보세요.</div></div>
+  </div></div>
+</div></div>
+
+<!-- QUICK ACCESS -->
+<div class="qa">
+  <div class="qab bl" onclick="gp('recruit')">채용</div>
+  <div class="qab" onclick="gp('tech')">A/S 부품</div>
+  <div class="qab" onclick="gp('about')">협력사</div>
+  <div class="qab" onclick="gp('about')">방문예약</div>
+</div>
+<div class="btop" id="btop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+<script>
+// Header scroll
+const hdr=document.getElementById('hdr');
+window.addEventListener('scroll',()=>{
+  hdr.classList.toggle('scrolled',scrollY>60);
+  document.getElementById('btop').classList.toggle('show',scrollY>400);
+});
+
+// Mega menus
+let om=-1;
+function tm(i){
+  const ms=document.querySelectorAll('.mega'),ns=document.querySelectorAll('.ni');
+  if(om===i){cm();return;}
+  ms.forEach(m=>m.classList.remove('open'));ns.forEach(n=>n.classList.remove('on'));
+  ms[i].classList.add('open');ns[i].classList.add('on');om=i;
+}
+function cm(){document.querySelectorAll('.mega').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));om=-1;}
+document.addEventListener('click',e=>{if(!hdr.contains(e.target))cm();});
+
+// Page routing
+const pft=document.getElementById('pft');
+function gp(id){
+  cm();
+  const t=document.getElementById('page-'+id);
+  if(!t)return;
+  if(t.classList.contains('active')){window.scrollTo({top:0,behavior:'smooth'});return;}
+  pft.classList.add('fl');
+  setTimeout(()=>{
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    t.classList.add('active');window.scrollTo(0,0);
+    pft.classList.remove('fl');
+    aos();
+  },180);
+}
+
+// Tabs
+function st(btn,pid){
+  const w=btn.closest('.subc');
+  w.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  w.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById(pid).classList.add('on');
+}
+
+// Slider
+let cur=0;
+const slides=document.querySelectorAll('.slide'),dots=document.querySelectorAll('.hd'),snum=document.getElementById('snum');
+function gs(n){slides[cur].classList.remove('active');dots[cur].classList.remove('on');cur=n;slides[cur].classList.add('active');dots[cur].classList.add('on');if(snum)snum.textContent=String(cur+1).padStart(2,'0');}
+setInterval(()=>gs((cur+1)%slides.length),5500);
+
+// Search
+function openSearch(){document.getElementById('sov').classList.add('open');setTimeout(()=>document.getElementById('sinp').focus(),300);}
+function closeSearch(){document.getElementById('sov').classList.remove('open');}
+function doSearch(){const q=document.getElementById('sinp').value;if(q){closeSearch();alert('"'+q+'" 검색 결과 페이지로 이동합니다.');}}
+function stag(q){document.getElementById('sinp').value=q;doSearch();}
+document.getElementById('sinp').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();if(e.key==='Escape')closeSearch();});
+
+// AOS
+function aos(){
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1});
+  document.querySelectorAll('.page.active [data-a]').forEach(el=>{el.classList.remove('vis');io.observe(el);});
+}
+aos();
+</script>
+</body>
+</html>
