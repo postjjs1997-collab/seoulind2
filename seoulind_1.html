@@ -4,266 +4,694 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SEOULIND | 서울산업(주)</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--black:#0a0b0d;--dark:#12141a;--dark2:#1c1f28;--blue:#0038a8;--blue2:#0050d0;--accent:#2979ff;--white:#fff;--off:#f3f4f7;--text:#2a2d38;--muted:#6b7280;--border:rgba(255,255,255,0.08)}
+:root{
+  --black:#000;
+  --dark:#1d1d1f;
+  --dark2:#2d2d2f;
+  --blue:#0071e3;
+  --blue2:#0077ed;
+  --accent:#0071e3;
+  --white:#fff;
+  --off:#fbfbfd;
+  --text:#1d1d1f;
+  --muted:#86868b;
+  --border:#d2d2d7;
+  --border-dark:rgba(255,255,255,0.12);
+  --radius:18px;
+  --radius-sm:10px;
+}
 html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden}
+body{font-family:'Inter','Noto Sans KR',sans-serif;background:var(--off);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
 /* SLIDE TRANSITION */
-.sbar{position:fixed;top:0;left:-100%;width:100%;height:3px;background:linear-gradient(90deg,var(--blue),var(--accent));z-index:9999;transition:left .65s cubic-bezier(.77,0,.18,1);pointer-events:none}
+.sbar{position:fixed;top:0;left:-100%;width:100%;height:2px;background:linear-gradient(90deg,var(--blue),#34aadc);z-index:9999;transition:left .65s cubic-bezier(.77,0,.18,1);pointer-events:none}
 .sbar.go{left:0}
 .page{display:none;min-height:100vh}
 .page.active{display:block}
-.page.sl-cur{display:block;position:fixed;top:0;left:0;right:0;bottom:0;overflow-y:auto;z-index:40;transform:translateX(0);transition:transform .65s cubic-bezier(.77,0,.18,1);will-change:transform;background:var(--white)}
+.page.sl-cur{display:block;position:fixed;top:0;left:0;right:0;bottom:0;overflow-y:auto;z-index:40;transform:translateX(0);transition:transform .65s cubic-bezier(.77,0,.18,1);will-change:transform;background:var(--off)}
 .page.sl-cur.go{transform:translateX(-100%)}
-.page.sl-nxt{display:block;position:fixed;top:0;left:0;right:0;bottom:0;overflow-y:auto;z-index:41;transform:translateX(100%);transition:transform .65s cubic-bezier(.77,0,.18,1);will-change:transform;background:var(--white)}
+.page.sl-nxt{display:block;position:fixed;top:0;left:0;right:0;bottom:0;overflow-y:auto;z-index:41;transform:translateX(100%);transition:transform .65s cubic-bezier(.77,0,.18,1);will-change:transform;background:var(--off)}
 .page.sl-nxt.go{transform:translateX(0)}
 
-/* HEADER */
-header{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all .3s}
-header.top{background:linear-gradient(to bottom,rgba(10,11,13,.72) 0%,rgba(10,11,13,0) 100%)}
-header.scrolled,header.mopen{background:rgba(10,11,13,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.hi{max-width:1480px;margin:0 auto;padding:0 48px;height:76px;display:flex;align-items:center;justify-content:space-between}
-.logo{display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none}
-.licon{width:40px;height:40px;background:var(--accent);display:flex;align-items:center;justify-content:center;clip-path:polygon(0 0,100% 0,100% 75%,75% 100%,0 100%)}
+/* ═══ HEADER — Apple-style frosted glass ═══ */
+header{position:fixed;top:0;left:0;right:0;z-index:1000;transition:background .4s,backdrop-filter .4s,border-color .4s}
+header.top{background:rgba(0,0,0,.45);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(255,255,255,.06)}
+header.scrolled,header.mopen{background:rgba(22,22,24,.88);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);border-bottom:1px solid rgba(255,255,255,.1)}
+.hi{max-width:1320px;margin:0 auto;padding:0 44px;height:52px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none}
+.licon{width:28px;height:28px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.licon svg{width:16px;height:16px}
 .lwm{display:flex;flex-direction:column;line-height:1}
-.lm{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.12em;color:#fff}
-.ls{font-size:9px;letter-spacing:.25em;color:rgba(255,255,255,.6);text-transform:uppercase;margin-top:1px}
+.lm{font-size:17px;font-weight:600;letter-spacing:-.02em;color:#fff}
+.ls{font-size:9px;letter-spacing:.12em;color:rgba(255,255,255,.45);text-transform:uppercase;margin-top:1px}
 nav{display:flex}
-.ni{position:relative;padding:0 22px;height:76px;display:flex;align-items:center;cursor:pointer;color:rgba(255,255,255,.92);font-size:14px;font-weight:500;transition:color .2s;white-space:nowrap;user-select:none}
+.ni{position:relative;padding:0 16px;height:52px;display:flex;align-items:center;cursor:pointer;color:rgba(255,255,255,.85);font-size:13px;font-weight:400;transition:color .2s;white-space:nowrap;user-select:none;letter-spacing:-.01em}
 .ni:hover,.ni.on{color:#fff}
-.ndot{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:0;transition:opacity .2s}
-.ni:hover .ndot,.ni.on .ndot{opacity:1}
-.hr{display:flex;align-items:center;gap:14px}
-.lang{font-size:11px;letter-spacing:.12em;color:rgba(255,255,255,.4);cursor:pointer;padding:5px 11px;border:1px solid rgba(255,255,255,.15);border-radius:2px;transition:all .2s;text-transform:uppercase}
-.lang:hover,.lang.on{color:#fff;border-color:var(--accent)}
-.sbtn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.5);transition:all .2s}
-.sbtn:hover{border-color:var(--accent);color:var(--accent)}
+.ndot{display:none}
+.hr{display:flex;align-items:center;gap:10px}
+.lang{font-size:11px;letter-spacing:.04em;color:rgba(255,255,255,.45);cursor:pointer;padding:4px 10px;border-radius:20px;transition:all .2s;background:transparent}
+.lang:hover,.lang.on{color:#fff;background:rgba(255,255,255,.1)}
+.sbtn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.6);transition:all .2s;background:transparent}
+.sbtn:hover{color:#fff;background:rgba(255,255,255,.1)}
 
-/* MEGA */
-.mega{position:fixed;top:76px;left:0;right:0;background:rgba(10,11,13,.98);backdrop-filter:blur(20px);border-bottom:2px solid var(--accent);padding:44px 0;z-index:999;opacity:0;pointer-events:none;transform:translateY(-12px);transition:opacity .3s,transform .3s}
+/* MEGA — Apple dropdown style */
+.mega{position:fixed;top:52px;left:0;right:0;background:rgba(22,22,24,.96);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);border-bottom:1px solid rgba(255,255,255,.08);padding:36px 0;z-index:999;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity .25s,transform .25s}
 .mega.open{opacity:1;pointer-events:all;transform:translateY(0)}
-.mi{max-width:1480px;margin:0 auto;padding:0 48px;display:flex;gap:64px}
-.mc{min-width:200px}
-.mct{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.07)}
-.ml{display:block;font-size:14px;color:rgba(255,255,255,.5);padding:9px 0;cursor:pointer;transition:all .22s;border-bottom:1px solid rgba(255,255,255,.04);text-decoration:none}
-.ml:last-child{border-bottom:none}
-.ml:hover{color:#fff;padding-left:8px}
-.mln{font-size:10px;color:var(--accent);margin-right:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:.06em}
+.mi{max-width:1320px;margin:0 auto;padding:0 44px;display:flex;gap:48px}
+.mc{min-width:180px}
+.mct{font-size:11px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.35);margin-bottom:16px;text-transform:none}
+.ml{display:block;font-size:14px;color:rgba(255,255,255,.6);padding:8px 0;cursor:pointer;transition:all .2s;text-decoration:none;letter-spacing:-.01em}
+.ml:hover{color:#fff}
+.mln{display:none}
 
 /* SEARCH */
-.sov{position:fixed;inset:0;z-index:2000;background:rgba(10,11,13,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.sov{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.88);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
 .sov.open{opacity:1;pointer-events:all}
-.scl{position:absolute;top:36px;right:52px;font-size:26px;color:rgba(255,255,255,.4);cursor:pointer;transition:color .2s}
-.scl:hover{color:var(--accent)}
-.sf{width:100%;max-width:720px;padding:0 24px}
-.slbl{font-size:10px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase;margin-bottom:22px;display:block}
-.srow{display:flex;border-bottom:2px solid rgba(255,255,255,.2);padding-bottom:14px}
-.sinp{flex:1;background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:32px;font-weight:300;color:#fff;caret-color:var(--accent)}
-.sinp::placeholder{color:rgba(255,255,255,.15)}
-.sgo{background:none;border:none;cursor:pointer;color:var(--accent);font-size:24px;padding:0 8px;transition:transform .2s}
-.sgo:hover{transform:translateX(5px)}
+.scl{position:absolute;top:32px;right:44px;font-size:20px;color:rgba(255,255,255,.4);cursor:pointer;transition:color .2s;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.08)}
+.scl:hover{color:#fff;background:rgba(255,255,255,.15)}
+.sf{width:100%;max-width:680px;padding:0 24px}
+.slbl{font-size:12px;letter-spacing:.04em;color:rgba(255,255,255,.35);margin-bottom:20px;display:block;font-weight:400}
+.srow{display:flex;align-items:center;background:rgba(255,255,255,.07);border-radius:14px;padding:0 20px}
+.sinp{flex:1;background:none;border:none;outline:none;font-family:'Inter',sans-serif;font-size:22px;font-weight:300;color:#fff;caret-color:var(--blue);padding:18px 0}
+.sinp::placeholder{color:rgba(255,255,255,.2)}
+.sgo{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);font-size:20px;padding:4px;transition:color .2s}
+.sgo:hover{color:#fff}
 
-/* HERO */
-.hero{position:relative;height:100vh;min-height:720px;overflow:hidden;background:var(--black);display:flex;align-items:center}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(41,121,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(41,121,255,.05) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at 60% 50%,black 30%,transparent 80%)}
-.hero-orb{position:absolute;right:-10%;top:50%;transform:translateY(-50%);width:70vw;height:70vw;max-width:900px;max-height:900px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,56,168,.25),rgba(41,121,255,.08) 40%,transparent 70%)}
-.hero-slash{position:absolute;right:0;top:0;width:55%;height:100%;clip-path:polygon(15% 0,100% 0,100% 100%,0% 100%);background:linear-gradient(135deg,rgba(0,56,168,.06),rgba(41,121,255,.03));border-left:1px solid rgba(41,121,255,.12)}
-.hcnt{position:relative;z-index:10;max-width:1480px;margin:0 auto;padding:0 48px;width:100%}
-.heye{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;opacity:0;animation:hf .8s ease .3s forwards}
-.htit{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,9vw,140px);line-height:.95;letter-spacing:.04em;color:#fff;margin-bottom:32px;opacity:0;animation:hs .9s ease .5s forwards}
-.htit em{font-style:normal;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.25)}
-.hsub{font-size:16px;font-weight:300;line-height:1.8;color:rgba(255,255,255,.5);max-width:480px;margin-bottom:48px;opacity:0;animation:hf .8s ease .8s forwards}
-.hact{display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:hf .8s ease 1s forwards}
-.bp{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;background:var(--accent);color:#fff;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:none;transition:all .3s;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
-.bp:hover{background:var(--blue2);transform:translateY(-2px)}
-.bg{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:transparent;color:rgba(255,255,255,.7);font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:1px solid rgba(255,255,255,.2);transition:all .3s}
-.bg:hover{border-color:var(--accent);color:#fff}
-.hstats{position:absolute;bottom:60px;right:48px;z-index:10;display:flex;gap:48px}
+/* ═══ HERO ═══ */
+.hero{position:relative;height:100vh;min-height:720px;overflow:hidden;background:#000;display:flex;align-items:center}
+.heye{font-size:13px;letter-spacing:.01em;color:rgba(255,255,255,.55);margin-bottom:18px;font-weight:400}
+.htit{font-size:clamp(52px,7.5vw,110px);line-height:1.04;letter-spacing:-.03em;color:#fff;font-weight:700;margin-bottom:24px}
+.htit em{font-style:normal;background:linear-gradient(135deg,#fff 30%,rgba(255,255,255,.4));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hsub{font-size:17px;font-weight:400;line-height:1.7;color:rgba(255,255,255,.5);max-width:460px;margin-bottom:40px;letter-spacing:-.01em}
+.hact{display:flex;gap:14px;flex-wrap:wrap}
+/* Apple pill buttons */
+.bp{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--blue);color:#fff;font-size:15px;font-weight:500;cursor:pointer;border:none;border-radius:980px;transition:all .3s;letter-spacing:-.01em;font-family:'Inter',sans-serif}
+.bp:hover{background:#0077ed;transform:scale(1.02)}
+.bg{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);font-size:15px;font-weight:500;cursor:pointer;border:none;border-radius:980px;transition:all .3s;backdrop-filter:blur(10px);font-family:'Inter',sans-serif}
+.bg:hover{background:rgba(255,255,255,.16);color:#fff}
+.hstats{position:absolute;bottom:48px;right:44px;z-index:10;display:flex;gap:40px}
 .hst{text-align:right}
-.hstv{font-family:'Bebas Neue',sans-serif;font-size:48px;color:#fff;line-height:1;letter-spacing:.06em}
-.hstv span{color:var(--accent);font-size:28px}
-.hstl{font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
-.hscrl{position:absolute;bottom:52px;left:48px;z-index:10;display:flex;align-items:center;gap:14px;color:rgba(255,255,255,.3);font-size:10px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
-.strk{width:48px;height:1px;background:rgba(255,255,255,.15);position:relative;overflow:hidden}
-.sfill{position:absolute;top:0;left:0;height:100%;width:40%;background:var(--accent);animation:sa 2s ease infinite}
+.hstv{font-size:44px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.04em}
+.hstv span{color:rgba(255,255,255,.35);font-size:24px;font-weight:400}
+.hstl{font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.04em;margin-top:4px;font-weight:400}
+.hscrl{position:absolute;bottom:44px;left:44px;z-index:10;display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.3);font-size:11px;cursor:pointer;font-weight:400}
+.strk{width:40px;height:1px;background:rgba(255,255,255,.12);position:relative;overflow:hidden}
+.sfill{position:absolute;top:0;left:0;height:100%;width:40%;background:rgba(255,255,255,.4);animation:sa 2s ease infinite}
 @keyframes sa{0%{left:-40%;width:40%}100%{left:100%;width:40%}}
-@keyframes hf{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes hs{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
 
-/* SUB-PAGE */
-.ptwrap{padding-top:76px;min-height:100vh}
-.subhero{background:var(--dark);padding:72px 0 60px;position:relative;overflow:hidden}
-.subhero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--accent),transparent 60%)}
-.shgeo{position:absolute;right:0;top:0;width:45%;height:100%;background:linear-gradient(135deg,rgba(41,121,255,.04),transparent);clip-path:polygon(20% 0,100% 0,100% 100%,0 100%);border-left:1px solid rgba(41,121,255,.1)}
-.shi{max-width:1480px;margin:0 auto;padding:0 48px;position:relative;z-index:1}
-.bc{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-.bci{font-size:12px;color:rgba(255,255,255,.3);cursor:pointer;transition:color .2s}
-.bci:hover{color:var(--accent)}
+/* ═══ SUB-PAGE ═══ */
+.ptwrap{padding-top:52px;min-height:100vh}
+.subhero{background:#000;padding:100px 0 72px;position:relative;overflow:hidden}
+.subhero-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.25;filter:saturate(0)}
+.shgeo{display:none}
+.shi{max-width:1320px;margin:0 auto;padding:0 44px;position:relative;z-index:1}
+.bc{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.bci{font-size:13px;color:rgba(255,255,255,.35);cursor:pointer;transition:color .2s;font-weight:400}
+.bci:hover{color:rgba(255,255,255,.7)}
 .bcs{color:rgba(255,255,255,.15);font-size:11px}
-.bcc{color:rgba(255,255,255,.55);cursor:default}
-.subhero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,5.5vw,80px);color:#fff;line-height:1;letter-spacing:.06em}
-.subhero h1 em{font-style:normal;color:var(--accent)}
-.shdesc{font-size:15px;color:rgba(255,255,255,.45);margin-top:14px;font-weight:300;line-height:1.75;max-width:500px}
-.subc{max-width:1480px;margin:0 auto;padding:72px 48px}
+.bcc{font-size:13px;color:rgba(255,255,255,.5);cursor:default}
+.subhero h1{font-size:clamp(44px,6vw,80px);color:#fff;line-height:1.06;letter-spacing:-.03em;font-weight:700}
+.subhero h1 em{font-style:normal;color:var(--blue)}
+.shdesc{font-size:17px;color:rgba(255,255,255,.4);margin-top:16px;font-weight:400;line-height:1.65;max-width:480px;letter-spacing:-.01em}
+.subc{max-width:1320px;margin:0 auto;padding:72px 44px;background:var(--off)}
 
-/* TABS */
-.tnav{display:flex;border-bottom:1px solid #e5e7eb;margin-bottom:48px;overflow-x:auto}
-.tb{padding:14px 28px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap;flex-shrink:0}
-.tb.on{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+/* ═══ TABS — Apple segment style ═══ */
+.tnav{display:flex;background:rgba(0,0,0,.04);border-radius:12px;padding:4px;margin-bottom:52px;gap:2px;overflow-x:auto;width:fit-content}
+.tb{padding:8px 20px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-radius:9px;transition:all .2s;white-space:nowrap;flex-shrink:0;letter-spacing:-.01em;border:none;background:transparent}
+.tb.on{color:var(--text);background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.12);transition:all .2s}
 .tp{display:none}
 .tp.on{display:block}
 
-/* CARDS */
-.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#e5e7eb;margin-top:48px}
-.gc{background:#fff;padding:44px 36px;transition:all .3s;border-top:3px solid transparent}
-.gc:hover{border-top-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.08)}
-.gcn{font-family:'Bebas Neue',sans-serif;font-size:52px;color:#edf0f6;line-height:1;margin-bottom:14px;letter-spacing:.04em}
-.gct{font-size:17px;font-weight:700;color:var(--text);margin-bottom:10px}
-.gcd{font-size:13.5px;color:var(--muted);line-height:1.7;font-weight:300}
+/* ═══ SECTION LABELS ═══ */
+.seye{font-size:13px;font-weight:500;color:var(--blue);margin-bottom:10px;letter-spacing:-.01em}
+.stit{font-size:clamp(32px,4vw,52px);color:var(--text);line-height:1.08;letter-spacing:-.03em;font-weight:700;margin-bottom:18px}
+.sdsc{font-size:17px;line-height:1.7;color:var(--muted);font-weight:400;max-width:480px;letter-spacing:-.01em}
+
+/* ═══ APPLE CARDS ═══ */
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:52px}
+.gc{background:#fff;padding:40px 32px;border-radius:0;transition:all .3s;border:1px solid transparent}
+.gc:first-child{border-radius:18px 0 0 18px}
+.gc:last-child{border-radius:0 18px 18px 0}
+.cgrid .gc:nth-child(3n+1){border-radius:18px 0 0 0}
+.cgrid .gc:nth-child(3n){border-radius:0 18px 0 0}
+.cgrid .gc:nth-last-child(-n+3):nth-child(3n+1){border-radius:18px 0 0 18px}
+.cgrid .gc:nth-last-child(1){border-radius:0 0 18px 0}
+.gc:hover{box-shadow:0 8px 32px rgba(0,0,0,.08);transform:translateY(-2px);z-index:1;position:relative}
+.gcn{font-size:13px;font-weight:600;color:var(--blue);margin-bottom:14px;letter-spacing:-.01em}
+.gct{font-size:17px;font-weight:600;color:var(--text);margin-bottom:10px;letter-spacing:-.02em}
+.gcd{font-size:14px;color:var(--muted);line-height:1.65;font-weight:400}
 
 /* PRODUCT CARDS */
-.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:#e5e7eb;margin-top:48px}
-.pcard{background:#fff;padding:52px 44px;display:flex;gap:32px;align-items:flex-start;transition:all .3s;border-left:4px solid transparent}
-.pcard:hover{border-left-color:var(--accent);background:#fafbff}
-.pcbadge{flex-shrink:0;width:64px;height:64px;background:var(--dark);display:flex;align-items:center;justify-content:center;clip-path:polygon(0 0,calc(100%-10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100%-10px))}
-.pcbadge svg{width:30px;height:30px;color:var(--accent)}
-.pce{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--blue);letter-spacing:.1em;margin-bottom:6px}
-.pck{font-size:13px;color:var(--muted);margin-bottom:12px}
-.pcd{font-size:13.5px;color:var(--text);line-height:1.7;font-weight:300}
-.ptags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.ptag{font-size:10px;padding:4px 10px;border:1px solid #dde0e8;color:var(--muted);border-radius:2px;letter-spacing:.06em;font-weight:500}
+.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:40px}
+.pcard{background:#fff;padding:36px;border-radius:18px;display:flex;gap:24px;align-items:flex-start;transition:all .3s;border:1px solid rgba(0,0,0,.04)}
+.pcard:hover{box-shadow:0 12px 40px rgba(0,0,0,.09);transform:translateY(-2px)}
+.pcbadge{flex-shrink:0;width:52px;height:52px;background:var(--off);border-radius:14px;display:flex;align-items:center;justify-content:center}
+.pcbadge svg{width:24px;height:24px;color:var(--blue)}
+.pce{font-size:17px;font-weight:600;color:var(--text);letter-spacing:-.02em;margin-bottom:4px}
+.pck{font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:400}
+.pcd{font-size:14px;color:var(--muted);line-height:1.65;font-weight:400}
+.ptags{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.ptag{font-size:11px;padding:4px 10px;background:var(--off);color:var(--muted);border-radius:20px;font-weight:500}
 
 /* CERT */
-.certgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#e5e7eb;margin-top:48px}
-.ccard{background:#fff;padding:44px;text-align:center}
-.cicon{width:72px;height:72px;background:var(--off);border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:28px}
-.ctit{font-size:18px;font-weight:700;color:var(--text);margin-bottom:10px}
-.cdsc{font-size:13.5px;color:var(--muted);line-height:1.7;font-weight:300}
+.certgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.ccard{background:#fff;padding:40px 32px;border-radius:18px;text-align:center;border:1px solid rgba(0,0,0,.04);transition:all .3s}
+.ccard:hover{box-shadow:0 12px 40px rgba(0,0,0,.09);transform:translateY(-2px)}
+.cicon{width:64px;height:64px;background:var(--off);border-radius:18px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-size:26px}
+.ctit{font-size:20px;font-weight:700;color:var(--text);margin-bottom:10px;letter-spacing:-.02em}
+.cdsc{font-size:14px;color:var(--muted);line-height:1.65;font-weight:400}
 
 /* TIMELINE */
-.tl{margin-top:48px;display:flex;flex-direction:column}
-.tlr{display:grid;grid-template-columns:120px 1px 1fr;gap:0 32px;align-items:start;padding:28px 0;border-bottom:1px solid #f0f1f4}
+.tl{margin-top:40px;display:flex;flex-direction:column}
+.tlr{display:grid;grid-template-columns:96px 1px 1fr;gap:0 28px;align-items:start;padding:24px 0;border-bottom:1px solid rgba(0,0,0,.06)}
 .tlr:last-child{border-bottom:none}
-.tly{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--blue);letter-spacing:.06em;padding-top:4px}
-.tll{background:#e5e7eb;position:relative}
-.tll::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 0 0 2px var(--accent)}
-.tlm{font-size:11px;color:var(--accent);letter-spacing:.1em;font-weight:600;margin-bottom:4px}
-.tlt{font-size:14px;color:var(--text);line-height:1.7}
+.tly{font-size:20px;font-weight:700;color:var(--blue);letter-spacing:-.03em;padding-top:2px}
+.tll{background:var(--border);position:relative}
+.tll::before{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:var(--blue);border:2px solid var(--off);box-shadow:0 0 0 2px var(--blue)}
+.tlm{font-size:11px;color:var(--blue);font-weight:600;margin-bottom:4px;letter-spacing:.02em;text-transform:uppercase}
+.tlt{font-size:15px;color:var(--text);line-height:1.65;font-weight:400}
 
 /* CONTACT */
-.ctgrid{display:grid;grid-template-columns:1fr 1.4fr;gap:2px;background:#e5e7eb;margin-top:48px}
-.ctinfo{background:var(--dark);padding:52px 44px}
-.ctinfo h3{font-family:'Bebas Neue',sans-serif;font-size:36px;color:#fff;margin-bottom:32px;letter-spacing:.06em}
-.cir{display:flex;gap:16px;margin-bottom:22px;align-items:flex-start}
-.ciic{width:36px;height:36px;background:rgba(41,121,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:2px}
-.ciic svg{width:16px;height:16px;color:var(--accent)}
-.cilbl{font-size:10px;letter-spacing:.15em;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:4px}
-.civ{font-size:14px;color:rgba(255,255,255,.75);line-height:1.5;font-weight:300}
-.mapph{background:#1c1f28;min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:40px}
-.mapph p{color:rgba(255,255,255,.3);font-size:13px}
+.ctgrid{display:grid;grid-template-columns:1fr 1.6fr;gap:16px;margin-top:40px}
+.ctinfo{background:#1d1d1f;padding:48px 40px;border-radius:18px}
+.ctinfo h3{font-size:28px;font-weight:700;color:#fff;margin-bottom:28px;letter-spacing:-.03em}
+.cir{display:flex;gap:14px;margin-bottom:20px;align-items:flex-start}
+.ciic{width:32px;height:32px;background:rgba(0,113,227,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:8px}
+.ciic svg{width:15px;height:15px;color:var(--blue)}
+.cilbl{font-size:11px;color:rgba(255,255,255,.3);margin-bottom:3px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.civ{font-size:14px;color:rgba(255,255,255,.7);line-height:1.55;font-weight:400}
+.mapph{background:#2c2c2e;border-radius:18px;min-height:380px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:40px}
+.mapph p{color:rgba(255,255,255,.25);font-size:13px}
 
 /* RECRUIT */
-.rgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:#e5e7eb;margin-top:48px}
-.rcard{background:#fff;padding:48px 44px}
-.rcn{font-family:'Bebas Neue',sans-serif;font-size:64px;color:#edf0f6;line-height:1;margin-bottom:16px}
-.rct{font-size:20px;font-weight:700;color:var(--text);margin-bottom:14px}
-.rcd{font-size:14px;color:var(--muted);line-height:1.8;font-weight:300}
-.bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:#e5e7eb;margin-top:48px}
-.ben{background:#fff;padding:32px 24px;text-align:center}
-.bei{font-size:32px;margin-bottom:12px}
-.bet{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
-.bed{font-size:12px;color:var(--muted);line-height:1.6;font-weight:300}
+.rgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:40px}
+.rcard{background:#fff;padding:40px;border-radius:18px;border:1px solid rgba(0,0,0,.04);transition:all .3s}
+.rcard:hover{box-shadow:0 12px 40px rgba(0,0,0,.09);transform:translateY(-2px)}
+.rcn{font-size:48px;font-weight:700;color:var(--off);line-height:1;margin-bottom:16px;letter-spacing:-.04em}
+.rct{font-size:20px;font-weight:700;color:var(--text);margin-bottom:12px;letter-spacing:-.02em}
+.rcd{font-size:14px;color:var(--muted);line-height:1.7;font-weight:400}
+.bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+.ben{background:#fff;padding:28px 22px;border-radius:18px;text-align:center;border:1px solid rgba(0,0,0,.04)}
+.bei{font-size:28px;margin-bottom:10px}
+.bet{font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px;letter-spacing:-.02em}
+.bed{font-size:12px;color:var(--muted);line-height:1.55;font-weight:400}
 
-/* HOME SECTIONS */
-.ha{padding:100px 0;background:#fff}
-.hai{max-width:1480px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
-.anr{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#e5e7eb;margin-top:48px}
-.anum{background:#fff;padding:32px 28px;border-top:3px solid transparent;transition:border-color .3s}
-.anum:hover{border-top-color:var(--accent)}
-.anv{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--text);line-height:1;letter-spacing:.04em}
-.anv span{color:var(--accent);font-size:30px}
-.anl{font-size:12px;color:var(--muted);margin-top:6px;letter-spacing:.06em}
+/* ═══ HOME SECTIONS — Apple magazine style ═══ */
+/* About: dark full-bleed with image */
+.ha{position:relative;overflow:hidden;background:#1d1d1f}
+.ha-img{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=1920&q=85');background-size:cover;background-position:center;opacity:.15;filter:saturate(.3)}
+.hai{position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:120px 44px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.anr{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:0}
+.anum{padding:32px 0;border-top:1px solid rgba(255,255,255,.08)}
+.anv{font-size:56px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.04em}
+.anv span{color:rgba(255,255,255,.3);font-size:28px;font-weight:400}
+.anl{font-size:12px;color:rgba(255,255,255,.35);margin-top:6px;font-weight:400;letter-spacing:.02em}
+/* Product grid: Apple card style */
 .hp{padding:100px 0;background:var(--off)}
-.hpi{max-width:1480px;margin:0 auto;padding:0 48px}
-.hpg{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#d8dae0;margin-top:52px}
-.hpc{background:#fff;overflow:hidden;cursor:pointer;transition:all .3s;position:relative}
-.hpc:hover{transform:translateY(-4px);box-shadow:0 20px 48px rgba(0,0,0,.1)}
-.hpth{height:180px;background:var(--dark);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.hpgrad{position:absolute;inset:0}
-.gb{background:linear-gradient(135deg,#0a0f1e,#0038a8 80%)}
-.ge{background:linear-gradient(135deg,#0d1a0d,#1a4a1a 70%,#2d8a2d)}
-.gs{background:linear-gradient(135deg,#1a0a0a,#6b1a1a 70%,#a02020)}
-.gp{background:linear-gradient(135deg,#1a1200,#6b4a00 70%,#c48800)}
-.gd{background:linear-gradient(135deg,#0e0a1a,#3a1a6b 70%,#6633cc)}
-.gt{background:linear-gradient(135deg,#0a1a1a,#1a4a4a 70%,#2a8a8a)}
-.hptl{position:relative;z-index:1;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.25em;color:rgba(255,255,255,.4);text-transform:uppercase}
-.hpb{padding:28px}
-.hpen{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--blue);letter-spacing:.08em;margin-bottom:6px}
-.hpd{font-size:13px;color:var(--muted);line-height:1.65;font-weight:300}
-.hpar{position:absolute;bottom:20px;right:20px;width:32px;height:32px;background:var(--off);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;transition:all .3s}
-.hpc:hover .hpar{background:var(--accent);color:#fff}
-.hq{padding:100px 0;background:var(--dark)}
-.hqi{max-width:1480px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
-.hqbd{margin-top:40px;display:flex;gap:2px;background:rgba(255,255,255,.06)}
-.hqb{flex:1;padding:28px 20px;text-align:center;border-right:1px solid rgba(255,255,255,.06)}
-.hqb:last-child{border-right:none}
-.hqbi{font-size:28px;margin-bottom:8px}
-.hqbn{font-size:11px;font-weight:700;color:#fff;letter-spacing:.08em;text-transform:uppercase}
-.hqbs{font-size:11px;color:rgba(255,255,255,.3);margin-top:3px}
-.hqr{display:flex;flex-direction:column;gap:2px;background:rgba(255,255,255,.04)}
-.hqit{padding:28px 32px;display:flex;gap:20px;align-items:center;border-bottom:1px solid rgba(255,255,255,.05);cursor:default;transition:background .2s}
-.hqit:hover{background:rgba(41,121,255,.06)}
+.hpi{max-width:1320px;margin:0 auto;padding:0 44px}
+.hpg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.hpc{background:#fff;border-radius:18px;overflow:hidden;cursor:pointer;transition:all .35s;position:relative;border:1px solid rgba(0,0,0,.04)}
+.hpc:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.12)}
+.hpth{height:200px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:18px 18px 0 0}
+.hpgrad{position:absolute;inset:0;transition:opacity .35s}
+.gb{background:radial-gradient(ellipse at 40% 60%,#003d82,#000f26)}
+.ge{background:radial-gradient(ellipse at 40% 60%,#0a4a1a,#00110a)}
+.gs{background:radial-gradient(ellipse at 40% 60%,#7a1e10,#1a0500)}
+.gp{background:radial-gradient(ellipse at 40% 60%,#7a5200,#1a1000)}
+.gd{background:radial-gradient(ellipse at 40% 60%,#4a1a80,#0e0520)}
+.gt{background:radial-gradient(ellipse at 40% 60%,#0a4a50,#001015)}
+.hptl{position:relative;z-index:1;font-size:11px;letter-spacing:.12em;color:rgba(255,255,255,.3);text-transform:uppercase;font-weight:600}
+.hpb{padding:24px 28px 32px}
+.hpen{font-size:17px;font-weight:600;color:var(--text);letter-spacing:-.02em;margin-bottom:6px}
+.hpd{font-size:13px;color:var(--muted);line-height:1.55;font-weight:400}
+.hpar{position:absolute;bottom:24px;right:24px;width:28px;height:28px;background:var(--off);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;transition:all .3s}
+.hpc:hover .hpar{background:var(--blue);color:#fff}
+/* Quality: dark section with image */
+.hq{position:relative;overflow:hidden;background:#000;padding:100px 0}
+.hq-img{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1920&q=85');background-size:cover;background-position:center;opacity:.12;filter:saturate(.2)}
+.hqi{position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:0 44px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.hqbd{margin-top:36px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.hqb{padding:24px;background:rgba(255,255,255,.04);border-radius:14px;text-align:center;border:1px solid rgba(255,255,255,.06);transition:all .3s}
+.hqb:hover{background:rgba(255,255,255,.07);border-color:rgba(0,113,227,.4)}
+.hqbi{font-size:24px;margin-bottom:8px}
+.hqbn{font-size:13px;font-weight:700;color:#fff;letter-spacing:.04em}
+.hqbs{font-size:11px;color:rgba(255,255,255,.3);margin-top:2px}
+.hqr{display:flex;flex-direction:column;gap:0}
+.hqit{padding:24px 0;border-bottom:1px solid rgba(255,255,255,.06);cursor:default;transition:all .2s;display:flex;gap:18px;align-items:flex-start}
+.hqit:hover{padding-left:6px}
 .hqit:last-child{border-bottom:none}
-.hqin{font-family:'Bebas Neue',sans-serif;font-size:32px;color:rgba(255,255,255,.12);flex-shrink:0;width:48px;line-height:1}
-.hqit h4{font-size:15px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:4px}
-.hqit p{font-size:13px;color:rgba(255,255,255,.35);line-height:1.5;font-weight:300}
+.hqin{font-size:12px;font-weight:700;color:var(--blue);flex-shrink:0;width:20px;padding-top:2px}
+.hqit h4{font-size:16px;font-weight:600;color:#fff;margin-bottom:4px;letter-spacing:-.02em}
+.hqit p{font-size:13px;color:rgba(255,255,255,.35);line-height:1.55;font-weight:400}
 
-/* SECTION */
-.seye{font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
-.stit{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,4vw,58px);color:var(--text);line-height:1;letter-spacing:.05em;margin-bottom:18px}
-.sdsc{font-size:15px;line-height:1.85;color:var(--muted);font-weight:300;max-width:520px}
+/* ═══ FOOTER — Apple style ═══ */
+footer{background:#f5f5f7;border-top:1px solid rgba(0,0,0,.08);padding:52px 0 28px}
+.ft{max-width:1320px;margin:0 auto;padding:0 44px}
+.fttop{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:40px;padding-bottom:40px;border-bottom:1px solid rgba(0,0,0,.1);margin-bottom:24px}
+.ftlw{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ftli{width:26px;height:26px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.ftln{font-size:16px;font-weight:600;color:var(--text);letter-spacing:-.02em}
+.fttag{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:14px;font-weight:400}
+.ftci{font-size:12px;color:var(--muted);margin-bottom:5px;line-height:1.5;font-weight:400}
+.ftci strong{color:var(--text);font-weight:500}
+.ftcol h5{font-size:12px;font-weight:600;color:var(--text);margin-bottom:12px;letter-spacing:-.01em}
+.ftcol ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.ftcol ul li a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;cursor:pointer;font-weight:400}
+.ftcol ul li a:hover{color:var(--blue)}
+.ftbot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ftleg{display:flex;gap:16px}
+.ftleg a{font-size:12px;color:var(--muted);text-decoration:none;transition:color .2s}
+.ftleg a:hover{color:var(--text)}
+.ftcpy{font-size:12px;color:var(--muted)}
 
-/* FOOTER */
-footer{background:#0a0b0d;border-top:1px solid rgba(255,255,255,.06);padding:60px 0 32px}
-.ft{max-width:1480px;margin:0 auto;padding:0 48px}
-.fttop{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:52px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:32px}
-.ftlw{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.ftli{width:36px;height:36px;background:var(--accent);display:flex;align-items:center;justify-content:center;clip-path:polygon(0 0,100% 0,100% 75%,75% 100%,0 100%)}
-.ftln{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;letter-spacing:.12em}
-.fttag{font-size:12px;color:rgba(255,255,255,.28);line-height:1.7;font-weight:300;margin-bottom:20px}
-.ftci{font-size:12px;color:rgba(255,255,255,.3);margin-bottom:6px;line-height:1.5}
-.ftci strong{color:rgba(255,255,255,.5)}
-.ftcol h5{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
-.ftcol ul{list-style:none;display:flex;flex-direction:column;gap:10px}
-.ftcol ul li a{font-size:13px;color:rgba(255,255,255,.3);text-decoration:none;transition:color .2s;cursor:pointer;font-weight:300}
-.ftcol ul li a:hover{color:var(--accent)}
-.ftbot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.ftleg{display:flex;gap:20px}
-.ftleg a{font-size:11px;color:rgba(255,255,255,.2);text-decoration:none;transition:color .2s}
-.ftleg a:hover{color:rgba(255,255,255,.5)}
-.ftcpy{font-size:11px;color:rgba(255,255,255,.15);letter-spacing:.04em}
-
-/* QUICK ACCESS */
-.qa{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:500;display:flex;flex-direction:column;background:rgba(10,11,13,.95);border-left:2px solid var(--accent)}
-.qab{padding:16px 12px;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;writing-mode:vertical-rl;color:rgba(255,255,255,.4);cursor:pointer;border-bottom:1px solid rgba(255,255,255,.06);transition:all .2s}
+/* QUICK ACCESS — minimal pill */
+.qa{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:500;display:flex;flex-direction:column;background:rgba(255,255,255,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:12px 0 0 12px;border:1px solid rgba(0,0,0,.08);border-right:none;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1)}
+.qab{padding:14px 10px;font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;writing-mode:vertical-rl;color:var(--muted);cursor:pointer;border-bottom:1px solid rgba(0,0,0,.06);transition:all .2s;font-family:'Inter',sans-serif}
 .qab:last-child{border-bottom:none}
-.qab:hover{color:var(--accent);background:rgba(41,121,255,.08)}
+.qab:hover{color:var(--blue);background:rgba(0,113,227,.06)}
 
 /* AOS */
-[data-a]{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+[data-a]{opacity:0;transform:translateY(24px);transition:opacity .75s ease,transform .75s ease}
 [data-a].vis{opacity:1;transform:translateY(0)}
-[data-a="r"]{transform:translateX(-28px)}
+[data-a="r"]{transform:translateX(-24px)}
 [data-a="r"].vis{transform:translateX(0)}
-[data-a="l"]{transform:translateX(28px)}
+[data-a="l"]{transform:translateX(24px)}
 [data-a="l"].vis{transform:translateX(0)}
 
 /* BACK TOP */
-.btop{position:fixed;bottom:32px;right:72px;width:44px;height:44px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;opacity:0;pointer-events:none;transition:all .3s;z-index:400;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)}
+.btop{position:fixed;bottom:28px;right:68px;width:40px;height:40px;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--text);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;opacity:0;pointer-events:none;transition:all .3s;z-index:400;border:1px solid rgba(0,0,0,.1);box-shadow:0 4px 16px rgba(0,0,0,.12)}
 .btop.show{opacity:1;pointer-events:all}
-.btop:hover{background:var(--accent);transform:translateY(-3px)}
+.btop:hover{background:#fff;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.16)}
+
+/* MISC APPLE TOUCHES */
+button{font-family:'Inter','Noto Sans KR',sans-serif}
+::selection{background:rgba(0,113,227,.2)}
+#hfbar.show{opacity:1 !important;transform:translate(-50%,0) !important}
+
+.partner-card{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;transition:all .25s}
+.partner-card:hover{background:rgba(0,113,227,.08);border-color:rgba(0,113,227,.3);transform:translateY(-2px)}
+.pc-flag{font-size:28px;flex-shrink:0;line-height:1}
+.pc-country{font-size:14px;font-weight:700;color:#fff;letter-spacing:-.01em;margin-bottom:4px}
+.pc-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.55;font-weight:400}
+
+/* fs-section acts as transparent wrapper (no fullpage scroll) */
+.fs-container { position: relative }
+.fs-section { position: relative; width: 100%; display: block }
+.fs-section > * { width: 100% }
+.fs-nav { display: none !important }
+
+/* When on fullpage home, header always looks "scrolled" */
+body:has(#page-home.active) header { background: rgba(22,22,24,.75); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(255,255,255,.08); }
+/* Fallback for browsers without :has() */
+header.fp-home { background: rgba(22,22,24,.75) !important; backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(255,255,255,.08); }
+
+/* Show btop on home when not on first section */
+#btop.fs-show { opacity: 1; pointer-events: all; }
+
+/* ═══ PHENOMENON-INSPIRED HOME HERO ═══ */
+.phero{
+  position:relative;
+  min-height:100vh;
+  background:#0a0b10;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  padding:52px 0 0;
+}
+.phero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 30%,rgba(0,113,227,.18) 0%,transparent 55%),
+    radial-gradient(ellipse 70% 50% at 80% 70%,rgba(121,40,255,.12) 0%,transparent 55%),
+    #0a0b10;
+}
+.phero-noise{
+  position:absolute;inset:0;
+  opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events:none;
+  mix-blend-mode:overlay;
+}
+.phero-gradient{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 0%,rgba(10,11,16,.0) 40%,rgba(10,11,16,.8) 100%);
+  pointer-events:none;
+}
+.phero-particles{
+  position:absolute;inset:0;pointer-events:none;
+}
+
+.phero-wrap{
+  position:relative;
+  z-index:3;
+  max-width:1320px;
+  margin:0 auto;
+  padding:0 44px;
+  width:100%;
+}
+
+.phero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 16px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:999px;
+  font-size:12px;
+  font-weight:500;
+  color:rgba(255,255,255,.65);
+  letter-spacing:-.01em;
+  margin-bottom:40px;
+  opacity:0;
+  animation:pheIn .8s cubic-bezier(.25,.46,.45,.94) .2s forwards;
+}
+.phero-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#00ff94;box-shadow:0 0 12px #00ff94;
+  animation:phDot 2s ease-in-out infinite;
+}
+@keyframes phDot{0%,100%{opacity:1}50%{opacity:.3}}
+
+.phero-title{
+  font-size:clamp(56px,9vw,140px);
+  line-height:.92;
+  letter-spacing:-.04em;
+  font-weight:700;
+  color:#fff;
+  margin-bottom:40px;
+  max-width:1200px;
+}
+.pt-line{
+  display:block;
+  overflow:hidden;
+  position:relative;
+}
+.pt-line > * , .pt-line::first-line{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(100%);
+}
+.pt-1{animation:pheSlide 1s cubic-bezier(.25,.46,.45,.94) .3s forwards}
+.pt-2{animation:pheSlide 1s cubic-bezier(.25,.46,.45,.94) .45s forwards}
+.pt-3{animation:pheSlide 1s cubic-bezier(.25,.46,.45,.94) .6s forwards}
+.pt-line em{
+  font-style:italic;
+  font-weight:500;
+  background:linear-gradient(90deg,#60a5fa 0%,#a78bfa 50%,#f0abfc 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  padding-right:10px;
+}
+.pt-dot{
+  color:#0071e3;
+}
+
+@keyframes pheSlide{
+  0%{opacity:0;transform:translateY(100%)}
+  100%{opacity:1;transform:translateY(0)}
+}
+.pt-line{
+  opacity:1 !important;
+  transform:none !important;
+  animation:none !important;
+}
+
+.phero-sub{
+  font-size:clamp(16px,1.3vw,19px);
+  font-weight:400;
+  color:rgba(255,255,255,.55);
+  line-height:1.65;
+  max-width:560px;
+  margin-bottom:48px;
+  letter-spacing:-.01em;
+  opacity:0;
+  animation:pheIn .8s cubic-bezier(.25,.46,.45,.94) .8s forwards;
+}
+
+.phero-cta{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  opacity:0;
+  animation:pheIn .8s cubic-bezier(.25,.46,.45,.94) 1s forwards;
+}
+.phero-primary{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:18px 32px;
+  font-size:15px;
+  font-weight:500;
+  border-radius:999px;
+  transition:all .35s cubic-bezier(.25,.46,.45,.94);
+}
+.phero-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 40px rgba(0,113,227,.5);
+}
+.phero-primary svg{transition:transform .35s}
+.phero-primary:hover svg{transform:translateX(4px)}
+.phero-secondary{
+  padding:18px 28px;
+  font-size:15px;
+  font-weight:500;
+  border-radius:999px;
+}
+
+@keyframes pheIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Floating stats (bottom-right) */
+.phero-floatstats{
+  position:absolute;
+  bottom:60px;
+  right:44px;
+  z-index:4;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  padding:20px 24px;
+  background:rgba(255,255,255,.03);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  opacity:0;
+  animation:pheIn .8s cubic-bezier(.25,.46,.45,.94) 1.2s forwards;
+}
+.pfs-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:32px;
+  padding:6px 0;
+}
+.pfs-row:not(:last-child){border-bottom:1px solid rgba(255,255,255,.06)}
+.pfs-label{
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.12em;
+  color:rgba(255,255,255,.4);
+}
+.pfs-val{
+  font-size:16px;
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-.02em;
+}
+
+/* Scroll hint */
+.phero-scroll{
+  position:absolute;
+  bottom:40px;
+  left:44px;
+  z-index:4;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.15em;
+  color:rgba(255,255,255,.35);
+  text-transform:uppercase;
+  opacity:0;
+  animation:pheIn .8s cubic-bezier(.25,.46,.45,.94) 1.4s forwards;
+}
+.phero-line{
+  width:1px;
+  height:40px;
+  background:linear-gradient(180deg,rgba(255,255,255,.4),transparent);
+  animation:phLine 1.8s ease-in-out infinite;
+}
+@keyframes phLine{
+  0%{transform:scaleY(0);transform-origin:top}
+  50%{transform:scaleY(1);transform-origin:top}
+  50.1%{transform-origin:bottom}
+  100%{transform:scaleY(0);transform-origin:bottom}
+}
+
+/* ═══ PARTNERS MARQUEE ═══ */
+.pmarq-sec{
+  background:#fff;
+  padding:60px 0;
+  border-top:1px solid rgba(0,0,0,.06);
+  border-bottom:1px solid rgba(0,0,0,.06);
+  overflow:hidden;
+  position:relative;
+}
+.pmarq-head{
+  max-width:1320px;
+  margin:0 auto 36px;
+  padding:0 44px;
+  display:flex;
+  align-items:baseline;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.pmarq-eyebrow{
+  font-size:12px;
+  font-weight:600;
+  color:var(--blue);
+  letter-spacing:-.01em;
+}
+.pmarq-title{
+  font-size:clamp(28px,3.5vw,44px);
+  font-weight:700;
+  color:var(--text);
+  letter-spacing:-.03em;
+  line-height:1;
+}
+.pmarq-track-wrap{
+  overflow:hidden;
+  width:100%;
+  mask-image:linear-gradient(90deg,transparent 0%,black 5%,black 95%,transparent 100%);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,black 5%,black 95%,transparent 100%);
+}
+.pmarq-track{
+  display:inline-flex;
+  align-items:center;
+  gap:32px;
+  white-space:nowrap;
+  animation:pmarq 45s linear infinite;
+  padding-left:32px;
+}
+.pmarq-item{
+  font-size:clamp(28px,3.5vw,52px);
+  font-weight:600;
+  color:var(--text);
+  letter-spacing:-.03em;
+  transition:color .25s;
+  cursor:default;
+}
+.pmarq-item:hover{color:var(--blue)}
+.pmarq-dot{
+  font-size:28px;
+  color:rgba(0,0,0,.15);
+}
+@keyframes pmarq{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+/* ═══ IN NUMBERS ═══ */
+.pnum-sec{
+  background:#0a0b10;
+  padding:120px 0;
+  position:relative;
+  overflow:hidden;
+}
+.pnum-sec::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(0,113,227,.15),transparent 60%);
+  pointer-events:none;
+}
+.pnum-inner{
+  position:relative;
+  max-width:1320px;
+  margin:0 auto;
+  padding:0 44px;
+}
+.pnum-head{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  margin-bottom:60px;
+}
+.pnum-label{
+  font-size:11px;
+  font-weight:600;
+  color:rgba(255,255,255,.4);
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.pnum-label-r{
+  font-size:11px;
+  font-weight:600;
+  color:var(--blue);
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.pnum-line{
+  flex:1;
+  height:1px;
+  background:rgba(255,255,255,.1);
+}
+
+.pnum-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+}
+.pnum-item{
+  padding:40px 32px 40px 0;
+  border-top:1px solid rgba(255,255,255,.08);
+  border-right:1px solid rgba(255,255,255,.08);
+  padding-left:32px;
+  transition:background .3s;
+}
+.pnum-item:last-child{border-right:none}
+.pnum-item:first-child{padding-left:0}
+.pnum-item:hover{background:rgba(0,113,227,.04)}
+.pnum-big{
+  font-size:clamp(56px,7vw,100px);
+  font-weight:700;
+  line-height:.95;
+  letter-spacing:-.05em;
+  color:#fff;
+  margin-bottom:16px;
+}
+.pnum-big span{
+  color:var(--blue);
+  font-size:.5em;
+  font-weight:500;
+}
+.pnum-kr{
+  font-size:13px;
+  color:rgba(255,255,255,.45);
+  line-height:1.55;
+  font-weight:400;
+  letter-spacing:-.01em;
+  max-width:240px;
+}
+
+/* Responsive */
+@media (max-width:1024px){
+  .pnum-grid{grid-template-columns:repeat(2,1fr)}
+  .pnum-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}
+  .phero-floatstats{display:none}
+}
 </style>
 </head>
 <body>
@@ -286,7 +714,7 @@ footer{background:#0a0b0d;border-top:1px solid rgba(255,255,255,.06);padding:60p
 <header id="hdr" class="top">
   <div class="hi">
     <a class="logo" onclick="gp('home')">
-      <div class="licon"><svg viewBox="0 0 22 22" fill="none" width="22" height="22"><path d="M3 4L11 2L19 4V12C19 17 11 21 11 21C11 21 3 17 3 12V4Z" fill="white" opacity=".9"/><path d="M7 10L10 13L15 8" stroke="#0038a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="licon"><svg viewBox="0 0 22 22" fill="none" width="16" height="16"><path d="M3 4L11 2L19 4V12C19 17 11 21 11 21C11 21 3 17 3 12V4Z" fill="white" opacity=".9"/><path d="M7 10L10 13L15 8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="lwm"><span class="lm">SEOULIND</span><span class="ls">서울산업(주)</span></div>
     </a>
     <nav>
@@ -294,7 +722,8 @@ footer{background:#0a0b0d;border-top:1px solid rgba(255,255,255,.06);padding:60p
       <div class="ni" id="n1" onclick="tm(1)">제품정보<div class="ndot"></div></div>
       <div class="ni" id="n2" onclick="tm(2)">품질보증<div class="ndot"></div></div>
       <div class="ni" id="n3" onclick="tm(3)">연구개발<div class="ndot"></div></div>
-      <div class="ni" id="n4" onclick="tm(4)">채용정보<div class="ndot"></div></div>
+      <div class="ni" id="n4" onclick="tm(4)">ESG<div class="ndot"></div></div>
+      <div class="ni" id="n5" onclick="tm(5)">채용정보<div class="ndot"></div></div>
     </nav>
     <div class="hr">
       <div class="lang on">KOR</div>
@@ -333,8 +762,17 @@ footer{background:#0a0b0d;border-top:1px solid rgba(255,255,255,.06);padding:60p
     <div class="mct">연구개발</div>
     <a class="ml" onclick="gp('rnd','parts')"><span class="mln">01</span>부품개발</a>
   </div></div></div>
-  <!-- Mega 4 -->
+  <!-- Mega 4 — ESG -->
   <div class="mega" id="m4"><div class="mi"><div class="mc">
+    <div class="mct">ESG 경영</div>
+    <a class="ml" onclick="gp('esg','overview')"><span class="mln">01</span>ESG 개요</a>
+    <a class="ml" onclick="gp('esg','carbon')"><span class="mln">02</span>탄소절감활동</a>
+    <a class="ml" onclick="gp('esg','safety')"><span class="mln">03</span>안전보건환경</a>
+    <a class="ml" onclick="gp('esg','social')"><span class="mln">04</span>사회공헌</a>
+    <a class="ml" onclick="gp('esg','ethics')"><span class="mln">05</span>윤리경영</a>
+  </div></div></div>
+  <!-- Mega 5 — Recruit -->
+  <div class="mega" id="m5"><div class="mi"><div class="mc">
     <div class="mct">채용정보</div>
     <a class="ml" onclick="gp('recruit','info')"><span class="mln">01</span>채용정보</a>
     <a class="ml" onclick="gp('recruit','welfare')"><span class="mln">02</span>복지제도</a>
@@ -343,568 +781,215 @@ footer{background:#0a0b0d;border-top:1px solid rgba(255,255,255,.06);padding:60p
 
 <!-- ═══ HOME ═══ -->
 <div class="page active" id="page-home">
-<div class="hero" id="hero-wrap" style="position:relative;overflow:hidden;background:#080a10">
-  <!-- Three.js canvas -->
-  <canvas id="hero3d" style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
-  <!-- SVG connector lines overlay -->
-  <svg id="hsv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5"></svg>
-  <!-- Hotspot HTML labels -->
-  <div id="hspots" style="position:absolute;inset:0;z-index:6;pointer-events:none"></div>
+<div class="fs-container" id="fs-container">
 
-  <!-- Text overlay bottom-left -->
-  <div style="position:absolute;left:48px;bottom:80px;z-index:10;pointer-events:none">
-    <p class="heye" style="opacity:1;animation:none;margin-bottom:12px">Automotive Parts Manufacturer · Est. 1993</p>
-    <h1 class="htit" style="opacity:1;animation:none;font-size:clamp(48px,6vw,96px)">PRECISION<br>IN <em>MOTION</em></h1>
-    <p class="hsub" style="opacity:1;animation:none;margin-bottom:24px;font-size:14px">자동차 핵심 부품의 설계부터 양산까지.<br>서울산업(주)은 글로벌 OEM에 공급합니다.</p>
-    <div class="hact" style="opacity:1;animation:none;pointer-events:all">
-      <button class="bp" onclick="gp('product')">제품 보기 →</button>
-      <button class="bg" onclick="gp('about')">회사소개</button>
+<!-- FULLPAGE NAV DOTS -->
+<div class="fs-nav" id="fs-nav"></div>
+
+<div class="fs-section fs-active" data-idx="0">
+<!-- ═══ NEW HOME HERO — Phenomenon-inspired ═══ -->
+<section class="phero" id="phero">
+  <div class="phero-bg"></div>
+  <div class="phero-noise"></div>
+  <div class="phero-gradient"></div>
+
+  <!-- Animated particles -->
+  <div class="phero-particles" id="pheroP"></div>
+
+  <!-- Main content -->
+  <div class="phero-wrap">
+    <div class="phero-eyebrow">
+      <span class="phero-dot"></span>
+      <span>Automotive Precision Since 1993</span>
+    </div>
+
+    <h1 class="phero-title">
+      <span class="pt-line pt-1">We craft the</span>
+      <span class="pt-line pt-2"><em>precision</em> that moves</span>
+      <span class="pt-line pt-3">the world<span class="pt-dot">.</span></span>
+    </h1>
+
+    <p class="phero-sub">서울산업(주)은 자동차 핵심 정밀 부품을<br>전 세계 OEM 및 Tier-1 협력사에 공급합니다.</p>
+
+    <div class="phero-cta">
+      <button class="bp phero-primary" onclick="gp('product')">
+        <span>제품 탐험하기</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <button class="bg phero-secondary" onclick="gp('about')">
+        <span>회사 소개</span>
+      </button>
     </div>
   </div>
 
-  <!-- Stats top-right -->
-  <div class="hstats" style="z-index:10">
-    <div class="hst"><div class="hstv">30<span>+</span></div><div class="hstl">Years of Experience</div></div>
-    <div class="hst"><div class="hstv">6<span>+</span></div><div class="hstl">Product Lines</div></div>
-    <div class="hst"><div class="hstv">IATF<span>16949</span></div><div class="hstl">Certified Quality</div></div>
+  <!-- Floating stats (bottom right) -->
+  <div class="phero-floatstats">
+    <div class="pfs-row"><span class="pfs-label">EST.</span><span class="pfs-val">1993</span></div>
+    <div class="pfs-row"><span class="pfs-label">PARTNERS</span><span class="pfs-val">15+</span></div>
+    <div class="pfs-row"><span class="pfs-label">COUNTRIES</span><span class="pfs-val">8</span></div>
   </div>
 
-  <!-- Part detail panel -->
-  <div id="hpanel" style="position:absolute;top:0;right:0;width:320px;height:100%;z-index:20;pointer-events:none;transform:translateX(100%);transition:transform .5s cubic-bezier(.77,0,.18,1);background:linear-gradient(to left,rgba(8,10,16,.98),rgba(8,10,16,.85));backdrop-filter:blur(12px);border-left:1px solid rgba(41,121,255,.2);display:flex;flex-direction:column;justify-content:center;padding:48px 36px">
-    <div id="hpanel-close" style="position:absolute;top:20px;right:20px;display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);cursor:pointer;color:rgba(255,255,255,.8);font-size:12px;font-weight:600;letter-spacing:.08em;pointer-events:all;transition:all .2s;text-transform:uppercase" onmouseenter="this.style.background='rgba(41,121,255,.25)';this.style.borderColor='#2979ff'" onmouseleave="this.style.background='rgba(255,255,255,.08)';this.style.borderColor='rgba(255,255,255,.2)'" onclick="closeHPanel()">← 돌아가기</div>
-    <p id="hp-eye" style="font-size:10px;letter-spacing:.22em;color:#2979ff;text-transform:uppercase;font-weight:600;margin-bottom:12px"></p>
-    <h3 id="hp-name" style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:#fff;letter-spacing:.08em;margin-bottom:16px;line-height:1"></h3>
-    <p id="hp-kr" style="font-size:13px;color:rgba(255,255,255,.4);margin-bottom:20px;letter-spacing:.04em"></p>
-    <p id="hp-desc" style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;font-weight:300;margin-bottom:28px"></p>
-    <div id="hp-tags" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px"></div>
-    <button id="hp-btn" style="display:inline-flex;align-items:center;gap:8px;padding:13px 24px;background:var(--accent);color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:none;pointer-events:all;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));transition:all .2s">제품 상세 보기 →</button>
-    <div style="margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,.07)">
-      <p style="font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.1em;text-transform:uppercase">클릭하여 3D 확대 · 드래그로 회전</p>
+  <!-- Scroll indicator -->
+  <div class="phero-scroll">
+    <span>Scroll</span>
+    <div class="phero-line"></div>
+  </div>
+</section>
+
+<!-- ═══ PARTNERS SCROLLING MARQUEE ═══ -->
+<section class="pmarq-sec">
+  <div class="pmarq-head">
+    <span class="pmarq-eyebrow">Global Clients & Partners</span>
+    <h3 class="pmarq-title">15+ global OEMs trust us</h3>
+  </div>
+  <div class="pmarq-track-wrap">
+    <div class="pmarq-track">
+      <!-- Set 1 -->
+      <span class="pmarq-item">Hyundai Mobis</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">Magna</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">ThyssenKrupp</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">GKN Driveline</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">Nexteer</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">BorgWarner</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">AAM</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">Metaldyne</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">ZF Group</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">TRW</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">Spartan</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">GMB</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">Bocar</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">명화공업</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">KDAC</span><span class="pmarq-dot">•</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="pmarq-item">Hyundai Mobis</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">Magna</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">ThyssenKrupp</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">GKN Driveline</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">Nexteer</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">BorgWarner</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">AAM</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">Metaldyne</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">ZF Group</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">TRW</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">Spartan</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">GMB</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">Bocar</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">명화공업</span><span class="pmarq-dot">•</span>
+      <span class="pmarq-item">KDAC</span><span class="pmarq-dot">•</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ IN NUMBERS ═══ -->
+<section class="pnum-sec">
+  <div class="pnum-inner">
+    <div class="pnum-head">
+      <span class="pnum-label">Seoul Industry</span>
+      <span class="pnum-line"></span>
+      <span class="pnum-label-r">IN NUMBERS</span>
+    </div>
+
+    <div class="pnum-grid">
+      <div class="pnum-item" data-n>
+        <div class="pnum-big">30<span>+</span></div>
+        <div class="pnum-kr">년간 축적한 정밀 가공 기술력</div>
+      </div>
+      <div class="pnum-item" data-n>
+        <div class="pnum-big">6</div>
+        <div class="pnum-kr">핵심 제품 라인 · BSM · EV · Steering · Powertrain · Driveline · etc.</div>
+      </div>
+      <div class="pnum-item" data-n>
+        <div class="pnum-big">15<span>+</span></div>
+        <div class="pnum-kr">글로벌 OEM·Tier-1 협력사</div>
+      </div>
+      <div class="pnum-item" data-n>
+        <div class="pnum-big">IATF<span style="color:rgba(255,255,255,.3);font-weight:400">&nbsp;16949</span></div>
+        <div class="pnum-kr">국제 품질경영 인증 취득 사업장</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="fs-section" data-idx="1"><!-- ═══ 3D GLOBE — Global Partners ═══ -->
+<div class="globe-sec" style="position:relative;background:#000;padding:100px 0 80px;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(0,113,227,.12) 0%,transparent 60%)"></div>
+
+  <div style="position:relative;z-index:2;max-width:1320px;margin:0 auto;padding:0 44px;text-align:center;margin-bottom:40px">
+    <p style="font-size:13px;font-weight:500;color:#0071e3;margin-bottom:12px;letter-spacing:-.01em" data-a>Global Network</p>
+    <h2 style="font-size:clamp(38px,5vw,64px);color:#fff;line-height:1.08;letter-spacing:-.03em;font-weight:700;margin-bottom:16px" data-a>세계와 함께하는<br>서울산업</h2>
+    <p style="font-size:17px;color:rgba(255,255,255,.4);font-weight:400;line-height:1.65;max-width:560px;margin:0 auto;letter-spacing:-.01em" data-a>화성 본사에서 출발하여, 국내외 주요 완성차 OEM 및<br>Tier-1 협력사에 정밀 부품을 공급하고 있습니다.</p>
+  </div>
+
+  <div id="globe-wrap" style="position:relative;width:100%;height:620px;z-index:2">
+    <canvas id="globe3d" style="position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab"></canvas>
+    <div id="globe-tooltip" style="position:absolute;background:rgba(22,22,24,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 16px;pointer-events:none;opacity:0;transition:opacity .2s;z-index:5;max-width:260px;box-shadow:0 8px 32px rgba(0,0,0,.5)">
+      <div style="font-size:10px;color:#0071e3;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px" id="tt-region"></div>
+      <div style="font-size:15px;color:#fff;font-weight:600;letter-spacing:-.01em" id="tt-city"></div>
+      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:3px;line-height:1.4" id="tt-partner"></div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="globe-load" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);z-index:3;transition:opacity .4s">
+      <div style="color:rgba(255,255,255,.4);font-size:12px;letter-spacing:.1em;text-transform:uppercase">Loading Earth…</div>
     </div>
   </div>
 
-  <!-- Scroll hint -->
-  <div class="hscrl" style="z-index:10;pointer-events:all" onclick="document.getElementById('hsec').scrollIntoView({behavior:'smooth'})">
-    <div class="strk"><div class="sfill"></div></div><span>Scroll</span>
+  <!-- ACTUAL Seoul Industry partner companies (from seoulind.co.kr) -->
+  <div style="position:relative;z-index:2;max-width:1320px;margin:48px auto 0;padding:0 44px">
+    <div style="text-align:center;margin-bottom:24px">
+      <p style="font-size:11px;font-weight:600;color:rgba(255,255,255,.35);letter-spacing:.18em;text-transform:uppercase">Global Customers & Partners</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+      <div class="partner-card">
+        <div class="pc-flag">🇰🇷</div>
+        <div><div class="pc-country">Korea</div><div class="pc-desc">현대모비스 · 명화공업<br>Metaldyne Korea · KDAC</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="pc-flag">🇺🇸</div>
+        <div><div class="pc-country">USA</div><div class="pc-desc">BorgWarner · AAM · Nexteer<br>Metaldyne · TRW · Spartan</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="pc-flag">🇨🇦</div>
+        <div><div class="pc-country">Canada</div><div class="pc-desc">Magna International<br>(Aurora, ON)</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="pc-flag">🇩🇪</div>
+        <div><div class="pc-country">Germany</div><div class="pc-desc">ThyssenKrupp · ZF Group</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="pc-flag">🇬🇧</div>
+        <div><div class="pc-country">UK</div><div class="pc-desc">GKN Driveline<br>(Redditch)</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="pc-flag">🇯🇵</div>
+        <div><div class="pc-country">Japan</div><div class="pc-desc">GMB Corporation<br>(Shizuoka)</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="pc-flag">🇨🇳</div>
+        <div><div class="pc-country">China</div><div class="pc-desc">Nexteer China<br>(Suzhou)</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="pc-flag">🇲🇽</div>
+        <div><div class="pc-country">Mexico</div><div class="pc-desc">Bocar Group<br>(Monterrey)</div></div>
+      </div>
+    </div>
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-(function(){
-'use strict';
-const canvas = document.getElementById('hero3d');
-const heroWrap = document.getElementById('hero-wrap');
-const svg = document.getElementById('hsv');
-const hspots = document.getElementById('hspots');
+</div>
 
-let W = heroWrap.offsetWidth, H = heroWrap.offsetHeight;
-
-const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-renderer.setSize(W, H);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(42, W/H, 0.1, 200);
-
-// --- MATERIALS ---
-function mat(hex, emHex, emInt, op, wire){
-  return new THREE.MeshPhongMaterial({
-    color:hex, emissive:emHex||0x000000, emissiveIntensity:emInt||0,
-    transparent: op<1, opacity: op===undefined?1:op,
-    wireframe: wire||false, shininess:60
-  });
-}
-const M = {
-  bodyWire: mat(0x1e3a7a, 0x000000, 0, 0.7, true),
-  bodyGlass: mat(0x0d2060, 0x000820, 0.1, 0.12),
-  chassis: mat(0x1a2540, 0x0d1a30, 0.1, 0.9),
-  subframe: mat(0x202d44, 0x0d1a30, 0.05, 1),
-  engine: mat(0x2a3550, 0x101828, 0.1, 1),
-  bsm: mat(0x2979ff, 0x1045cc, 0.5, 1),
-  ev: mat(0x00b84c, 0x005a24, 0.5, 1),
-  steering: mat(0xff6b35, 0x7a2a10, 0.4, 1),
-  powertrain: mat(0xf5a623, 0x7a4a00, 0.4, 1),
-  driveline: mat(0x9b59b6, 0x4a1a6b, 0.4, 1),
-  etc: mat(0x00bcd4, 0x004d60, 0.4, 1),
-  axle: mat(0x445566, 0x000000, 0, 1),
-  wheel: mat(0x111120, 0x000000, 0, 1),
-  rim: mat(0x8899aa, 0x334455, 0.1, 1),
-  floor: mat(0x0d1020, 0x000000, 0, 0.4),
-};
-
-// --- LIGHTS ---
-scene.add(new THREE.AmbientLight(0x0a1530, 3));
-const sun = new THREE.DirectionalLight(0x6090ff, 1.2);
-sun.position.set(4, 8, 4);
-sun.castShadow = true;
-scene.add(sun);
-[[-2,1.5,2, 0x2979ff, 3, 7],[2,2,-2, 0x4060aa, 1.5, 8],[0,3,0, 0x1a3060, 1, 12]].forEach(([x,y,z,c,i,d])=>{
-  const pl = new THREE.PointLight(c, i, d);
-  pl.position.set(x,y,z);
-  scene.add(pl);
-});
-
-// --- GRID FLOOR ---
-const grid = new THREE.GridHelper(24, 24, 0x1a2a4a, 0x111828);
-grid.position.y = -0.85;
-grid.material.transparent = true;
-grid.material.opacity = 0.5;
-scene.add(grid);
-
-// Floor plane
-const floorGeo = new THREE.PlaneGeometry(24, 24);
-const floorMesh = new THREE.Mesh(floorGeo, M.floor);
-floorMesh.rotation.x = -Math.PI/2;
-floorMesh.position.y = -0.86;
-scene.add(floorMesh);
-
-// --- CAR GROUP ---
-const carGroup = new THREE.Group();
-scene.add(carGroup);
-carGroup.rotation.y = 0.3;
-
-// Helper: add mesh to group and return it
-function addBox(g, mat, w, h, d, x, y, z){
-  const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat);
-  m.position.set(x,y,z);
-  m.castShadow = true;
-  m.receiveShadow = true;
-  g.add(m);
-  return m;
-}
-function addCyl(g, mat, rt, rb, h, x, y, z, rx, ry, rz, segs){
-  const m = new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,segs||16), mat);
-  m.position.set(x,y,z);
-  if(rx) m.rotation.x = rx;
-  if(ry) m.rotation.y = ry;
-  if(rz) m.rotation.z = rz;
-  m.castShadow = true;
-  g.add(m);
-  return m;
-}
-
-// -- BODY SHELL (wireframe + glass) --
-const bodyG = new THREE.Group();
-carGroup.add(bodyG);
-// Cabin wireframe box (main passenger area)
-addBox(bodyG, M.bodyWire, 2.2, 0.85, 1.72, 0.1, 0.42, 0);
-addBox(bodyG, M.bodyGlass, 2.2, 0.85, 1.72, 0.1, 0.42, 0);
-// Roof
-addBox(bodyG, M.bodyWire, 1.6, 0.08, 1.6, 0.1, 0.9, 0);
-// Hood
-addBox(bodyG, M.bodyWire, 1.55, 0.07, 1.65, -1.35, 0.08, 0);
-// Trunk
-addBox(bodyG, M.bodyWire, 0.85, 0.07, 1.65, 1.55, 0.08, 0);
-// Windshield plane (tilted)
-const wsG = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.85), M.bodyWire);
-wsG.position.set(-0.78, 0.42, 0);
-wsG.rotation.z = Math.PI/2 * 0.35;
-wsG.rotation.y = Math.PI/2;
-bodyG.add(wsG);
-
-// -- CHASSIS --
-const chassisG = new THREE.Group();
-carGroup.add(chassisG);
-addBox(chassisG, M.chassis, 4.3, 0.1, 1.78, 0, -0.32, 0);  // main floor
-addBox(chassisG, M.subframe, 1.3, 0.07, 1.55, -1.45, -0.18, 0); // front subframe
-addBox(chassisG, M.subframe, 1.1, 0.07, 1.55, 1.5, -0.18, 0);  // rear subframe
-// Firewall
-addBox(chassisG, M.subframe, 0.07, 0.6, 1.72, -0.7, 0.1, 0);
-// Rear bulkhead
-addBox(chassisG, M.subframe, 0.07, 0.5, 1.72, 1.1, 0.08, 0);
-
-// -- ENGINE BLOCK (Powertrain) --
-const ptGroup = new THREE.Group();
-carGroup.add(ptGroup);
-ptGroup.userData = {id:'powertrain', origPos:[0,0,0]};
-const engineMesh = addBox(ptGroup, M.engine, 0.85, 0.52, 0.72, -1.45, 0.12, 0); // block
-addBox(ptGroup, M.engine, 0.55, 0.38, 0.55, -0.82, 0.06, 0); // transmission
-addBox(ptGroup, M.powertrain, 0.8, 0.08, 0.65, -1.45, 0.38, 0); // intake manifold
-addCyl(ptGroup, M.powertrain, 0.12, 0.12, 0.5, -1.45, 0.18, 0.22, Math.PI/2, 0, 0); // cylinder L
-addCyl(ptGroup, M.powertrain, 0.12, 0.12, 0.5, -1.45, 0.18, -0.22, Math.PI/2, 0, 0); // cylinder R
-
-// -- BSM --
-const bsmGroup = new THREE.Group();
-carGroup.add(bsmGroup);
-bsmGroup.userData = {id:'bsm', origPos:[0,0,0]};
-addCyl(bsmGroup, M.bsm, 0.11, 0.11, 0.46, -1.45, 0.1, 0.44, Math.PI/2, 0, 0);
-addCyl(bsmGroup, M.bsm, 0.11, 0.11, 0.46, -1.45, 0.1, -0.44, Math.PI/2, 0, 0);
-addCyl(bsmGroup, M.bsm, 0.06, 0.06, 0.42, -1.45, 0.1, 0.44, 0, 0, 0); // shaft inside L
-addCyl(bsmGroup, M.bsm, 0.06, 0.06, 0.42, -1.45, 0.1, -0.44, 0, 0, 0); // shaft inside R
-
-// -- EV BATTERY --
-const evGroup = new THREE.Group();
-carGroup.add(evGroup);
-evGroup.userData = {id:'ev', origPos:[0,0,0]};
-addBox(evGroup, M.ev, 2.85, 0.17, 1.5, 0.15, -0.25, 0);
-addCyl(evGroup, M.ev, 0.17, 0.17, 0.28, -1.32, 0.1, 0, 0, 0, Math.PI/2); // front motor
-addCyl(evGroup, M.ev, 0.14, 0.14, 0.24, 1.42, -0.06, 0, 0, 0, Math.PI/2); // rear motor
-// Battery cells (decorative)
-for(let i=-3; i<=3; i++){
-  addBox(evGroup, mat(0x007a30, 0x003a14, 0.2, 0.8), 0.32, 0.12, 0.08, 0.15+i*0.38, -0.18, 0);
-}
-
-// -- STEERING --
-const stGroup = new THREE.Group();
-carGroup.add(stGroup);
-stGroup.userData = {id:'steering', origPos:[0,0,0]};
-addBox(stGroup, M.steering, 0.07, 0.07, 1.35, -1.42, 0.0, 0); // rack
-addBox(stGroup, M.steering, 0.5, 0.04, 0.04, -1.2, 0.0, 0.65); // tie rod L
-addBox(stGroup, M.steering, 0.5, 0.04, 0.04, -1.2, 0.0, -0.65); // tie rod R
-addCyl(stGroup, M.steering, 0.038, 0.038, 0.65, -1.38, 0.32, -0.4, 0.38, 0, 0); // column
-// Steering wheel
-const swRing = new THREE.Mesh(new THREE.TorusGeometry(0.19, 0.025, 8, 20), M.steering);
-swRing.position.set(-1.28, 0.58, -0.52);
-swRing.rotation.x = 0.35;
-swRing.rotation.z = 0.1;
-stGroup.add(swRing);
-
-// -- DRIVELINE --
-const dlGroup = new THREE.Group();
-carGroup.add(dlGroup);
-dlGroup.userData = {id:'driveline', origPos:[0,0,0]};
-addCyl(dlGroup, M.driveline, 0.038, 0.038, 2.1, 0.35, -0.16, 0, 0, 0, Math.PI/2); // propshaft
-addBox(dlGroup, M.driveline, 0.28, 0.22, 0.3, 1.48, -0.15, 0); // diff
-addCyl(dlGroup, M.axle, 0.04, 0.04, 0.66, -1.62, -0.3, 0.62, 0, 0, Math.PI/2); // front axle L
-addCyl(dlGroup, M.axle, 0.04, 0.04, 0.66, -1.62, -0.3, -0.62, 0, 0, Math.PI/2);
-addCyl(dlGroup, M.axle, 0.04, 0.04, 0.6, 1.62, -0.27, 0.62, 0, 0, Math.PI/2); // rear axle L
-addCyl(dlGroup, M.axle, 0.04, 0.04, 0.6, 1.62, -0.27, -0.62, 0, 0, Math.PI/2);
-
-// -- ETC (misc parts) --
-const etcGroup = new THREE.Group();
-carGroup.add(etcGroup);
-etcGroup.userData = {id:'etc', origPos:[0,0,0]};
-addBox(etcGroup, M.etc, 0.55, 0.22, 0.42, -1.45, -0.06, -0.3); // alternator/pump
-addCyl(etcGroup, M.etc, 0.08, 0.08, 0.35, 1.55, 0.05, 0.35, 0, 0, Math.PI/2); // sensor
-addBox(etcGroup, M.etc, 0.45, 0.18, 0.3, 1.55, 0.05, -0.3); // module box
-
-// -- WHEELS --
-const whlGroup = new THREE.Group();
-carGroup.add(whlGroup);
-function addWheel(x, z){
-  const g = new THREE.Group();
-  const tire = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.36, 0.22, 24), M.wheel);
-  tire.rotation.z = Math.PI/2;
-  g.add(tire);
-  const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.24, 10), M.rim);
-  rim.rotation.z = Math.PI/2;
-  g.add(rim);
-  // Spokes
-  for(let i=0;i<5;i++){
-    const sp = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.035, 0.035), M.rim);
-    sp.rotation.z = (i/5)*Math.PI*2;
-    sp.position.x = 0.001;
-    g.add(sp);
-  }
-  g.position.set(x, -0.34, z);
-  whlGroup.add(g);
-  return g;
-}
-const wheels = [
-  addWheel(-1.62, 0.95), addWheel(-1.62,-0.95),
-  addWheel(1.62, 0.95), addWheel(1.62,-0.95)
-];
-
-// Exhaust pipes
-addCyl(carGroup, M.axle, 0.04, 0.04, 0.5, 1.88, -0.28, 0.22, 0, 0, Math.PI/2);
-addCyl(carGroup, M.axle, 0.04, 0.04, 0.5, 1.88, -0.28, -0.22, 0, 0, Math.PI/2);
-
-// -- HOTSPOT DATA --
-const HOTSPOTS = [
-  {
-    id:'bsm', group: bsmGroup,
-    label:'Balance Shaft Module', kr:'밸런스 샤프트 모듈',
-    desc:'엔진 2차 진동을 상쇄하는 핵심 모듈. 정밀 가공으로 소음과 진동을 최소화합니다.',
-    tags:['ENGINE','VIBRATION','OEM'],
-    color:'#2979ff',
-    worldPos: new THREE.Vector3(-1.45, 0.55, 0.75),
-    camPos: {x:-1.2, y:1.2, z:2.5},
-    lookAt: {x:-1.45, y:0.1, z:0.44},
-    page:'product', tab:'bsm',
-    explodeDir: new THREE.Vector3(0, 0.3, 0.4)
-  },
-  {
-    id:'ev', group: evGroup,
-    label:'Electric Vehicle', kr:'전기차 구동 부품',
-    desc:'전기차 구동 모터 및 감속기용 정밀 부품. 경량화와 고강도를 동시에 실현합니다.',
-    tags:['EV','MOTOR','LIGHTWEIGHT'],
-    color:'#00b84c',
-    worldPos: new THREE.Vector3(0.15, 0.2, 1.0),
-    camPos: {x:0.5, y:1.5, z:3.0},
-    lookAt: {x:0.15, y:-0.2, z:0},
-    page:'product', tab:'ev',
-    explodeDir: new THREE.Vector3(0, -0.4, 0)
-  },
-  {
-    id:'steering', group: stGroup,
-    label:'Steering', kr:'조향 부품',
-    desc:'조향 시스템의 핵심 컬럼 및 랙·피니언 부품. 고정밀 선삭 가공으로 제작됩니다.',
-    tags:['STEERING','EPS','PRECISION'],
-    color:'#ff6b35',
-    worldPos: new THREE.Vector3(-1.45, 0.7, -0.9),
-    camPos: {x:-0.8, y:1.0, z:2.0},
-    lookAt: {x:-1.42, y:0.15, z:-0.4},
-    page:'product', tab:'st',
-    explodeDir: new THREE.Vector3(0, 0.2, -0.4)
-  },
-  {
-    id:'powertrain', group: ptGroup,
-    label:'Powertrain', kr:'파워트레인 부품',
-    desc:'변속기·크랭크샤프트 등 파워트레인 계열 고강도 정밀 부품을 공급합니다.',
-    tags:['TRANSMISSION','ENGINE','HIGH-STRENGTH'],
-    color:'#f5a623',
-    worldPos: new THREE.Vector3(-1.0, 0.9, -0.7),
-    camPos: {x:-0.8, y:1.5, z:2.8},
-    lookAt: {x:-1.2, y:0.12, z:0},
-    page:'product', tab:'pt',
-    explodeDir: new THREE.Vector3(-0.2, 0.4, 0)
-  },
-  {
-    id:'driveline', group: dlGroup,
-    label:'Driveline', kr:'드라이브라인 부품',
-    desc:'드라이브샤프트·디퍼런셜 등 구동계 핵심 부품. 고토크 환경에 최적화된 설계.',
-    tags:['DRIVESHAFT','DIFFERENTIAL','4WD'],
-    color:'#9b59b6',
-    worldPos: new THREE.Vector3(0.8, 0.3, 1.0),
-    camPos: {x:1.0, y:1.2, z:3.0},
-    lookAt: {x:0.5, y:-0.15, z:0},
-    page:'product', tab:'dl',
-    explodeDir: new THREE.Vector3(0, -0.3, 0.4)
-  },
-  {
-    id:'etc', group: etcGroup,
-    label:'etc.', kr:'기타 정밀 부품',
-    desc:'고객 도면에 따른 맞춤형 자동차 정밀 부품 가공 및 공급이 가능합니다.',
-    tags:['CUSTOM','PRECISION','OEM'],
-    color:'#00bcd4',
-    worldPos: new THREE.Vector3(1.6, 0.5, 0.7),
-    camPos: {x:2.0, y:1.2, z:2.8},
-    lookAt: {x:1.55, y:0.05, z:0},
-    page:'product', tab:'etc',
-    explodeDir: new THREE.Vector3(0.3, 0.3, 0.3)
-  }
-];
-
-// -- CAMERA STATE --
-const camState = {
-  pos: {x:5.5, y:3.2, z:5.8},
-  lookAt: {x:0, y:0, z:0},
-  autoRot: true
-};
-camera.position.set(5.5, 3.2, 5.8);
-
-// -- HOTSPOT HTML ELEMENTS --
-HOTSPOTS.forEach((hs, i) => {
-  const el = document.createElement('div');
-  el.id = 'hs-'+hs.id;
-  el.style.cssText = 'position:absolute;pointer-events:all;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:0';
-  el.innerHTML = `
-    <div style="display:flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;background:rgba(8,10,16,.85);border:1px solid ${hs.color}44;border-radius:2px;backdrop-filter:blur(8px);transition:all .25s;white-space:nowrap" onmouseenter="this.style.background='rgba(8,10,16,.95)';this.style.borderColor='${hs.color}'" onmouseleave="this.style.background='rgba(8,10,16,.85)';this.style.borderColor='${hs.color}44'">
-      <div style="width:8px;height:8px;border-radius:50%;background:${hs.color};box-shadow:0 0 6px ${hs.color};animation:hspulse 2s ease infinite;animation-delay:${i*0.3}s"></div>
-      <span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:.08em;font-family:'DM Sans',sans-serif;text-transform:uppercase">${hs.label}</span>
-    </div>
-    <div style="width:1px;height:18px;background:${hs.color};opacity:0.5"></div>
-  `;
-  el.addEventListener('click', ()=>focusHotspot(hs));
-  hspots.appendChild(el);
-});
-
-// Pulse animation CSS
-const styleEl = document.createElement('style');
-styleEl.textContent = '@keyframes hspulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}';
-document.head.appendChild(styleEl);
-
-// -- FOCUSED STATE --
-// Store original materials PER MESH before any modification
-let focused = null;
-const allGroups = [bsmGroup, evGroup, stGroup, ptGroup, dlGroup, etcGroup];
-const origPositions = {};
-const origMaterials = new Map(); // mesh -> original material
-
-allGroups.forEach(g => {
-  origPositions[g.userData.id] = g.position.clone();
-  g.traverse(c => { if(c.isMesh) origMaterials.set(c, c.material); });
-});
-bodyG.traverse(c => { if(c.isMesh) origMaterials.set(c, c.material); });
-
-function setMeshOpacity(mesh, opacity, emBoost){
-  // Always work on a clone so we never dirty the original
-  const orig = origMaterials.get(mesh);
-  if(!orig) return;
-  const m = orig.clone();
-  if(opacity < 1){
-    m.transparent = true;
-    m.opacity = opacity;
-  } else {
-    m.transparent = orig.transparent || false;
-    m.opacity = 1;
-    if(emBoost) m.emissiveIntensity = (orig.emissiveIntensity||0) + emBoost;
-  }
-  mesh.material = m;
-}
-
-function restoreMesh(mesh){
-  mesh.material = origMaterials.get(mesh) || mesh.material;
-}
-
-function focusHotspot(hs){
-  // Toggle off if same hotspot clicked again
-  if(focused && focused.id === hs.id){ closeHPanel(); return; }
-  focused = hs;
-  camState.autoRot = false;
-  camState.pos = {...hs.camPos};
-  camState.lookAt = {...hs.lookAt};
-
-  allGroups.forEach(g => {
-    const isFocused = g.userData.id === hs.id;
-    g.traverse(c => {
-      if(!c.isMesh) return;
-      if(isFocused) setMeshOpacity(c, 1, 0.6);
-      else          setMeshOpacity(c, 0.08);
-    });
-    if(isFocused){
-      const tgt = origPositions[g.userData.id].clone().add(hs.explodeDir.clone().multiplyScalar(0.55));
-      animateVec3(g.position, tgt, 650);
-    } else {
-      animateVec3(g.position, origPositions[g.userData.id], 650);
-    }
-  });
-  // Body dim
-  bodyG.traverse(c => { if(c.isMesh) setMeshOpacity(c, 0.18); });
-
-  showHPanel(hs);
-}
-
-function closeHPanel(){
-  focused = null;
-  camState.autoRot = true;
-  camState.pos = {x:5.5, y:3.2, z:5.8};
-  camState.lookAt = {x:0, y:0, z:0};
-
-  // Restore ALL meshes from saved originals
-  allGroups.forEach(g => {
-    g.traverse(c => { if(c.isMesh) restoreMesh(c); });
-    animateVec3(g.position, origPositions[g.userData.id], 650);
-  });
-  bodyG.traverse(c => { if(c.isMesh) restoreMesh(c); });
-
-  const panel = document.getElementById('hpanel');
-  panel.style.transform = 'translateX(100%)';
-  panel.style.pointerEvents = 'none';
-}
-// Expose globally so onclick="closeHPanel()" in HTML works
-window.closeHPanel = closeHPanel;
-// ESC key also closes
-document.addEventListener('keydown', e => { if(e.key==='Escape' && focused) closeHPanel(); });
-
-function showHPanel(hs){
-  const panel = document.getElementById('hpanel');
-  document.getElementById('hp-eye').textContent = 'Product · ' + hs.id.toUpperCase();
-  document.getElementById('hp-name').textContent = hs.label;
-  document.getElementById('hp-kr').textContent = hs.kr;
-  document.getElementById('hp-desc').textContent = hs.desc;
-  document.getElementById('hp-tags').innerHTML = hs.tags.map(t=>`<span style="font-size:10px;padding:3px 8px;border:1px solid #333;color:#888;border-radius:2px;letter-spacing:.06em">${t}</span>`).join('');
-  document.getElementById('hp-btn').onclick = ()=>{ closeHPanel(); gp(hs.page, hs.tab); };
-  panel.style.transform = 'translateX(0)';
-  panel.style.pointerEvents = 'all';
-}
-
-// -- VECTOR3 ANIMATION --
-function animateVec3(vec, target, duration){
-  const start = vec.clone();
-  const t0 = performance.now();
-  function step(){
-    const t = Math.min((performance.now()-t0)/duration, 1);
-    const ease = t<.5 ? 2*t*t : -1+(4-2*t)*t;
-    vec.lerpVectors(start, target, ease);
-    if(t<1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-}
-
-// -- HOTSPOT SCREEN POSITION UPDATE --
-const tmpVec = new THREE.Vector3();
-function updateHotspots(){
-  HOTSPOTS.forEach(hs => {
-    const el = document.getElementById('hs-'+hs.id);
-    if(!el) return;
-    // Get world position accounting for car rotation
-    const wp = hs.worldPos.clone();
-    wp.applyEuler(carGroup.rotation);
-    wp.add(carGroup.position);
-    tmpVec.copy(wp);
-    tmpVec.project(camera);
-    const x = (tmpVec.x*0.5+0.5)*W;
-    const y = (-tmpVec.y*0.5+0.5)*H;
-    if(tmpVec.z > 1){ el.style.display='none'; return; }
-    el.style.display = 'flex';
-    el.style.left = (x - el.offsetWidth/2) + 'px';
-    el.style.top = (y - el.offsetHeight) + 'px';
-    // Scale by depth
-    const depth = 1 - Math.max(0, Math.min(0.5, (tmpVec.z)));
-    el.style.opacity = focused ? (focused.id===hs.id ? '1':'0.15') : '1';
-  });
-}
-
-// -- ANIMATION LOOP --
-const clock = new THREE.Clock();
-let rotY = 0.3;
-
-function animate(){
-  requestAnimationFrame(animate);
-  const dt = clock.getDelta();
-
-  // Auto rotate
-  if(camState.autoRot){
-    rotY += dt * 0.28;
-    carGroup.rotation.y = rotY;
-  }
-
-  // Wheel spin
-  wheels.forEach(w => { w.rotation.z += dt * 1.2; });
-
-  // Lerp camera
-  camera.position.x += (camState.pos.x - camera.position.x) * 0.06;
-  camera.position.y += (camState.pos.y - camera.position.y) * 0.06;
-  camera.position.z += (camState.pos.z - camera.position.z) * 0.06;
-  const la = new THREE.Vector3(camState.lookAt.x, camState.lookAt.y, camState.lookAt.z);
-  // Apply car rotation to lookAt when auto-rotating
-  if(camState.autoRot){
-    camera.lookAt(0, 0.1, 0);
-  } else {
-    // lookAt target in world space accounting for car position
-    const worldLa = la.clone().applyEuler(carGroup.rotation).add(carGroup.position);
-    camera.lookAt(worldLa);
-  }
-
-  updateHotspots();
-  renderer.render(scene, camera);
-}
-animate();
-
-// -- RESIZE --
-window.addEventListener('resize', ()=>{
-  W = heroWrap.offsetWidth; H = heroWrap.offsetHeight;
-  camera.aspect = W/H;
-  camera.updateProjectionMatrix();
-  renderer.setSize(W, H);
-});
-
-})();
-</script>
-
-<!-- 회사소개 -->
+<div class="fs-section" data-idx="2"><!-- 회사소개 -->
 <div class="ha" id="hsec">
+  <div class="ha-img"></div>
   <div class="hai">
     <div data-a="r">
-      <p class="seye">About SEOULIND</p>
-      <h2 class="stit">정밀 가공의<br>선두 기업</h2>
-      <p class="sdsc">서울산업(주)는 1993년 설립 이래 자동차 핵심 부품 제조 분야에서 30년 이상의 기술력을 축적해왔습니다. Balance Shaft Module, 전기차 부품, Steering, Powertrain, Driveline 등 다양한 제품군을 통해 글로벌 OEM에 공급하고 있습니다.</p>
-      <br><br>
-      <button class="bp" onclick="gp('about')">자세히 보기 →</button>
+      <p class="seye" style="color:rgba(255,255,255,.5)">About SEOULIND</p>
+      <h2 class="stit" style="color:#fff;font-size:clamp(38px,5vw,64px)">정밀 가공의<br>선두 기업</h2>
+      <p class="sdsc" style="color:rgba(255,255,255,.45)">서울산업(주)는 1993년 설립 이래 자동차 핵심 부품 제조 분야에서 30년 이상의 기술력을 축적해왔습니다. Balance Shaft Module, 전기차 부품, Steering, Powertrain, Driveline 등 다양한 제품군을 통해 글로벌 OEM에 공급하고 있습니다.</p>
+      <br>
+      <button class="bg" onclick="gp('about')" style="margin-top:16px">자세히 보기 →</button>
     </div>
     <div data-a="l">
       <div class="anr">
@@ -912,56 +997,63 @@ window.addEventListener('resize', ()=>{
         <div class="anum"><div class="anv">30<span>+</span></div><div class="anl">업력 (년)</div></div>
         <div class="anum"><div class="anv">6<span>+</span></div><div class="anl">제품 라인</div></div>
       </div>
-      <div style="margin-top:2px;background:var(--dark);padding:32px 28px;border-top:3px solid var(--accent)">
-        <div class="anv" style="color:#fff;font-size:20px">경기도 화성시 양감면 요당길 320번길 51</div>
-        <div class="anl" style="color:rgba(255,255,255,.35);margin-top:8px">TEL. +82-31-366-1141</div>
+      <div style="margin-top:16px;background:rgba(255,255,255,.05);padding:28px 24px;border-radius:14px;border:1px solid rgba(255,255,255,.08)">
+        <div style="font-size:14px;color:rgba(255,255,255,.7);font-weight:400;line-height:1.6">📍 경기도 화성시 양감면 요당길 320번길 51</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.35);margin-top:6px">TEL. +82-31-366-1141</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 제품 -->
+</div><!-- /fs-section 2 -->
+
+<div class="fs-section" data-idx="3"><!-- 제품 -->
 <div class="hp">
   <div class="hpi">
     <div data-a><p class="seye">Products</p><h2 class="stit">핵심 제품 라인업</h2><p class="sdsc">자동차 핵심 부품을 설계·개발·양산하는 서울산업의 주요 제품을 소개합니다.</p></div>
     <div class="hpg" data-a>
-      <div class="hpc" onclick="gp('product','bsm')"><div class="hpth"><div class="hpgrad gb"></div><span class="hptl">BSM</span></div><div class="hpb"><div class="hpen">Balance Shaft Module</div><div class="hpd">엔진 진동을 저감하는 밸런스 샤프트 모듈 전문 생산</div></div><div class="hpar">→</div></div>
-      <div class="hpc" onclick="gp('product','ev')"><div class="hpth"><div class="hpgrad ge"></div><span class="hptl">EV</span></div><div class="hpb"><div class="hpen">Electric Vehicle</div><div class="hpd">전기차 핵심 구동계 부품 설계 및 양산</div></div><div class="hpar">→</div></div>
-      <div class="hpc" onclick="gp('product','st')"><div class="hpth"><div class="hpgrad gs"></div><span class="hptl">STEERING</span></div><div class="hpb"><div class="hpen">Steering</div><div class="hpd">조향 시스템 핵심 정밀 부품 제조</div></div><div class="hpar">→</div></div>
-      <div class="hpc" onclick="gp('product','pt')"><div class="hpth"><div class="hpgrad gp"></div><span class="hptl">POWERTRAIN</span></div><div class="hpb"><div class="hpen">Powertrain</div><div class="hpd">파워트레인 계열 고강도 정밀 부품</div></div><div class="hpar">→</div></div>
-      <div class="hpc" onclick="gp('product','dl')"><div class="hpth"><div class="hpgrad gd"></div><span class="hptl">DRIVELINE</span></div><div class="hpb"><div class="hpen">Driveline</div><div class="hpd">드라이브라인 핵심 부품 가공 및 공급</div></div><div class="hpar">→</div></div>
-      <div class="hpc" onclick="gp('product','etc')"><div class="hpth"><div class="hpgrad gt"></div><span class="hptl">ETC</span></div><div class="hpb"><div class="hpen">etc.</div><div class="hpd">기타 자동차 정밀 부품 라인업</div></div><div class="hpar">→</div></div>
+      <div class="hpc" onclick="gp('product','bsm')"><div class="hpth"><div class="hpgrad gb" style="background-image:linear-gradient(135deg,rgba(0,20,60,.6),rgba(0,0,20,.85)),url('https://images.unsplash.com/photo-1635773054337-82ddbcc91bc3?w=800&q=85');background-size:cover;background-position:center"></div><span class="hptl">BSM</span></div><div class="hpb"><div class="hpen">Balance Shaft Module</div><div class="hpd">엔진 진동을 저감하는 밸런스 샤프트 모듈 전문 생산</div></div><div class="hpar">→</div></div>
+      <div class="hpc" onclick="gp('product','ev')"><div class="hpth"><div class="hpgrad ge" style="background-image:linear-gradient(135deg,rgba(0,30,15,.6),rgba(0,15,5,.85)),url('https://images.unsplash.com/photo-1593941707882-a5bac6861d75?w=800&q=85');background-size:cover;background-position:center"></div><span class="hptl">EV</span></div><div class="hpb"><div class="hpen">Electric Vehicle</div><div class="hpd">전기차 핵심 구동계 부품 설계 및 양산</div></div><div class="hpar">→</div></div>
+      <div class="hpc" onclick="gp('product','st')"><div class="hpth"><div class="hpgrad gs" style="background-image:linear-gradient(135deg,rgba(40,10,5,.6),rgba(20,5,0,.85)),url('https://images.unsplash.com/photo-1542362567-b07e54358753?w=800&q=85');background-size:cover;background-position:center"></div><span class="hptl">STEERING</span></div><div class="hpb"><div class="hpen">Steering</div><div class="hpd">조향 시스템 핵심 정밀 부품 제조</div></div><div class="hpar">→</div></div>
+      <div class="hpc" onclick="gp('product','pt')"><div class="hpth"><div class="hpgrad gp" style="background-image:linear-gradient(135deg,rgba(40,25,0,.6),rgba(20,10,0,.85)),url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=85');background-size:cover;background-position:center"></div><span class="hptl">POWERTRAIN</span></div><div class="hpb"><div class="hpen">Powertrain</div><div class="hpd">파워트레인 계열 고강도 정밀 부품</div></div><div class="hpar">→</div></div>
+      <div class="hpc" onclick="gp('product','dl')"><div class="hpth"><div class="hpgrad gd" style="background-image:linear-gradient(135deg,rgba(30,10,50,.6),rgba(10,5,25,.85)),url('https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=800&q=85');background-size:cover;background-position:center"></div><span class="hptl">DRIVELINE</span></div><div class="hpb"><div class="hpen">Driveline</div><div class="hpd">드라이브라인 핵심 부품 가공 및 공급</div></div><div class="hpar">→</div></div>
+      <div class="hpc" onclick="gp('product','etc')"><div class="hpth"><div class="hpgrad gt" style="background-image:linear-gradient(135deg,rgba(0,40,45,.6),rgba(0,15,20,.85)),url('https://images.unsplash.com/photo-1600661653561-629509216228?w=800&q=85');background-size:cover;background-position:center"></div><span class="hptl">ETC</span></div><div class="hpb"><div class="hpen">etc.</div><div class="hpd">기타 자동차 정밀 부품 라인업</div></div><div class="hpar">→</div></div>
     </div>
   </div>
 </div>
 
-<!-- 품질 -->
+</div><!-- /fs-section 3 -->
+
+<div class="fs-section" data-idx="4"><!-- 품질 -->
 <div class="hq">
+  <div class="hq-img"></div>
   <div class="hqi">
     <div data-a="r">
       <p class="seye" style="color:rgba(255,255,255,.4)">Quality Assurance</p>
-      <h2 class="stit" style="color:#fff">품질이<br>경쟁력입니다</h2>
-      <p class="sdsc" style="color:rgba(255,255,255,.45)">글로벌 자동차 부품 품질 기준을 충족하는 인증 체계와 예방 품질 활동으로 신뢰를 구축합니다.</p>
+      <h2 class="stit" style="color:#fff;font-size:clamp(38px,5vw,64px)">품질이<br>경쟁력입니다</h2>
+      <p class="sdsc" style="color:rgba(255,255,255,.4)">글로벌 자동차 부품 품질 기준을 충족하는 인증 체계와 예방 품질 활동으로 신뢰를 구축합니다.</p>
       <div class="hqbd">
         <div class="hqb"><div class="hqbi">🏆</div><div class="hqbn">IATF</div><div class="hqbs">16949</div></div>
         <div class="hqb"><div class="hqbi">✅</div><div class="hqbn">ISO</div><div class="hqbs">9001</div></div>
         <div class="hqb"><div class="hqbi">🌿</div><div class="hqbn">ISO</div><div class="hqbs">14001</div></div>
       </div>
+      <button class="bg" onclick="gp('quality')" style="margin-top:32px">품질보증 자세히 →</button>
     </div>
     <div class="hqr" data-a="l">
       <div class="hqit"><div class="hqin">01</div><div><h4>품질방침</h4><p>고객 만족을 최우선으로 하는 전사적 품질 경영 방침</p></div></div>
       <div class="hqit"><div class="hqin">02</div><div><h4>품질시스템</h4><p>IATF 16949 기반의 체계적인 품질 관리 프로세스 운영</p></div></div>
       <div class="hqit"><div class="hqin">03</div><div><h4>예방품질활동</h4><p>APQP, PPAP, FMEA 등 선행 품질 기법 적용</p></div></div>
-      <div class="hqit" style="cursor:pointer" onclick="gp('quality')"><div class="hqin" style="color:var(--accent)">→</div><div><h4 style="color:var(--accent)">품질보증 전체 보기</h4><p>자세한 품질 인증 및 시스템 확인</p></div></div>
     </div>
   </div>
 </div>
 
-<!-- FOOTER -->
+</div><!-- /fs-section 4 -->
+
+<div class="fs-section" data-idx="5"><!-- FOOTER -->
 <footer><div class="ft">
   <div class="fttop">
     <div>
-      <div class="ftlw"><div class="ftli"><svg viewBox="0 0 22 22" fill="none" width="18" height="18"><path d="M3 4L11 2L19 4V12C19 17 11 21 11 21C11 21 3 17 3 12V4Z" fill="white" opacity=".9"/></svg></div><span class="ftln">SEOULIND</span></div>
+      <div class="ftlw"><div class="ftli"><svg viewBox="0 0 22 22" fill="none" width="14" height="14"><path d="M3 4L11 2L19 4V12C19 17 11 21 11 21C11 21 3 17 3 12V4Z" fill="white" opacity=".9"/></svg></div><span class="ftln">SEOULIND</span></div>
       <p class="fttag">서울산업(주) · Automotive Parts Manufacturer<br>정밀 부품으로 더 나은 이동을 만듭니다.</p>
       <div class="ftci"><strong>주소</strong> 경기도 화성시 양감면 요당길 320번길 51</div>
       <div class="ftci"><strong>TEL</strong> +82-31-366-1141 &nbsp;|&nbsp; <strong>FAX</strong> +82-31-366-1150</div>
@@ -985,10 +1077,11 @@ window.addEventListener('resize', ()=>{
       <li><a onclick="gp('quality','system')">품질시스템</a></li>
       <li><a onclick="gp('quality','prevention')">예방품질활동</a></li>
     </ul></div>
-    <div class="ftcol"><h5>채용 / R&amp;D</h5><ul>
-      <li><a onclick="gp('rnd','parts')">부품개발</a></li>
+    <div class="ftcol"><h5>ESG · 채용</h5><ul>
+      <li><a onclick="gp('esg','overview')">ESG 경영</a></li>
+      <li><a onclick="gp('esg','ethics')">윤리경영</a></li>
+      <li><a onclick="gp('rnd','parts')">R&amp;D 부품개발</a></li>
       <li><a onclick="gp('recruit','info')">채용정보</a></li>
-      <li><a onclick="gp('recruit','welfare')">복지제도</a></li>
     </ul></div>
   </div>
   <div class="ftbot">
@@ -996,11 +1089,14 @@ window.addEventListener('resize', ()=>{
     <p class="ftcpy">© 2024 Seoul Industry Co., Ltd. All rights reserved.</p>
   </div>
 </div></footer>
+</div><!-- /fs-section 5 -->
+
+</div><!-- /fs-container -->
 </div><!-- /home -->
 
 <!-- ═══ 기업정보 ═══ -->
 <div class="page" id="page-about"><div class="ptwrap">
-  <div class="subhero"><div class="shgeo"></div><div class="shi">
+  <div class="subhero"><div class="subhero-img" style="background-image:url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&q=85')"></div><div class="shi">
     <div class="bc"><span class="bci" onclick="gp('home')">홈</span><span class="bcs">›</span><span class="bcc">기업정보</span></div>
     <h1>기업 <em>정보</em></h1><p class="shdesc">서울산업(주)의 경영철학과 역사, 조직, 위치 정보를 안내드립니다.</p>
   </div></div>
@@ -1079,10 +1175,55 @@ window.addEventListener('resize', ()=>{
 
 <!-- ═══ 제품정보 ═══ -->
 <div class="page" id="page-product"><div class="ptwrap">
-  <div class="subhero"><div class="shgeo"></div><div class="shi">
+  <div class="subhero"><div class="subhero-img" style="background-image:url('https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=1920&q=85')"></div><div class="shi">
     <div class="bc"><span class="bci" onclick="gp('home')">홈</span><span class="bcs">›</span><span class="bcc">제품정보</span></div>
     <h1>제품 <em>정보</em></h1><p class="shdesc">서울산업(주)의 자동차 핵심 부품 라인업을 소개합니다.</p>
   </div></div>
+
+  <!-- ═══ 3D CAR EXPLORER ═══ -->
+  <div class="hero" id="hero-wrap" style="position:relative;overflow:hidden;background:#080a10;min-height:680px;height:680px">
+  <!-- Three.js canvas -->
+  <canvas id="hero3d" style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
+  <!-- SVG connector lines overlay -->
+  <svg id="hsv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5"></svg>
+  <!-- Hotspot HTML labels -->
+  <div id="hspots" style="position:absolute;inset:0;z-index:6;pointer-events:none"></div>
+
+  <!-- Product explorer intro -->
+  <div style="position:absolute;left:44px;top:44px;z-index:10;pointer-events:none;max-width:480px">
+    <p style="font-size:11px;font-weight:500;color:#2979ff;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px">Product Explorer</p>
+    <h2 style="font-size:clamp(28px,3vw,40px);font-weight:700;color:#fff;letter-spacing:-.03em;line-height:1.05;margin-bottom:12px">각 부품을 클릭하여<br>3D로 탐험하기</h2>
+    <p style="font-size:14px;color:rgba(255,255,255,.5);font-weight:400;line-height:1.6">자동차를 드래그해 회전 · 핫스팟을 클릭하면 해당 부품 영역으로 카메라가 이동합니다</p>
+  </div>
+
+  <!-- Part detail panel -->
+  <div id="hpanel" style="position:absolute;top:0;right:0;width:320px;height:100%;z-index:20;pointer-events:none;transform:translateX(100%);transition:transform .5s cubic-bezier(.77,0,.18,1);background:linear-gradient(to left,rgba(8,10,16,.98),rgba(8,10,16,.85));backdrop-filter:blur(12px);border-left:1px solid rgba(41,121,255,.2);display:flex;flex-direction:column;justify-content:center;padding:48px 36px">
+
+    <p id="hp-eye" style="font-size:10px;letter-spacing:.22em;color:#2979ff;text-transform:uppercase;font-weight:600;margin-bottom:12px"></p>
+    <h3 id="hp-name" style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:#fff;letter-spacing:.08em;margin-bottom:16px;line-height:1"></h3>
+    <p id="hp-kr" style="font-size:13px;color:rgba(255,255,255,.4);margin-bottom:20px;letter-spacing:.04em"></p>
+    <p id="hp-desc" style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;font-weight:300;margin-bottom:28px"></p>
+    <div id="hp-tags" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px"></div>
+    <button id="hp-btn" style="display:inline-flex;align-items:center;gap:8px;padding:13px 24px;background:var(--accent);color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:none;pointer-events:all;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));transition:all .2s">제품 상세 보기 →</button>
+    <div style="margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,.07)">
+      <p style="font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.1em;text-transform:uppercase">클릭하여 3D 확대 · 드래그로 회전</p>
+    </div>
+  </div>
+
+  <!-- Floating action bar (appears when part is focused) -->
+  <div id="hfbar" style="position:absolute;bottom:40px;left:50%;transform:translate(-50%,20px);z-index:25;display:none;align-items:center;gap:4px;padding:6px;background:rgba(22,22,24,.72);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);border:1px solid rgba(255,255,255,.12);border-radius:999px;box-shadow:0 12px 48px rgba(0,0,0,.4);pointer-events:all;opacity:0;transition:opacity .4s,transform .4s cubic-bezier(.34,1.56,.64,1)">
+    <button onclick="nextHotspot(-1)" style="display:flex;align-items:center;gap:6px;padding:10px 18px;background:transparent;border:none;color:rgba(255,255,255,.7);font-size:13px;font-weight:500;letter-spacing:-.01em;cursor:pointer;border-radius:999px;transition:all .2s;font-family:'Inter',sans-serif" onmouseover="this.style.background='rgba(255,255,255,.08)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,.7)'">← 이전 제품</button>
+    <div style="padding:0 14px;display:flex;align-items:center;gap:8px;pointer-events:none">
+      <div style="width:6px;height:6px;border-radius:50%;background:#2979ff;box-shadow:0 0 12px #2979ff"></div>
+      <span id="fbar-label" style="font-size:12px;color:#fff;font-weight:500;letter-spacing:-.01em;white-space:nowrap"></span>
+    </div>
+    <button onclick="closeHPanel()" style="display:flex;align-items:center;gap:6px;padding:10px 18px;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:13px;font-weight:500;letter-spacing:-.01em;cursor:pointer;border-radius:999px;transition:all .2s;font-family:'Inter',sans-serif" onmouseover="this.style.background='rgba(255,255,255,.15)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">× 전체 보기</button>
+    <button onclick="nextHotspot(1)" style="display:flex;align-items:center;gap:6px;padding:10px 18px;background:transparent;border:none;color:rgba(255,255,255,.7);font-size:13px;font-weight:500;letter-spacing:-.01em;cursor:pointer;border-radius:999px;transition:all .2s;font-family:'Inter',sans-serif" onmouseover="this.style.background='rgba(255,255,255,.08)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,.7)'">다음 제품 →</button>
+  </div>
+</div>
+
+</div>
+
   <div class="subc">
     <div class="tnav">
       <div class="tb on" onclick="st(this,'p1')" id="t-bsm">Balance Shaft Module</div>
@@ -1120,7 +1261,7 @@ window.addEventListener('resize', ()=>{
 
 <!-- ═══ 품질보증 ═══ -->
 <div class="page" id="page-quality"><div class="ptwrap">
-  <div class="subhero"><div class="shgeo"></div><div class="shi">
+  <div class="subhero"><div class="subhero-img" style="background-image:url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1920&q=85')"></div><div class="shi">
     <div class="bc"><span class="bci" onclick="gp('home')">홈</span><span class="bcs">›</span><span class="bcc">품질보증</span></div>
     <h1>품질 <em>보증</em></h1><p class="shdesc">글로벌 자동차 품질 기준을 충족하는 체계적인 품질 관리 시스템을 운영합니다.</p>
   </div></div>
@@ -1131,7 +1272,7 @@ window.addEventListener('resize', ()=>{
       <div class="tb" onclick="st(this,'q3')" id="t-prevention">예방품질활동</div>
     </div>
     <div class="tp on" id="q1">
-      <div style="background:var(--dark);padding:52px;border-top:3px solid var(--accent);margin-bottom:2px">
+      <div style="background:#1d1d1f;padding:52px;border-radius:18px;margin-bottom:16px">
         <p style="font-size:10px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase;margin-bottom:16px;font-weight:600">Quality Policy</p>
         <h3 style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#fff;letter-spacing:.06em;margin-bottom:24px">품질방침</h3>
         <p style="font-size:16px;line-height:2;color:rgba(255,255,255,.6);font-weight:300;max-width:640px">고객에게 최고의 품질과 서비스를 제공하고, 지속적인 개선을 통해 기업 경쟁력을 강화함으로써 신뢰받는 기업이 되겠습니다.</p>
@@ -1186,6 +1327,142 @@ window.addEventListener('resize', ()=>{
 </div></div>
 
 <!-- ═══ 채용정보 ═══ -->
+<!-- ═══ ESG ═══ -->
+<div class="page" id="page-esg"><div class="ptwrap">
+  <div class="subhero"><div class="subhero-img" style="background-image:url('https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1920&q=85')"></div><div class="shi">
+    <div class="bc"><span class="bci" onclick="gp('home')">홈</span><span class="bcs">›</span><span class="bcc">ESG</span></div>
+    <h1>ESG <em>경영</em></h1><p class="shdesc">환경과 사회, 거버넌스. 서울산업은 지속가능한 미래를 위한 책임경영을 실천합니다.</p>
+  </div></div>
+  <div class="subc">
+    <div class="tnav">
+      <div class="tb on" onclick="st(this,'esg1')" id="t-overview">ESG 개요</div>
+      <div class="tb" onclick="st(this,'esg2')" id="t-carbon">탄소절감활동</div>
+      <div class="tb" onclick="st(this,'esg3')" id="t-safety">안전보건환경</div>
+      <div class="tb" onclick="st(this,'esg4')" id="t-social">사회공헌</div>
+      <div class="tb" onclick="st(this,'esg5')" id="t-ethics">윤리경영</div>
+    </div>
+
+    <!-- ESG 개요 -->
+    <div class="tp on" id="esg1">
+      <div style="max-width:880px;margin-bottom:56px">
+        <p class="seye">SEOULIND ESG</p>
+        <h3 style="font-size:clamp(30px,3.5vw,46px);font-weight:700;color:var(--text);letter-spacing:-.03em;margin-bottom:20px;line-height:1.1">기업과 사회, 환경이<br>함께 공존하는 미래를 만듭니다</h3>
+        <p style="font-size:16px;line-height:1.8;color:var(--muted);font-weight:400;letter-spacing:-.01em">서울산업(주)은 자동차 부품 제조기업으로서 환경(Environment), 사회(Social), 거버넌스(Governance) 세 가지 축을 중심으로 지속가능한 경영을 실천하고 있습니다. 친환경 공법 도입, 임직원 안전, 투명 경영을 통해 미래 세대에 책임있는 기업이 되겠습니다.</p>
+      </div>
+
+      <!-- E/S/G 3카드 -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:56px">
+        <div style="background:#fff;border-radius:18px;padding:40px 32px;border:1px solid rgba(0,0,0,.04);transition:all .3s" onmouseover="this.style.boxShadow='0 12px 40px rgba(0,0,0,.09)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div style="width:52px;height:52px;background:#e8f5e9;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px">🌱</div>
+          <div style="font-size:11px;font-weight:600;color:#2e7d32;letter-spacing:.08em;margin-bottom:6px;text-transform:uppercase">Environment</div>
+          <h4 style="font-size:20px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:12px">환경</h4>
+          <p style="font-size:14px;line-height:1.7;color:var(--muted);font-weight:400">친환경차량 부품 개발역량 강화 및 제조 공정에서의 환경오염 저감 공법을 적극 도입합니다.</p>
+        </div>
+        <div style="background:#fff;border-radius:18px;padding:40px 32px;border:1px solid rgba(0,0,0,.04);transition:all .3s" onmouseover="this.style.boxShadow='0 12px 40px rgba(0,0,0,.09)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div style="width:52px;height:52px;background:#e3f2fd;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px">🤝</div>
+          <div style="font-size:11px;font-weight:600;color:#1565c0;letter-spacing:.08em;margin-bottom:6px;text-transform:uppercase">Social</div>
+          <h4 style="font-size:20px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:12px">사회</h4>
+          <p style="font-size:14px;line-height:1.7;color:var(--muted);font-weight:400">건전한 기업활동을 통한 국가경제와 지역사회 발전에 기여하고, 임직원 인권을 존중합니다.</p>
+        </div>
+        <div style="background:#fff;border-radius:18px;padding:40px 32px;border:1px solid rgba(0,0,0,.04);transition:all .3s" onmouseover="this.style.boxShadow='0 12px 40px rgba(0,0,0,.09)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div style="width:52px;height:52px;background:#fff3e0;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px">⚖️</div>
+          <div style="font-size:11px;font-weight:600;color:#e65100;letter-spacing:.08em;margin-bottom:6px;text-transform:uppercase">Governance</div>
+          <h4 style="font-size:20px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:12px">거버넌스</h4>
+          <p style="font-size:14px;line-height:1.7;color:var(--muted);font-weight:400">협력업체와의 상호 신뢰를 기반으로 한 투명한 경영 구조를 구축하고 실천합니다.</p>
+        </div>
+      </div>
+
+      <!-- 6개 핵심 활동 -->
+      <div>
+        <p class="seye" style="margin-bottom:16px">Key Initiatives</p>
+        <h3 style="font-size:clamp(24px,2.8vw,36px);font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:32px">6가지 핵심 ESG 활동</h3>
+        <div class="cgrid">
+          <div class="gc"><div class="gcn">01</div><div class="gct">환경영향 최소화</div><div class="gcd">ISO 14001 기반 환경경영시스템을 구축·운영하며, 폐수·폐기물·화학물질 배출 관리 및 감축</div></div>
+          <div class="gc"><div class="gcn">02</div><div class="gct">온실가스 배출관리</div><div class="gcd">전사적 기후 변화 대응을 위한 온실가스 관리 및 감축에 적극 참여</div></div>
+          <div class="gc"><div class="gcn">03</div><div class="gct">인권경영</div><div class="gcd">임직원 인권 존중을 위한 인권정책 제정 및 인권 리스크 관리 프로세스 구축</div></div>
+          <div class="gc"><div class="gcn">04</div><div class="gct">사회공헌활동</div><div class="gcd">지역사회와 상생하는 나눔 활동 및 자동차 부품 산업 생태계 발전에 기여</div></div>
+          <div class="gc"><div class="gcn">05</div><div class="gct">안전한 근무환경</div><div class="gcd">ISO 45001 기반 안전보건 경영시스템 운영을 통한 사고 ZERO 사업장 달성</div></div>
+          <div class="gc"><div class="gcn">06</div><div class="gct">신뢰받는 경영구조</div><div class="gcd">이해관계자와의 적극적인 소통 및 투명한 경영구조 확립</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 탄소절감 -->
+    <div class="tp" id="esg2">
+      <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:16px;margin-bottom:40px">
+        <div style="background:#1d1d1f;border-radius:18px;padding:48px 40px;color:#fff">
+          <p style="font-size:11px;font-weight:600;color:#4fc3f7;letter-spacing:.08em;margin-bottom:12px;text-transform:uppercase">Carbon Reduction</p>
+          <h3 style="font-size:32px;font-weight:700;letter-spacing:-.03em;margin-bottom:20px;line-height:1.1">2050<br>탄소중립 목표</h3>
+          <p style="font-size:15px;line-height:1.75;color:rgba(255,255,255,.55);font-weight:400">파리협정 및 국가 온실가스 감축목표에 발맞춰, 2030년까지 온실가스 배출량 40% 감축을 목표로 합니다.</p>
+        </div>
+        <div style="background:#fff;border-radius:18px;padding:48px 40px;border:1px solid rgba(0,0,0,.04)">
+          <h4 style="font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:24px">주요 탄소절감 활동</h4>
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="display:flex;gap:14px;align-items:flex-start"><div style="width:28px;height:28px;border-radius:50%;background:#e8f5e9;color:#2e7d32;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">1</div><div><div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px">고효율 설비 전환</div><div style="font-size:13px;color:var(--muted);line-height:1.6">노후 가공 설비 교체 및 고효율 전동기 도입으로 전력 사용량 감소</div></div></div>
+            <div style="display:flex;gap:14px;align-items:flex-start"><div style="width:28px;height:28px;border-radius:50%;background:#e8f5e9;color:#2e7d32;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">2</div><div><div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px">친환경 소재·공법</div><div style="font-size:13px;color:var(--muted);line-height:1.6">알루미늄 재활용률 제고 및 저탄소 다이캐스팅 공법 적용</div></div></div>
+            <div style="display:flex;gap:14px;align-items:flex-start"><div style="width:28px;height:28px;border-radius:50%;background:#e8f5e9;color:#2e7d32;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">3</div><div><div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px">재생에너지 도입</div><div style="font-size:13px;color:var(--muted);line-height:1.6">공장 지붕 태양광 패널 설치 검토 및 단계적 재생에너지 전환</div></div></div>
+            <div style="display:flex;gap:14px;align-items:flex-start"><div style="width:28px;height:28px;border-radius:50%;background:#e8f5e9;color:#2e7d32;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">4</div><div><div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px">친환경차 부품 확대</div><div style="font-size:13px;color:var(--muted);line-height:1.6">전기차·하이브리드차 부품 개발 비중 확대로 전방산업 기여</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 안전보건환경 -->
+    <div class="tp" id="esg3">
+      <div class="certgrid">
+        <div class="ccard"><div class="cicon" style="background:#e3f2fd">🛡️</div><div class="ctit">ISO 45001</div><div class="cdsc">안전보건경영시스템 국제 표준. 산업재해 예방과 안전한 작업환경 구축을 위한 체계적 관리</div></div>
+        <div class="ccard"><div class="cicon" style="background:#e8f5e9">🌿</div><div class="ctit">ISO 14001</div><div class="cdsc">환경경영시스템 국제 표준. 환경영향 저감 및 지속가능한 생산 환경 관리</div></div>
+        <div class="ccard"><div class="cicon" style="background:#fff3e0">⚠️</div><div class="ctit">무재해 사업장</div><div class="cdsc">지속적인 안전교육과 위험성 평가를 통해 사고 ZERO 사업장을 추구</div></div>
+      </div>
+      <div style="margin-top:40px;background:#fff;border-radius:18px;padding:40px;border:1px solid rgba(0,0,0,.04)">
+        <h4 style="font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:18px">안전보건 주요 활동</h4>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px 32px">
+          <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--blue);font-weight:700;flex-shrink:0">→</span><div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px">정기 안전교육</div><div style="font-size:13px;color:var(--muted);line-height:1.6">전 임직원 대상 분기별 안전교육 및 특별교육 실시</div></div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--blue);font-weight:700;flex-shrink:0">→</span><div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px">위험성 평가</div><div style="font-size:13px;color:var(--muted);line-height:1.6">공정별 잠재 위험 요소를 사전 식별하고 개선 조치</div></div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--blue);font-weight:700;flex-shrink:0">→</span><div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px">건강검진 지원</div><div style="font-size:13px;color:var(--muted);line-height:1.6">임직원 정기 건강검진 및 작업환경 측정 실시</div></div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--blue);font-weight:700;flex-shrink:0">→</span><div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px">비상대응 훈련</div><div style="font-size:13px;color:var(--muted);line-height:1.6">화재·재해 대비 비상대응 시나리오 및 정기 훈련</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 사회공헌 -->
+    <div class="tp" id="esg4">
+      <div style="max-width:760px;margin-bottom:40px">
+        <p class="seye">Social Contribution</p>
+        <h3 style="font-size:clamp(28px,3vw,40px);font-weight:700;color:var(--text);letter-spacing:-.03em;margin-bottom:16px;line-height:1.15">지역사회와 함께<br>성장합니다</h3>
+        <p style="font-size:15px;line-height:1.8;color:var(--muted);font-weight:400">서울산업(주)은 화성시에 뿌리내린 지역 기반 기업으로서, 지역사회 상생과 자동차 부품 산업 생태계 발전을 위해 다양한 사회공헌 활동을 이어가고 있습니다.</p>
+      </div>
+      <div class="rgrid">
+        <div class="rcard"><div style="font-size:32px;margin-bottom:16px">🏘️</div><div class="rct">지역사회 상생</div><div class="rcd">화성시 양감면 지역의 복지 시설 및 취약계층 지원 활동을 통해 지역 공동체 발전에 기여합니다.</div></div>
+        <div class="rcard"><div style="font-size:32px;margin-bottom:16px">🎓</div><div class="rct">인재 육성</div><div class="rcd">지역 공업계 고등학교와의 산학협력 및 현장실습 프로그램을 통해 미래 기술 인재를 양성합니다.</div></div>
+        <div class="rcard"><div style="font-size:32px;margin-bottom:16px">🤲</div><div class="rct">나눔 활동</div><div class="rcd">명절 이웃돕기 성금 전달, 지역 봉사활동 등 임직원이 직접 참여하는 나눔 문화를 실천합니다.</div></div>
+        <div class="rcard"><div style="font-size:32px;margin-bottom:16px">🤝</div><div class="rct">협력사 상생</div><div class="rcd">중소 협력업체와의 공정거래 및 기술 지원을 통해 자동차 부품 생태계의 공동 성장을 도모합니다.</div></div>
+      </div>
+    </div>
+
+    <!-- 윤리경영 -->
+    <div class="tp" id="esg5">
+      <div style="background:#1d1d1f;border-radius:18px;padding:56px 48px;color:#fff;margin-bottom:24px">
+        <p style="font-size:11px;font-weight:600;color:#4fc3f7;letter-spacing:.08em;margin-bottom:16px;text-transform:uppercase">Ethical Management</p>
+        <h3 style="font-size:32px;font-weight:700;letter-spacing:-.03em;margin-bottom:20px;line-height:1.1">윤리헌장</h3>
+        <p style="font-size:16px;line-height:1.8;color:rgba(255,255,255,.65);font-weight:400;max-width:720px">서울산업(주)은 정직과 신뢰를 바탕으로 모든 이해관계자에게 가치를 제공하는 기업이 되기 위해 윤리경영을 최우선으로 실천합니다. 전 임직원은 법규와 사회 규범을 준수하며, 공정하고 투명한 경영활동을 수행할 것을 선언합니다.</p>
+      </div>
+      <div class="cgrid">
+        <div class="gc"><div class="gcn">01</div><div class="gct">고객 신뢰</div><div class="gcd">고객의 요구를 최우선으로 하며, 최고 품질의 제품과 서비스를 제공합니다</div></div>
+        <div class="gc"><div class="gcn">02</div><div class="gct">임직원 존중</div><div class="gcd">공정한 인사 제도와 안전한 근무환경을 통해 임직원의 가치를 존중합니다</div></div>
+        <div class="gc"><div class="gcn">03</div><div class="gct">공정 경쟁</div><div class="gcd">법규를 준수하며, 건전한 경쟁과 공정 거래를 실천합니다</div></div>
+        <div class="gc"><div class="gcn">04</div><div class="gct">협력사 상생</div><div class="gcd">협력사와 동반 성장을 추구하며, 상호 신뢰 기반의 관계를 구축합니다</div></div>
+        <div class="gc"><div class="gcn">05</div><div class="gct">사회적 책임</div><div class="gcd">환경 보호와 사회공헌을 통해 기업시민으로서 책임을 다합니다</div></div>
+        <div class="gc"><div class="gcn">06</div><div class="gct">반부패 정책</div><div class="gcd">부정부패·금품수수·이해충돌을 엄격히 금지하고 투명한 경영을 실천합니다</div></div>
+      </div>
+      <div style="margin-top:32px;padding:32px;background:rgba(0,113,227,.06);border-radius:14px;border-left:4px solid var(--blue)">
+        <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px">📧 윤리경영 제보 채널</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7">임직원의 비윤리 행위 또는 부정행위를 발견하신 경우 익명으로 제보하실 수 있습니다. 제보자의 신원은 엄격히 보호됩니다.</div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
 <div class="page" id="page-recruit"><div class="ptwrap">
   <div class="subhero"><div class="shgeo"></div><div class="shi">
     <div class="bc"><span class="bci" onclick="gp('home')">홈</span><span class="bcs">›</span><span class="bcc">채용정보</span></div>
@@ -1230,7 +1507,7 @@ window.addEventListener('resize', ()=>{
   <div class="qab" onclick="gp('recruit')">채용정보</div>
   <div class="qab" onclick="gp('about','location')">오시는길</div>
 </div>
-<div class="btop" id="btop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+<div class="btop" id="btop" onclick="if(document.getElementById('page-home').classList.contains('active')&&window.goFsSection){goFsSection(0)}else{window.scrollTo({top:0,behavior:'smooth'})}">↑</div>
 
 <script>
 // Header
@@ -1239,8 +1516,12 @@ window.addEventListener('scroll',()=>{
   const s=window.scrollY>60;
   hdr.classList.toggle('scrolled',s);
   hdr.classList.toggle('top',!s);
-  document.getElementById('btop').classList.toggle('show',window.scrollY>400);
-});
+  // btop visibility handled in fs system for home, scroll Y for others
+  const homeActive = document.getElementById('page-home').classList.contains('active');
+  if(!homeActive){
+    document.getElementById('btop').classList.toggle('show',window.scrollY>400);
+  }
+},{ passive:true });
 
 // Mega menus
 let om=-1;
@@ -1261,6 +1542,7 @@ const tabMap={
   product:{bsm:'p1',ev:'p2',st:'p3',pt:'p4',dl:'p5',etc:'p6'},
   quality:{policy:'q1',system:'q2',prevention:'q3'},
   rnd:{parts:'r1'},
+  esg:{overview:'esg1',carbon:'esg2',safety:'esg3',social:'esg4',ethics:'esg5'},
   recruit:{info:'rc1',welfare:'rc2'}
 };
 const tabBtnMap={
@@ -1268,6 +1550,7 @@ const tabBtnMap={
   product:{bsm:'t-bsm',ev:'t-ev',st:'t-st',pt:'t-pt',dl:'t-dl',etc:'t-etc'},
   quality:{policy:'t-policy',system:'t-system',prevention:'t-prevention'},
   rnd:{parts:'t-parts'},
+  esg:{overview:'t-overview',carbon:'t-carbon',safety:'t-safety',social:'t-social',ethics:'t-ethics'},
   recruit:{info:'t-info',welfare:'t-welfare'}
 };
 
@@ -1347,6 +1630,1184 @@ function aos(){
   document.querySelectorAll('.page.active [data-a]').forEach(el=>{el.classList.remove('vis');io.observe(el);});
 }
 aos();
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+<script>
+(function(){
+'use strict';
+const canvas = document.getElementById('hero3d');
+const heroWrap = document.getElementById('hero-wrap');
+const svg = document.getElementById('hsv');
+const hspots = document.getElementById('hspots');
+
+let W = heroWrap.offsetWidth, H = heroWrap.offsetHeight;
+
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+renderer.setSize(W, H);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.physicallyCorrectLights = true;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(42, W/H, 0.1, 200);
+
+// --- MATERIALS ---
+function mat(hex, emHex, emInt, op, wire){
+  return new THREE.MeshPhongMaterial({
+    color:hex, emissive:emHex||0x000000, emissiveIntensity:emInt||0,
+    transparent: op<1, opacity: op===undefined?1:op,
+    wireframe: wire||false, shininess:60
+  });
+}
+const M = {
+  bodyWire: mat(0x1e3a7a, 0x000000, 0, 0.7, true),
+  bodyGlass: mat(0x0d2060, 0x000820, 0.1, 0.12),
+  chassis: mat(0x1a2540, 0x0d1a30, 0.1, 0.9),
+  subframe: mat(0x202d44, 0x0d1a30, 0.05, 1),
+  engine: mat(0x2a3550, 0x101828, 0.1, 1),
+  bsm: mat(0x2979ff, 0x1045cc, 0.5, 1),
+  ev: mat(0x00b84c, 0x005a24, 0.5, 1),
+  steering: mat(0xff6b35, 0x7a2a10, 0.4, 1),
+  powertrain: mat(0xf5a623, 0x7a4a00, 0.4, 1),
+  driveline: mat(0x9b59b6, 0x4a1a6b, 0.4, 1),
+  etc: mat(0x00bcd4, 0x004d60, 0.4, 1),
+  axle: mat(0x445566, 0x000000, 0, 1),
+  wheel: mat(0x111120, 0x000000, 0, 1),
+  rim: mat(0x8899aa, 0x334455, 0.1, 1),
+  floor: mat(0x0d1020, 0x000000, 0, 0.4),
+};
+
+// --- LIGHTS — studio-style car lighting ---
+scene.add(new THREE.AmbientLight(0x202840, 0.8));
+// Key light (top-front, warm)
+const sun = new THREE.DirectionalLight(0xffffff, 2.2);
+sun.position.set(5, 10, 5);
+sun.castShadow = true;
+sun.shadow.mapSize.width = 2048;
+sun.shadow.mapSize.height = 2048;
+sun.shadow.camera.near = 0.5;
+sun.shadow.camera.far = 50;
+sun.shadow.camera.left = -10;
+sun.shadow.camera.right = 10;
+sun.shadow.camera.top = 10;
+sun.shadow.camera.bottom = -10;
+scene.add(sun);
+// Rim light (back-right, blue)
+const rim = new THREE.DirectionalLight(0x2979ff, 1.2);
+rim.position.set(-4, 5, -4);
+scene.add(rim);
+// Fill light (bottom-left, cool)
+const fill = new THREE.DirectionalLight(0x4060a0, 0.6);
+fill.position.set(3, -2, 4);
+scene.add(fill);
+// Accent studio spots
+[[-3, 2, 3, 0x60a0ff, 2], [3, 1.5, -3, 0x4080cc, 1.5]].forEach(([x,y,z,c,i]) => {
+  const pl = new THREE.PointLight(c, i, 15);
+  pl.position.set(x, y, z);
+  scene.add(pl);
+});
+
+// Floor removed for cleaner aesthetic
+
+// --- CAR GROUP ---
+const carGroup = new THREE.Group();
+scene.add(carGroup);
+carGroup.rotation.y = 0.3;
+
+// Procedural car (fallback) - built below
+const proceduralCarGroup = new THREE.Group();
+carGroup.add(proceduralCarGroup);
+
+// Real GLB car group (loaded async)
+const realCarGroup = new THREE.Group();
+realCarGroup.visible = false;
+carGroup.add(realCarGroup);
+
+// Loading overlay
+const heroLoadEl = document.createElement('div');
+heroLoadEl.id = 'hero-load';
+heroLoadEl.style.cssText = 'position:absolute;top:32px;right:32px;display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(22,22,24,.7);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:999px;color:rgba(255,255,255,.7);font-size:12px;font-weight:500;letter-spacing:-.01em;z-index:30;transition:opacity .5s';
+heroLoadEl.innerHTML = '<div style="width:10px;height:10px;border:2px solid rgba(255,255,255,.2);border-top-color:#0071e3;border-radius:50%;animation:spin 0.8s linear infinite"></div><span>3D 모델 로딩 중…</span>';
+heroWrap.appendChild(heroLoadEl);
+const spinCss = document.createElement('style');
+spinCss.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+document.head.appendChild(spinCss);
+
+// Try loading real car model
+(function tryLoadRealCar(){
+  if(!THREE.GLTFLoader){ console.log('GLTFLoader not available'); return; }
+
+  const loader = new THREE.GLTFLoader();
+  if(THREE.DRACOLoader){
+    const draco = new THREE.DRACOLoader();
+    draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
+    loader.setDRACOLoader(draco);
+  }
+
+  // Multi-URL fallback chain (GitHub-based CDN first, since npm excludes /examples/models)
+  const modelURLs = [
+    'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/models/gltf/ferrari.glb',
+    'https://threejs.org/examples/models/gltf/ferrari.glb',
+    'https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/models/gltf/ferrari.glb'
+  ];
+
+  function onLoaded(gltf){
+    const model = gltf.scene;
+    console.log('✓ Ferrari model loaded successfully');
+
+    model.scale.set(2.0, 2.0, 2.0);
+    model.position.set(0, -0.55, 0);
+    model.rotation.y = Math.PI;
+
+    // Enhance materials
+    // Transparent X-ray style so internal hotspots are visible through the car
+    model.traverse(child => {
+      if(child.isMesh){
+        child.castShadow = false;
+        child.receiveShadow = false;
+        if(child.material){
+          // Make every part semi-transparent with cyan/blue glow
+          const m = child.material;
+          m.transparent = true;
+          m.opacity = 0.22;
+          m.depthWrite = false;
+          if(m.color) m.color = new THREE.Color(0x5a9eff);
+          if('emissive' in m) { m.emissive = new THREE.Color(0x1a3a70); m.emissiveIntensity = 0.3; }
+          if('metalness' in m) m.metalness = 0.3;
+          if('roughness' in m) m.roughness = 0.6;
+          m.side = THREE.DoubleSide;
+        }
+        // Add wireframe outline on top of each mesh for technical look
+        const wireGeo = child.geometry;
+        const wireMat = new THREE.LineBasicMaterial({
+          color: 0x60a0ff,
+          transparent: true,
+          opacity: 0.25,
+          linewidth: 1
+        });
+        const wireframe = new THREE.LineSegments(
+          new THREE.EdgesGeometry(wireGeo, 30),
+          wireMat
+        );
+        child.add(wireframe);
+      }
+    });
+
+    realCarGroup.add(model);
+    realCarGroup.visible = true;
+    proceduralCarGroup.visible = false;
+
+    rebuildMaterialMaps();
+
+    heroLoadEl.style.opacity = '0';
+    setTimeout(()=> heroLoadEl.remove(), 600);
+  }
+
+  function tryLoadURL(index){
+    if(index >= modelURLs.length){
+      console.warn('All GLB URLs failed. Using procedural fallback.');
+      heroLoadEl.querySelector('span').textContent = '로딩 실패 — 기본 모델 사용';
+      setTimeout(() => {
+        heroLoadEl.style.opacity = '0';
+        setTimeout(() => heroLoadEl.remove(), 500);
+      }, 1500);
+      return;
+    }
+    const url = modelURLs[index];
+    console.log(`[${index+1}/${modelURLs.length}] Trying: ${url}`);
+    heroLoadEl.querySelector('span').textContent = `3D 모델 로딩 중… (${index+1}/${modelURLs.length})`;
+
+    loader.load(
+      url,
+      onLoaded,
+      (progress) => {
+        if(progress.total > 0){
+          const pct = Math.round(progress.loaded/progress.total*100);
+          heroLoadEl.querySelector('span').textContent = `3D 모델 로딩 중… ${pct}%`;
+        }
+      },
+      (err) => {
+        console.warn(`URL ${index+1} failed:`, err.message || err);
+        tryLoadURL(index + 1);
+      }
+    );
+  }
+
+  tryLoadURL(0);
+})();
+
+// Function to rebuild material maps after GLB loads (used by focus system)
+function rebuildMaterialMaps(){
+  // Re-collect materials for smooth opacity transitions
+  origMaterials.clear();
+  cloneMaterials.clear();
+  allGroups.forEach(g => {
+    g.traverse(c => {
+      if(c.isMesh) origMaterials.set(c, c.material);
+    });
+  });
+  // Include real car materials
+  realCarGroup.traverse(c => {
+    if(c.isMesh) origMaterials.set(c, c.material);
+  });
+  // Include procedural body  
+  bodyG.traverse(c => {
+    if(c.isMesh) origMaterials.set(c, c.material);
+  });
+  // Create clones for smooth opacity
+  origMaterials.forEach((orig, mesh) => {
+    const clone = orig.clone();
+    clone.transparent = true;
+    clone.opacity = 1;
+    cloneMaterials.set(mesh, clone);
+    mesh.material = clone;
+  });
+}
+
+// Enhanced HDRI environment for reflections (if RGBELoader available)
+if(THREE.RGBELoader){
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  pmrem.compileEquirectangularShader();
+
+  new THREE.RGBELoader()
+    .load('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/textures/equirectangular/venice_sunset_1k.hdr',
+      (tex) => {
+        const envMap = pmrem.fromEquirectangular(tex).texture;
+        scene.environment = envMap;
+        tex.dispose();
+        pmrem.dispose();
+      },
+      undefined,
+      (err) => console.log('HDR env failed, skipping:', err)
+    );
+}
+
+// Helper: add mesh to group and return it
+function addBox(g, mat, w, h, d, x, y, z){
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat);
+  m.position.set(x,y,z);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  g.add(m);
+  return m;
+}
+function addCyl(g, mat, rt, rb, h, x, y, z, rx, ry, rz, segs){
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,segs||16), mat);
+  m.position.set(x,y,z);
+  if(rx) m.rotation.x = rx;
+  if(ry) m.rotation.y = ry;
+  if(rz) m.rotation.z = rz;
+  m.castShadow = true;
+  g.add(m);
+  return m;
+}
+
+// -- BODY SHELL (wireframe + glass) --
+const bodyG = new THREE.Group();
+proceduralCarGroup.add(bodyG);
+// Cabin wireframe box (main passenger area)
+addBox(bodyG, M.bodyWire, 2.2, 0.85, 1.72, 0.1, 0.42, 0);
+addBox(bodyG, M.bodyGlass, 2.2, 0.85, 1.72, 0.1, 0.42, 0);
+// Roof
+addBox(bodyG, M.bodyWire, 1.6, 0.08, 1.6, 0.1, 0.9, 0);
+// Hood
+addBox(bodyG, M.bodyWire, 1.55, 0.07, 1.65, -1.35, 0.08, 0);
+// Trunk
+addBox(bodyG, M.bodyWire, 0.85, 0.07, 1.65, 1.55, 0.08, 0);
+// Windshield plane (tilted)
+const wsG = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.85), M.bodyWire);
+wsG.position.set(-0.78, 0.42, 0);
+wsG.rotation.z = Math.PI/2 * 0.35;
+wsG.rotation.y = Math.PI/2;
+bodyG.add(wsG);
+
+// -- CHASSIS --
+const chassisG = new THREE.Group();
+proceduralCarGroup.add(chassisG);
+addBox(chassisG, M.chassis, 4.3, 0.1, 1.78, 0, -0.32, 0);  // main floor
+addBox(chassisG, M.subframe, 1.3, 0.07, 1.55, -1.45, -0.18, 0); // front subframe
+addBox(chassisG, M.subframe, 1.1, 0.07, 1.55, 1.5, -0.18, 0);  // rear subframe
+// Firewall
+addBox(chassisG, M.subframe, 0.07, 0.6, 1.72, -0.7, 0.1, 0);
+// Rear bulkhead
+addBox(chassisG, M.subframe, 0.07, 0.5, 1.72, 1.1, 0.08, 0);
+
+// -- ENGINE BLOCK (Powertrain) --
+const ptGroup = new THREE.Group();
+proceduralCarGroup.add(ptGroup);
+ptGroup.userData = {id:'powertrain', origPos:[0,0,0]};
+const engineMesh = addBox(ptGroup, M.engine, 0.85, 0.52, 0.72, -1.45, 0.12, 0); // block
+addBox(ptGroup, M.engine, 0.55, 0.38, 0.55, -0.82, 0.06, 0); // transmission
+addBox(ptGroup, M.powertrain, 0.8, 0.08, 0.65, -1.45, 0.38, 0); // intake manifold
+addCyl(ptGroup, M.powertrain, 0.12, 0.12, 0.5, -1.45, 0.18, 0.22, Math.PI/2, 0, 0); // cylinder L
+addCyl(ptGroup, M.powertrain, 0.12, 0.12, 0.5, -1.45, 0.18, -0.22, Math.PI/2, 0, 0); // cylinder R
+
+// -- BSM --
+const bsmGroup = new THREE.Group();
+proceduralCarGroup.add(bsmGroup);
+bsmGroup.userData = {id:'bsm', origPos:[0,0,0]};
+addCyl(bsmGroup, M.bsm, 0.11, 0.11, 0.46, -1.45, 0.1, 0.44, Math.PI/2, 0, 0);
+addCyl(bsmGroup, M.bsm, 0.11, 0.11, 0.46, -1.45, 0.1, -0.44, Math.PI/2, 0, 0);
+addCyl(bsmGroup, M.bsm, 0.06, 0.06, 0.42, -1.45, 0.1, 0.44, 0, 0, 0); // shaft inside L
+addCyl(bsmGroup, M.bsm, 0.06, 0.06, 0.42, -1.45, 0.1, -0.44, 0, 0, 0); // shaft inside R
+
+// -- EV BATTERY --
+const evGroup = new THREE.Group();
+proceduralCarGroup.add(evGroup);
+evGroup.userData = {id:'ev', origPos:[0,0,0]};
+addBox(evGroup, M.ev, 2.85, 0.17, 1.5, 0.15, -0.25, 0);
+addCyl(evGroup, M.ev, 0.17, 0.17, 0.28, -1.32, 0.1, 0, 0, 0, Math.PI/2); // front motor
+addCyl(evGroup, M.ev, 0.14, 0.14, 0.24, 1.42, -0.06, 0, 0, 0, Math.PI/2); // rear motor
+// Battery cells (decorative)
+for(let i=-3; i<=3; i++){
+  addBox(evGroup, mat(0x007a30, 0x003a14, 0.2, 0.8), 0.32, 0.12, 0.08, 0.15+i*0.38, -0.18, 0);
+}
+
+// -- STEERING --
+const stGroup = new THREE.Group();
+proceduralCarGroup.add(stGroup);
+stGroup.userData = {id:'steering', origPos:[0,0,0]};
+addBox(stGroup, M.steering, 0.07, 0.07, 1.35, -1.42, 0.0, 0); // rack
+addBox(stGroup, M.steering, 0.5, 0.04, 0.04, -1.2, 0.0, 0.65); // tie rod L
+addBox(stGroup, M.steering, 0.5, 0.04, 0.04, -1.2, 0.0, -0.65); // tie rod R
+addCyl(stGroup, M.steering, 0.038, 0.038, 0.65, -1.38, 0.32, -0.4, 0.38, 0, 0); // column
+// Steering wheel
+const swRing = new THREE.Mesh(new THREE.TorusGeometry(0.19, 0.025, 8, 20), M.steering);
+swRing.position.set(-1.28, 0.58, -0.52);
+swRing.rotation.x = 0.35;
+swRing.rotation.z = 0.1;
+stGroup.add(swRing);
+
+// -- DRIVELINE --
+const dlGroup = new THREE.Group();
+proceduralCarGroup.add(dlGroup);
+dlGroup.userData = {id:'driveline', origPos:[0,0,0]};
+addCyl(dlGroup, M.driveline, 0.038, 0.038, 2.1, 0.35, -0.16, 0, 0, 0, Math.PI/2); // propshaft
+addBox(dlGroup, M.driveline, 0.28, 0.22, 0.3, 1.48, -0.15, 0); // diff
+addCyl(dlGroup, M.axle, 0.04, 0.04, 0.66, -1.62, -0.3, 0.62, 0, 0, Math.PI/2); // front axle L
+addCyl(dlGroup, M.axle, 0.04, 0.04, 0.66, -1.62, -0.3, -0.62, 0, 0, Math.PI/2);
+addCyl(dlGroup, M.axle, 0.04, 0.04, 0.6, 1.62, -0.27, 0.62, 0, 0, Math.PI/2); // rear axle L
+addCyl(dlGroup, M.axle, 0.04, 0.04, 0.6, 1.62, -0.27, -0.62, 0, 0, Math.PI/2);
+
+// -- ETC (misc parts) --
+const etcGroup = new THREE.Group();
+proceduralCarGroup.add(etcGroup);
+etcGroup.userData = {id:'etc', origPos:[0,0,0]};
+addBox(etcGroup, M.etc, 0.55, 0.22, 0.42, -1.45, -0.06, -0.3); // alternator/pump
+addCyl(etcGroup, M.etc, 0.08, 0.08, 0.35, 1.55, 0.05, 0.35, 0, 0, Math.PI/2); // sensor
+addBox(etcGroup, M.etc, 0.45, 0.18, 0.3, 1.55, 0.05, -0.3); // module box
+
+// -- WHEELS --
+const whlGroup = new THREE.Group();
+proceduralCarGroup.add(whlGroup);
+function addWheel(x, z){
+  const g = new THREE.Group();
+  const tire = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.36, 0.22, 24), M.wheel);
+  tire.rotation.z = Math.PI/2;
+  g.add(tire);
+  const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.24, 10), M.rim);
+  rim.rotation.z = Math.PI/2;
+  g.add(rim);
+  // Spokes
+  for(let i=0;i<5;i++){
+    const sp = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.035, 0.035), M.rim);
+    sp.rotation.z = (i/5)*Math.PI*2;
+    sp.position.x = 0.001;
+    g.add(sp);
+  }
+  g.position.set(x, -0.34, z);
+  whlGroup.add(g);
+  return g;
+}
+const wheels = [
+  addWheel(-1.62, 0.95), addWheel(-1.62,-0.95),
+  addWheel(1.62, 0.95), addWheel(1.62,-0.95)
+];
+
+// Exhaust pipes
+addCyl(proceduralCarGroup, M.axle, 0.04, 0.04, 0.5, 1.88, -0.28, 0.22, 0, 0, Math.PI/2);
+addCyl(proceduralCarGroup, M.axle, 0.04, 0.04, 0.5, 1.88, -0.28, -0.22, 0, 0, Math.PI/2);
+
+// -- HOTSPOT DATA (coordinates for Ferrari GLB model) --
+const HOTSPOTS = [
+  {
+    id:'bsm', group: bsmGroup,
+    label:'Balance Shaft Module', kr:'밸런스 샤프트 모듈',
+    desc:'엔진 2차 진동을 상쇄하는 핵심 모듈. 정밀 가공으로 소음과 진동을 최소화합니다.',
+    tags:['ENGINE','VIBRATION','OEM'],
+    color:'#2979ff',
+    worldPos: new THREE.Vector3(-1.3, 0.35, 0.6),
+    camPos: {x:-1.4, y:1.3, z:2.8},
+    lookAt: {x:-1.2, y:0.2, z:0.3},
+    page:'product', tab:'bsm',
+    explodeDir: new THREE.Vector3(0, 0.3, 0.4)
+  },
+  {
+    id:'ev', group: evGroup,
+    label:'Electric Vehicle', kr:'전기차 구동 부품',
+    desc:'전기차 구동 모터 및 감속기용 정밀 부품. 경량화와 고강도를 동시에 실현합니다.',
+    tags:['EV','MOTOR','LIGHTWEIGHT'],
+    color:'#00b84c',
+    worldPos: new THREE.Vector3(0, 0.1, 0.85),
+    camPos: {x:0.3, y:1.8, z:3.2},
+    lookAt: {x:0, y:-0.1, z:0.2},
+    page:'product', tab:'ev',
+    explodeDir: new THREE.Vector3(0, -0.4, 0)
+  },
+  {
+    id:'steering', group: stGroup,
+    label:'Steering', kr:'조향 부품',
+    desc:'조향 시스템의 핵심 컬럼 및 랙·피니언 부품. 고정밀 선삭 가공으로 제작됩니다.',
+    tags:['STEERING','EPS','PRECISION'],
+    color:'#ff6b35',
+    worldPos: new THREE.Vector3(-0.5, 0.55, -0.5),
+    camPos: {x:-0.2, y:1.3, z:2.4},
+    lookAt: {x:-0.6, y:0.25, z:-0.3},
+    page:'product', tab:'st',
+    explodeDir: new THREE.Vector3(0, 0.2, -0.4)
+  },
+  {
+    id:'powertrain', group: ptGroup,
+    label:'Powertrain', kr:'파워트레인 부품',
+    desc:'변속기·크랭크샤프트 등 파워트레인 계열 고강도 정밀 부품을 공급합니다.',
+    tags:['TRANSMISSION','ENGINE','HIGH-STRENGTH'],
+    color:'#f5a623',
+    worldPos: new THREE.Vector3(0.9, 0.5, -0.5),
+    camPos: {x:0.6, y:1.4, z:-2.8},
+    lookAt: {x:0.9, y:0.25, z:-0.2},
+    page:'product', tab:'pt',
+    explodeDir: new THREE.Vector3(-0.2, 0.4, 0)
+  },
+  {
+    id:'driveline', group: dlGroup,
+    label:'Driveline', kr:'드라이브라인 부품',
+    desc:'드라이브샤프트·디퍼런셜 등 구동계 핵심 부품. 고토크 환경에 최적화된 설계.',
+    tags:['DRIVESHAFT','DIFFERENTIAL','4WD'],
+    color:'#9b59b6',
+    worldPos: new THREE.Vector3(0.4, -0.05, 0.7),
+    camPos: {x:0.8, y:1.0, z:3.0},
+    lookAt: {x:0.4, y:-0.15, z:0.2},
+    page:'product', tab:'dl',
+    explodeDir: new THREE.Vector3(0, -0.3, 0.4)
+  },
+  {
+    id:'etc', group: etcGroup,
+    label:'etc.', kr:'기타 정밀 부품',
+    desc:'고객 도면에 따른 맞춤형 자동차 정밀 부품 가공 및 공급이 가능합니다.',
+    tags:['CUSTOM','PRECISION','OEM'],
+    color:'#00bcd4',
+    worldPos: new THREE.Vector3(1.5, 0.35, 0.4),
+    camPos: {x:2.2, y:1.3, z:2.2},
+    lookAt: {x:1.4, y:0.1, z:0.1},
+    page:'product', tab:'etc',
+    explodeDir: new THREE.Vector3(0.3, 0.3, 0.3)
+  }
+];
+
+// -- CAMERA STATE --
+const camState = {
+  pos: {x:5.5, y:3.2, z:5.8},
+  lookAt: {x:0, y:0, z:0},
+  autoRot: true
+};
+camera.position.set(5.5, 3.2, 5.8);
+
+// -- HOTSPOT HTML ELEMENTS --
+HOTSPOTS.forEach((hs, i) => {
+  const el = document.createElement('div');
+  el.id = 'hs-'+hs.id;
+  el.style.cssText = 'position:absolute;pointer-events:all;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:0';
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;background:rgba(8,10,16,.85);border:1px solid ${hs.color}44;border-radius:2px;backdrop-filter:blur(8px);transition:all .25s;white-space:nowrap" onmouseenter="this.style.background='rgba(8,10,16,.95)';this.style.borderColor='${hs.color}'" onmouseleave="this.style.background='rgba(8,10,16,.85)';this.style.borderColor='${hs.color}44'">
+      <div style="width:8px;height:8px;border-radius:50%;background:${hs.color};box-shadow:0 0 6px ${hs.color};animation:hspulse 2s ease infinite;animation-delay:${i*0.3}s"></div>
+      <span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:.08em;font-family:'DM Sans',sans-serif;text-transform:uppercase">${hs.label}</span>
+    </div>
+    <div style="width:1px;height:18px;background:${hs.color};opacity:0.5"></div>
+  `;
+  el.addEventListener('click', ()=>focusHotspot(hs));
+  hspots.appendChild(el);
+});
+
+// Pulse animation CSS
+const styleEl = document.createElement('style');
+styleEl.textContent = '@keyframes hspulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}';
+document.head.appendChild(styleEl);
+
+// -- FOCUSED STATE --
+// Store original materials PER MESH before any modification
+let focused = null;
+const allGroups = [bsmGroup, evGroup, stGroup, ptGroup, dlGroup, etcGroup];
+const origPositions = {};
+const origMaterials = new Map(); // mesh -> original material
+
+allGroups.forEach(g => {
+  origPositions[g.userData.id] = g.position.clone();
+  g.traverse(c => { if(c.isMesh) origMaterials.set(c, c.material); });
+});
+bodyG.traverse(c => { if(c.isMesh) origMaterials.set(c, c.material); });
+
+// Setup clone materials per mesh (so we can animate opacity without losing originals)
+const cloneMaterials = new Map();
+origMaterials.forEach((orig, mesh) => {
+  const clone = orig.clone();
+  clone.transparent = true;
+  clone.opacity = 1;
+  cloneMaterials.set(mesh, clone);
+  mesh.material = clone; // use clone from the start
+});
+
+// Current per-mesh target opacity (for smooth transitions)
+const targetOpacity = new Map();
+cloneMaterials.forEach((m, mesh) => targetOpacity.set(mesh, 1));
+
+// Smooth easing function
+function easeInOutCubic(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2 }
+
+// -- NUMBER TWEEN --
+const activeTweens = [];
+function tween(obj, prop, to, duration){
+  // Cancel any existing tween on the same obj/prop
+  for(let i=activeTweens.length-1; i>=0; i--){
+    if(activeTweens[i].obj === obj && activeTweens[i].prop === prop){
+      activeTweens.splice(i,1);
+    }
+  }
+  activeTweens.push({
+    obj, prop,
+    from: obj[prop],
+    to,
+    t0: performance.now(),
+    duration
+  });
+}
+function updateTweens(){
+  const now = performance.now();
+  for(let i=activeTweens.length-1; i>=0; i--){
+    const tw = activeTweens[i];
+    const t = Math.min((now - tw.t0)/tw.duration, 1);
+    const e = easeInOutCubic(t);
+    tw.obj[tw.prop] = tw.from + (tw.to - tw.from) * e;
+    if(t >= 1) activeTweens.splice(i, 1);
+  }
+}
+
+// -- VECTOR3 ANIMATION with easing --
+function animateVec3(vec, target, duration){
+  const start = vec.clone();
+  const t0 = performance.now();
+  function step(){
+    const t = Math.min((performance.now()-t0)/duration, 1);
+    const ease = easeInOutCubic(t);
+    vec.lerpVectors(start, target, ease);
+    if(t<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function focusHotspot(hs){
+  if(focused && focused.id === hs.id){ closeHPanel(); return; }
+  focused = hs;
+  camState.autoRot = false;
+
+  // Smooth camera move
+  tween(camState.pos, 'x', hs.camPos.x, 1400);
+  tween(camState.pos, 'y', hs.camPos.y, 1400);
+  tween(camState.pos, 'z', hs.camPos.z, 1400);
+  tween(camState.lookAt, 'x', hs.lookAt.x, 1400);
+  tween(camState.lookAt, 'y', hs.lookAt.y, 1400);
+  tween(camState.lookAt, 'z', hs.lookAt.z, 1400);
+
+  // If real car loaded: dim whole car body slightly, show glow at hotspot
+  if(realCarGroup.visible){
+    realCarGroup.traverse(c => {
+      if(!c.isMesh) return;
+      const m = cloneMaterials.get(c);
+      if(m) tween(m, 'opacity', 0.55, 900);
+    });
+    // Position glow indicator at hotspot
+    showGlowAt(hs.worldPos, hs.color);
+  } else {
+    // Procedural car: explode parts
+    allGroups.forEach(g => {
+      const isFocused = g.userData.id === hs.id;
+      g.traverse(c => {
+        if(!c.isMesh) return;
+        const m = cloneMaterials.get(c);
+        if(!m) return;
+        tween(m, 'opacity', isFocused ? 1 : 0.08, 900);
+      });
+      if(isFocused){
+        const tgt = origPositions[g.userData.id].clone().add(hs.explodeDir.clone().multiplyScalar(0.55));
+        animateVec3(g.position, tgt, 1200);
+      } else {
+        animateVec3(g.position, origPositions[g.userData.id], 1200);
+      }
+    });
+    bodyG.traverse(c => {
+      if(!c.isMesh) return;
+      const m = cloneMaterials.get(c);
+      if(m) tween(m, 'opacity', 0.12, 900);
+    });
+  }
+
+  showHPanel(hs);
+  showFBar();
+}
+
+// Glow sphere indicator shown at focused hotspot (real car mode)
+const glowIndicator = new THREE.Mesh(
+  new THREE.SphereGeometry(0.15, 24, 24),
+  new THREE.MeshBasicMaterial({color:0x2979ff, transparent:true, opacity:0})
+);
+glowIndicator.visible = false;
+carGroup.add(glowIndicator);
+const glowRing = new THREE.Mesh(
+  new THREE.TorusGeometry(0.28, 0.015, 8, 32),
+  new THREE.MeshBasicMaterial({color:0x2979ff, transparent:true, opacity:0})
+);
+glowRing.visible = false;
+carGroup.add(glowRing);
+
+function showGlowAt(worldPos, colorHex){
+  const c = new THREE.Color(colorHex || '#2979ff');
+  glowIndicator.material.color = c;
+  glowRing.material.color = c;
+  glowIndicator.position.copy(worldPos);
+  glowRing.position.copy(worldPos);
+  glowIndicator.visible = true;
+  glowRing.visible = true;
+  tween(glowIndicator.material, 'opacity', 0.5, 800);
+  tween(glowRing.material, 'opacity', 0.8, 800);
+}
+
+function hideGlow(){
+  tween(glowIndicator.material, 'opacity', 0, 400);
+  tween(glowRing.material, 'opacity', 0, 400);
+  setTimeout(()=>{ glowIndicator.visible=false; glowRing.visible=false; }, 500);
+}
+
+function closeHPanel(){
+  focused = null;
+  camState.autoRot = true;
+
+  tween(camState.pos, 'x', 5.5, 1400);
+  tween(camState.pos, 'y', 3.2, 1400);
+  tween(camState.pos, 'z', 5.8, 1400);
+  tween(camState.lookAt, 'x', 0, 1400);
+  tween(camState.lookAt, 'y', 0, 1400);
+  tween(camState.lookAt, 'z', 0, 1400);
+
+  // Restore real car opacity
+  if(realCarGroup.visible){
+    realCarGroup.traverse(c => {
+      if(!c.isMesh) return;
+      const m = cloneMaterials.get(c);
+      if(m) tween(m, 'opacity', 1, 900);
+    });
+    hideGlow();
+  }
+
+  // Restore procedural too (no-op if not visible)
+  allGroups.forEach(g => {
+    g.traverse(c => {
+      if(!c.isMesh) return;
+      const m = cloneMaterials.get(c);
+      if(m) tween(m, 'opacity', 1, 900);
+    });
+    animateVec3(g.position, origPositions[g.userData.id], 1200);
+  });
+  bodyG.traverse(c => {
+    if(!c.isMesh) return;
+    const m = cloneMaterials.get(c);
+    if(m){
+      const orig = origMaterials.get(c);
+      tween(m, 'opacity', orig && orig.opacity !== undefined ? orig.opacity : 1, 900);
+    }
+  });
+
+  const panel = document.getElementById('hpanel');
+  panel.style.transform = 'translateX(100%)';
+  panel.style.pointerEvents = 'none';
+  hideFBar();
+}
+window.closeHPanel = closeHPanel;
+document.addEventListener('keydown', e => { if(e.key==='Escape' && focused) closeHPanel(); });
+
+// Next/prev hotspot navigation
+function nextHotspot(dir){
+  if(!focused) return;
+  const idx = HOTSPOTS.findIndex(h => h.id === focused.id);
+  const nextIdx = (idx + dir + HOTSPOTS.length) % HOTSPOTS.length;
+  focusHotspot(HOTSPOTS[nextIdx]);
+}
+window.nextHotspot = nextHotspot;
+
+// Floating bottom bar
+function showFBar(){
+  const fb = document.getElementById('hfbar');
+  if(fb){
+    fb.style.display = 'flex';
+    setTimeout(()=> fb.classList.add('show'), 10);
+  }
+}
+function hideFBar(){
+  const fb = document.getElementById('hfbar');
+  if(fb){
+    fb.classList.remove('show');
+    setTimeout(()=> fb.style.display = 'none', 300);
+  }
+}
+
+function showHPanel(hs){
+  const panel = document.getElementById('hpanel');
+  document.getElementById('hp-eye').textContent = 'Product · ' + hs.id.toUpperCase();
+  document.getElementById('hp-name').textContent = hs.label;
+  document.getElementById('hp-kr').textContent = hs.kr;
+  document.getElementById('hp-desc').textContent = hs.desc;
+  document.getElementById('hp-tags').innerHTML = hs.tags.map(t=>`<span style="font-size:10px;padding:4px 10px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.6);border-radius:999px;letter-spacing:.02em;font-weight:500">${t}</span>`).join('');
+  document.getElementById('hp-btn').onclick = ()=>{ closeHPanel(); gp(hs.page, hs.tab); };
+  panel.style.transform = 'translateX(0)';
+  panel.style.pointerEvents = 'all';
+  // Update floating bar current label
+  const fbl = document.getElementById('fbar-label');
+  if(fbl) fbl.textContent = hs.label;
+}
+
+// -- HOTSPOT SCREEN POSITION UPDATE --
+const tmpVec = new THREE.Vector3();
+function updateHotspots(){
+  HOTSPOTS.forEach(hs => {
+    const el = document.getElementById('hs-'+hs.id);
+    if(!el) return;
+    // Get world position accounting for car rotation
+    const wp = hs.worldPos.clone();
+    wp.applyEuler(carGroup.rotation);
+    wp.add(carGroup.position);
+    tmpVec.copy(wp);
+    tmpVec.project(camera);
+    const x = (tmpVec.x*0.5+0.5)*W;
+    const y = (-tmpVec.y*0.5+0.5)*H;
+    if(tmpVec.z > 1){ el.style.display='none'; return; }
+    el.style.display = 'flex';
+    el.style.left = (x - el.offsetWidth/2) + 'px';
+    el.style.top = (y - el.offsetHeight) + 'px';
+    // Scale by depth
+    const depth = 1 - Math.max(0, Math.min(0.5, (tmpVec.z)));
+    el.style.opacity = focused ? (focused.id===hs.id ? '1':'0.15') : '1';
+  });
+}
+
+// -- ANIMATION LOOP --
+const clock = new THREE.Clock();
+let rotY = 0.3;
+
+function animate(){
+  requestAnimationFrame(animate);
+  const dt = clock.getDelta();
+  const et = clock.getElapsedTime();
+
+  updateTweens();
+
+  if(camState.autoRot){
+    rotY += dt * 0.2;
+    carGroup.rotation.y = rotY;
+  }
+
+  // Spin procedural wheels only when visible
+  if(proceduralCarGroup.visible){
+    wheels.forEach(w => { w.rotation.z += dt * 1.2; });
+  }
+
+  // Pulse glow ring when focused
+  if(glowRing.visible){
+    glowRing.scale.setScalar(1 + Math.sin(et * 2.5) * 0.2);
+    glowRing.rotation.x = et * 0.5;
+    glowRing.rotation.y = et * 0.3;
+  }
+
+  // Camera follows state directly (tweens update camState smoothly)
+  camera.position.set(camState.pos.x, camState.pos.y, camState.pos.z);
+  const la = new THREE.Vector3(camState.lookAt.x, camState.lookAt.y, camState.lookAt.z);
+  if(camState.autoRot){
+    camera.lookAt(0, 0.1, 0);
+  } else {
+    const worldLa = la.clone().applyEuler(carGroup.rotation).add(carGroup.position);
+    camera.lookAt(worldLa);
+  }
+
+  updateHotspots();
+  renderer.render(scene, camera);
+}
+animate();
+
+// -- RESIZE --
+function doResize(){
+  W = heroWrap.offsetWidth; H = heroWrap.offsetHeight;
+  if(W === 0 || H === 0) return;
+  camera.aspect = W/H;
+  camera.updateProjectionMatrix();
+  renderer.setSize(W, H);
+}
+window.addEventListener('resize', doResize);
+// Expose globally so page navigation can trigger resize when product page becomes visible
+window.__heroResize = doResize;
+
+// Also use ResizeObserver for when parent element resizes (page becomes visible)
+if(typeof ResizeObserver !== 'undefined'){
+  new ResizeObserver(doResize).observe(heroWrap);
+}
+
+})();
+</script>
+
+<script>
+(function(){
+'use strict';
+const gc = document.getElementById('globe3d');
+const gw = document.getElementById('globe-wrap');
+if(!gc || !gw) return;
+
+let GW = gw.offsetWidth, GH = gw.offsetHeight;
+const gRenderer = new THREE.WebGLRenderer({canvas: gc, antialias:true, alpha:true});
+gRenderer.setSize(GW, GH);
+gRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+const gScene = new THREE.Scene();
+const gCam = new THREE.PerspectiveCamera(45, GW/GH, 0.1, 100);
+gCam.position.set(0, 1.2, 5.5);
+gCam.lookAt(0, 0, 0);
+
+// -- LIGHTS (more realistic sunlight model) --
+gScene.add(new THREE.AmbientLight(0x334466, 1.5));
+const sunLight = new THREE.DirectionalLight(0xffffff, 1.6);
+sunLight.position.set(5, 3, 5);
+gScene.add(sunLight);
+const fillLight = new THREE.DirectionalLight(0x6090ff, 0.5);
+fillLight.position.set(-4, -2, -4);
+gScene.add(fillLight);
+
+// -- GLOBE GROUP --
+const R = 1.8;
+const globeGroup = new THREE.Group();
+gScene.add(globeGroup);
+globeGroup.rotation.x = 0.2;
+
+// -- EARTH TEXTURE (real, with fallback) --
+const earthGeo = new THREE.SphereGeometry(R, 80, 80);
+const loader = new THREE.TextureLoader();
+loader.crossOrigin = 'anonymous';
+
+// Fallback material in case texture fails
+const fallbackMat = new THREE.MeshPhongMaterial({
+  color: 0x1a3a6e,
+  emissive: 0x0a1830,
+  emissiveIntensity: 0.3,
+  shininess: 15
+});
+const earthMesh = new THREE.Mesh(earthGeo, fallbackMat);
+globeGroup.add(earthMesh);
+
+// Load real Earth texture from reliable CDN
+loader.load(
+  'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg',
+  (tex) => {
+    tex.anisotropy = 4;
+    earthMesh.material = new THREE.MeshPhongMaterial({
+      map: tex,
+      shininess: 10,
+      specular: 0x222244
+    });
+    // Hide loading overlay
+    const ld = document.getElementById('globe-load');
+    if(ld){ ld.style.opacity = '0'; setTimeout(()=> ld.style.display='none', 400); }
+  },
+  undefined,
+  // Error callback - try alternative source
+  () => {
+    loader.load(
+      'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg',
+      (tex) => {
+        tex.anisotropy = 4;
+        earthMesh.material = new THREE.MeshPhongMaterial({
+          map: tex,
+          shininess: 10,
+          specular: 0x222244
+        });
+        const ld = document.getElementById('globe-load');
+        if(ld){ ld.style.opacity = '0'; setTimeout(()=> ld.style.display='none', 400); }
+      },
+      undefined,
+      () => {
+        // Final fallback - just hide loader
+        const ld = document.getElementById('globe-load');
+        if(ld){ ld.style.opacity = '0'; setTimeout(()=> ld.style.display='none', 400); }
+      }
+    );
+  }
+);
+
+// Atmospheric glow (thin ring around earth)
+const atmGeo = new THREE.SphereGeometry(R * 1.025, 64, 64);
+const atmMat = new THREE.ShaderMaterial({
+  vertexShader: `varying vec3 vNormal; void main(){ vNormal = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+  fragmentShader: `varying vec3 vNormal; void main(){ float intensity = pow(0.6 - dot(vNormal, vec3(0,0,1.0)), 2.0); gl_FragColor = vec4(0.3, 0.6, 1.0, 1.0) * intensity; }`,
+  blending: THREE.AdditiveBlending,
+  side: THREE.BackSide,
+  transparent: true
+});
+globeGroup.add(new THREE.Mesh(atmGeo, atmMat));
+
+// -- LAT/LON TO 3D --
+function latLonToVec3(lat, lon, radius){
+  const phi = (90 - lat) * Math.PI/180;
+  const theta = (lon + 180) * Math.PI/180;
+  return new THREE.Vector3(
+    -radius * Math.sin(phi) * Math.cos(theta),
+    radius * Math.cos(phi),
+    radius * Math.sin(phi) * Math.sin(theta)
+  );
+}
+
+// -- REAL PARTNERS (Korean auto supply chain global footprint) --
+// ACTUAL SEOUL INDUSTRY PARTNERS (from seoulind.co.kr 회사연혁)
+const PARTNERS = [
+  // HQ
+  {lat: 37.10, lon: 126.98, city:'화성 본사', partner:'서울산업(주)', region:'Korea HQ', isHQ:true},
+
+  // 국내 협력사
+  {lat: 37.24, lon: 127.18, city:'용인', partner:'현대모비스 (Hyundai Mobis)', region:'Korea', kr:true},
+  {lat: 37.46, lon: 126.63, city:'인천', partner:'명화공업 (Myunghwa Industry)', region:'Korea', kr:true},
+  {lat: 37.44, lon: 127.14, city:'성남', partner:'Metaldyne Korea · KDAC', region:'Korea', kr:true},
+
+  // USA — Detroit / Michigan 클러스터
+  {lat: 42.33, lon: -83.05, city:'Detroit, MI', partner:'AAM (American Axle) · TRW', region:'USA'},
+  {lat: 42.69, lon: -83.23, city:'Auburn Hills, MI', partner:'BorgWarner · Nexteer (HQ)', region:'USA'},
+  {lat: 43.16, lon: -85.71, city:'Sparta, MI', partner:'Spartan Light Metal', region:'USA'},
+  {lat: 42.37, lon: -83.47, city:'Plymouth, MI', partner:'Metaldyne (USA)', region:'USA'},
+
+  // Canada — Magna
+  {lat: 44.01, lon: -79.47, city:'Aurora, ON', partner:'Magna International', region:'Canada'},
+
+  // Germany
+  {lat: 51.45, lon: 7.01,   city:'Essen', partner:'ThyssenKrupp', region:'Germany'},
+  {lat: 47.66, lon: 9.48,   city:'Friedrichshafen', partner:'ZF Group', region:'Germany'},
+
+  // UK
+  {lat: 52.31, lon: -1.94,  city:'Redditch', partner:'GKN Driveline', region:'UK'},
+
+  // Japan
+  {lat: 34.75, lon: 137.92, city:'Shizuoka', partner:'GMB Corporation', region:'Japan'},
+
+  // China
+  {lat: 31.30, lon: 120.62, city:'Suzhou', partner:'Nexteer China', region:'China'},
+
+  // Mexico
+  {lat: 25.67, lon: -100.31, city:'Monterrey', partner:'Bocar Group', region:'Mexico'},
+];
+
+const markers = [];
+const travelers = [];
+const markerGroup = new THREE.Group();
+globeGroup.add(markerGroup);
+
+PARTNERS.forEach((p, i) => {
+  const pos = latLonToVec3(p.lat, p.lon, R * 1.008);
+  const g = new THREE.Group();
+  g.position.copy(pos);
+  g.lookAt(0,0,0);
+  g.rotateX(Math.PI/2);
+
+  const color = p.isHQ ? 0xff3b30 : (p.kr ? 0xffd60a : 0x2979ff);
+  const size = p.isHQ ? 0.055 : 0.035;
+
+  // Marker dot
+  const dot = new THREE.Mesh(
+    new THREE.SphereGeometry(size, 16, 16),
+    new THREE.MeshBasicMaterial({color})
+  );
+  g.add(dot);
+
+  // Solid halo ring
+  const halo = new THREE.Mesh(
+    new THREE.RingGeometry(size * 1.4, size * 1.7, 24),
+    new THREE.MeshBasicMaterial({color, transparent:true, opacity:0.7, side:THREE.DoubleSide})
+  );
+  halo.rotation.x = -Math.PI/2;
+  g.add(halo);
+
+  // Animated pulse ring
+  const pulse = new THREE.Mesh(
+    new THREE.RingGeometry(size * 1.4, size * 2.2, 32),
+    new THREE.MeshBasicMaterial({color, transparent:true, opacity:0.5, side:THREE.DoubleSide})
+  );
+  pulse.rotation.x = -Math.PI/2;
+  g.add(pulse);
+
+  // Vertical light beam (for HQ)
+  if(p.isHQ){
+    const beamGeo = new THREE.CylinderGeometry(0.006, 0.006, 0.4, 8, 1, true);
+    const beamMat = new THREE.MeshBasicMaterial({color, transparent:true, opacity:0.6});
+    const beam = new THREE.Mesh(beamGeo, beamMat);
+    beam.position.y = 0.2;
+    g.add(beam);
+  }
+
+  markerGroup.add(g);
+  markers.push({group:g, pulse, dot, data:p, pulsePhase: i * 0.5, color});
+});
+
+// -- ARCS from HQ (Seoul) to each partner --
+const HQ_POS = latLonToVec3(37.10, 126.98, R);
+PARTNERS.forEach((p, i) => {
+  if(p.isHQ) return;
+  const dest = latLonToVec3(p.lat, p.lon, R);
+  const mid = new THREE.Vector3().addVectors(HQ_POS, dest).multiplyScalar(0.5);
+  const dist = HQ_POS.distanceTo(dest);
+  mid.normalize().multiplyScalar(R + dist * 0.4);
+
+  const curve = new THREE.QuadraticBezierCurve3(HQ_POS, mid, dest);
+  const pts = curve.getPoints(80);
+
+  // Arc line (subtle)
+  const arcGeo = new THREE.BufferGeometry().setFromPoints(pts);
+  const arcMat = new THREE.LineBasicMaterial({
+    color: 0x60a5fa,
+    transparent: true,
+    opacity: 0.28
+  });
+  globeGroup.add(new THREE.Line(arcGeo, arcMat));
+
+  // Glowing traveler particle
+  const travelDot = new THREE.Mesh(
+    new THREE.SphereGeometry(0.028, 10, 10),
+    new THREE.MeshBasicMaterial({color: 0xaaddff, transparent:true, opacity:0.9})
+  );
+  globeGroup.add(travelDot);
+  travelers.push({mesh:travelDot, curve, phase: i * 0.15, speed: 0.12 + i*0.015});
+});
+
+// -- INTERACTION: drag + hover --
+const gRaycaster = new THREE.Raycaster();
+gRaycaster.params.Points = {threshold: 0.05};
+const gMouse = new THREE.Vector2();
+const gTooltip = document.getElementById('globe-tooltip');
+
+gw.addEventListener('mousemove', e => {
+  const rect = gw.getBoundingClientRect();
+  gMouse.x = ((e.clientX - rect.left)/GW) * 2 - 1;
+  gMouse.y = -((e.clientY - rect.top)/GH) * 2 + 1;
+
+  gRaycaster.setFromCamera(gMouse, gCam);
+  const dots = markers.map(m => m.dot);
+  const hits = gRaycaster.intersectObjects(dots);
+  if(hits.length){
+    const hit = markers.find(m => m.dot === hits[0].object);
+    if(hit){
+      gTooltip.style.left = (e.clientX - rect.left + 14) + 'px';
+      gTooltip.style.top = (e.clientY - rect.top - 40) + 'px';
+      gTooltip.style.opacity = '1';
+      document.getElementById('tt-region').textContent = hit.data.region;
+      document.getElementById('tt-city').textContent = hit.data.city;
+      document.getElementById('tt-partner').textContent = hit.data.partner;
+      gc.style.cursor = 'pointer';
+    }
+  } else {
+    gTooltip.style.opacity = '0';
+    if(!dragging) gc.style.cursor = 'grab';
+  }
+});
+
+// Drag controls
+let dragging = false, dX = 0, dY = 0;
+let rotX = 0.2, rotY = 0;
+let lastRotX = rotX, lastRotY = rotY;
+let autoRotate = false; // User preference: globe is static
+
+gw.addEventListener('mousedown', e => {
+  dragging = true;
+  dX = e.clientX; dY = e.clientY;
+  lastRotY = rotY; lastRotX = rotX;
+  autoRotate = false;
+  gc.style.cursor = 'grabbing';
+});
+window.addEventListener('mouseup', ()=> { dragging = false; gc.style.cursor = 'grab'; });
+window.addEventListener('mousemove', e => {
+  if(!dragging) return;
+  rotY = lastRotY + (e.clientX - dX) * 0.005;
+  rotX = Math.max(-0.8, Math.min(0.8, lastRotX + (e.clientY - dY) * 0.005));
+});
+
+// Resume auto-rotate after 4s idle
+let idleTimer;
+gw.addEventListener('mousemove', () => {
+  clearTimeout(idleTimer);
+  // idle timer disabled - globe stays static
+});
+
+// Touch support
+gw.addEventListener('touchstart', e => {
+  const t = e.touches[0];
+  dragging = true;
+  dX = t.clientX; dY = t.clientY;
+  lastRotY = rotY; lastRotX = rotX;
+  autoRotate = false;
+});
+gw.addEventListener('touchmove', e => {
+  if(!dragging) return;
+  const t = e.touches[0];
+  rotY = lastRotY + (t.clientX - dX) * 0.005;
+  rotX = Math.max(-0.8, Math.min(0.8, lastRotX + (t.clientY - dY) * 0.005));
+});
+gw.addEventListener('touchend', () => { dragging = false; });
+
+// -- ANIMATION LOOP --
+const gClock = new THREE.Clock();
+function gAnimate(){
+  requestAnimationFrame(gAnimate);
+  const dt = gClock.getDelta();
+  const et = gClock.getElapsedTime();
+
+  if(autoRotate) rotY += dt * 0.08;
+  globeGroup.rotation.y = rotY;
+  globeGroup.rotation.x = rotX;
+
+  // Marker pulse animation (looping)
+  markers.forEach(m => {
+    const p = (et * 0.7 + m.pulsePhase) % 2;
+    const s = 1 + p * 1.3;
+    m.pulse.scale.set(s, s, 1);
+    m.pulse.material.opacity = Math.max(0, 0.5 * (1 - p/2));
+  });
+
+  // Arc travelers
+  travelers.forEach(t => {
+    const phase = ((et * t.speed) + t.phase) % 1;
+    const pt = t.curve.getPoint(phase);
+    t.mesh.position.copy(pt);
+    t.mesh.material.opacity = Math.sin(phase * Math.PI) * 0.9;
+  });
+
+  gRenderer.render(gScene, gCam);
+}
+gAnimate();
+
+// Resize
+window.addEventListener('resize', ()=>{
+  GW = gw.offsetWidth; GH = gw.offsetHeight;
+  gCam.aspect = GW/GH;
+  gCam.updateProjectionMatrix();
+  gRenderer.setSize(GW, GH);
+});
+})();
 </script>
 </body>
 </html>
