@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEOULIND | 서울산업(주)</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#0a0b0d;--dark:#12141a;--dark2:#1c1f28;--blue:#0038a8;--blue2:#0050d0;--accent:#2979ff;--white:#fff;--off:#f3f4f7;--text:#2a2d38;--muted:#6b7280;--border:rgba(255,255,255,0.08)}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden}
+
+/* SLIDE TRANSITION */
+.sbar{position:fixed;top:0;left:-100%;width:100%;height:3px;background:linear-gradient(90deg,var(--blue),var(--accent));z-index:9999;transition:left .65s cubic-bezier(.77,0,.18,1);pointer-events:none}
+.sbar.go{left:0}
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+.page.sl-cur{display:block;position:fixed;top:0;left:0;right:0;bottom:0;overflow-y:auto;z-index:40;transform:translateX(0);transition:transform .65s cubic-bezier(.77,0,.18,1);will-change:transform;background:var(--white)}
+.page.sl-cur.go{transform:translateX(-100%)}
+.page.sl-nxt{display:block;position:fixed;top:0;left:0;right:0;bottom:0;overflow-y:auto;z-index:41;transform:translateX(100%);transition:transform .65s cubic-bezier(.77,0,.18,1);will-change:transform;background:var(--white)}
+.page.sl-nxt.go{transform:translateX(0)}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all .3s}
+header.top{background:linear-gradient(to bottom,rgba(10,11,13,.72) 0%,rgba(10,11,13,0) 100%)}
+header.scrolled,header.mopen{background:rgba(10,11,13,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.hi{max-width:1480px;margin:0 auto;padding:0 48px;height:76px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none}
+.licon{width:40px;height:40px;background:var(--accent);display:flex;align-items:center;justify-content:center;clip-path:polygon(0 0,100% 0,100% 75%,75% 100%,0 100%)}
+.lwm{display:flex;flex-direction:column;line-height:1}
+.lm{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.12em;color:#fff}
+.ls{font-size:9px;letter-spacing:.25em;color:rgba(255,255,255,.6);text-transform:uppercase;margin-top:1px}
+nav{display:flex}
+.ni{position:relative;padding:0 22px;height:76px;display:flex;align-items:center;cursor:pointer;color:rgba(255,255,255,.92);font-size:14px;font-weight:500;transition:color .2s;white-space:nowrap;user-select:none}
+.ni:hover,.ni.on{color:#fff}
+.ndot{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:0;transition:opacity .2s}
+.ni:hover .ndot,.ni.on .ndot{opacity:1}
+.hr{display:flex;align-items:center;gap:14px}
+.lang{font-size:11px;letter-spacing:.12em;color:rgba(255,255,255,.4);cursor:pointer;padding:5px 11px;border:1px solid rgba(255,255,255,.15);border-radius:2px;transition:all .2s;text-transform:uppercase}
+.lang:hover,.lang.on{color:#fff;border-color:var(--accent)}
+.sbtn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.5);transition:all .2s}
+.sbtn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* MEGA */
+.mega{position:fixed;top:76px;left:0;right:0;background:rgba(10,11,13,.98);backdrop-filter:blur(20px);border-bottom:2px solid var(--accent);padding:44px 0;z-index:999;opacity:0;pointer-events:none;transform:translateY(-12px);transition:opacity .3s,transform .3s}
+.mega.open{opacity:1;pointer-events:all;transform:translateY(0)}
+.mi{max-width:1480px;margin:0 auto;padding:0 48px;display:flex;gap:64px}
+.mc{min-width:200px}
+.mct{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.07)}
+.ml{display:block;font-size:14px;color:rgba(255,255,255,.5);padding:9px 0;cursor:pointer;transition:all .22s;border-bottom:1px solid rgba(255,255,255,.04);text-decoration:none}
+.ml:last-child{border-bottom:none}
+.ml:hover{color:#fff;padding-left:8px}
+.mln{font-size:10px;color:var(--accent);margin-right:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:.06em}
+
+/* SEARCH */
+.sov{position:fixed;inset:0;z-index:2000;background:rgba(10,11,13,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.sov.open{opacity:1;pointer-events:all}
+.scl{position:absolute;top:36px;right:52px;font-size:26px;color:rgba(255,255,255,.4);cursor:pointer;transition:color .2s}
+.scl:hover{color:var(--accent)}
+.sf{width:100%;max-width:720px;padding:0 24px}
+.slbl{font-size:10px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase;margin-bottom:22px;display:block}
+.srow{display:flex;border-bottom:2px solid rgba(255,255,255,.2);padding-bottom:14px}
+.sinp{flex:1;background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:32px;font-weight:300;color:#fff;caret-color:var(--accent)}
+.sinp::placeholder{color:rgba(255,255,255,.15)}
+.sgo{background:none;border:none;cursor:pointer;color:var(--accent);font-size:24px;padding:0 8px;transition:transform .2s}
+.sgo:hover{transform:translateX(5px)}
+
+/* HERO */
+.hero{position:relative;height:100vh;min-height:720px;overflow:hidden;background:var(--black);display:flex;align-items:center}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(41,121,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(41,121,255,.05) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at 60% 50%,black 30%,transparent 80%)}
+.hero-orb{position:absolute;right:-10%;top:50%;transform:translateY(-50%);width:70vw;height:70vw;max-width:900px;max-height:900px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,56,168,.25),rgba(41,121,255,.08) 40%,transparent 70%)}
+.hero-slash{position:absolute;right:0;top:0;width:55%;height:100%;clip-path:polygon(15% 0,100% 0,100% 100%,0% 100%);background:linear-gradient(135deg,rgba(0,56,168,.06),rgba(41,121,255,.03));border-left:1px solid rgba(41,121,255,.12)}
+.hcnt{position:relative;z-index:10;max-width:1480px;margin:0 auto;padding:0 48px;width:100%}
+.heye{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;opacity:0;animation:hf .8s ease .3s forwards}
+.htit{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,9vw,140px);line-height:.95;letter-spacing:.04em;color:#fff;margin-bottom:32px;opacity:0;animation:hs .9s ease .5s forwards}
+.htit em{font-style:normal;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.25)}
+.hsub{font-size:16px;font-weight:300;line-height:1.8;color:rgba(255,255,255,.5);max-width:480px;margin-bottom:48px;opacity:0;animation:hf .8s ease .8s forwards}
+.hact{display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:hf .8s ease 1s forwards}
+.bp{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;background:var(--accent);color:#fff;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:none;transition:all .3s;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
+.bp:hover{background:var(--blue2);transform:translateY(-2px)}
+.bg{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:transparent;color:rgba(255,255,255,.7);font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:1px solid rgba(255,255,255,.2);transition:all .3s}
+.bg:hover{border-color:var(--accent);color:#fff}
+.hstats{position:absolute;bottom:60px;right:48px;z-index:10;display:flex;gap:48px}
+.hst{text-align:right}
+.hstv{font-family:'Bebas Neue',sans-serif;font-size:48px;color:#fff;line-height:1;letter-spacing:.06em}
+.hstv span{color:var(--accent);font-size:28px}
+.hstl{font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
+.hscrl{position:absolute;bottom:52px;left:48px;z-index:10;display:flex;align-items:center;gap:14px;color:rgba(255,255,255,.3);font-size:10px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.strk{width:48px;height:1px;background:rgba(255,255,255,.15);position:relative;overflow:hidden}
+.sfill{position:absolute;top:0;left:0;height:100%;width:40%;background:var(--accent);animation:sa 2s ease infinite}
+@keyframes sa{0%{left:-40%;width:40%}100%{left:100%;width:40%}}
+@keyframes hf{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes hs{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
+
+/* SUB-PAGE */
+.ptwrap{padding-top:76px;min-height:100vh}
+.subhero{background:var(--dark);padding:72px 0 60px;position:relative;overflow:hidden}
+.subhero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--accent),transparent 60%)}
+.shgeo{position:absolute;right:0;top:0;width:45%;height:100%;background:linear-gradient(135deg,rgba(41,121,255,.04),transparent);clip-path:polygon(20% 0,100% 0,100% 100%,0 100%);border-left:1px solid rgba(41,121,255,.1)}
+.shi{max-width:1480px;margin:0 auto;padding:0 48px;position:relative;z-index:1}
+.bc{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.bci{font-size:12px;color:rgba(255,255,255,.3);cursor:pointer;transition:color .2s}
+.bci:hover{color:var(--accent)}
+.bcs{color:rgba(255,255,255,.15);font-size:11px}
+.bcc{color:rgba(255,255,255,.55);cursor:default}
+.subhero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,5.5vw,80px);color:#fff;line-height:1;letter-spacing:.06em}
+.subhero h1 em{font-style:normal;color:var(--accent)}
+.shdesc{font-size:15px;color:rgba(255,255,255,.45);margin-top:14px;font-weight:300;line-height:1.75;max-width:500px}
+.subc{max-width:1480px;margin:0 auto;padding:72px 48px}
+
+/* TABS */
+.tnav{display:flex;border-bottom:1px solid #e5e7eb;margin-bottom:48px;overflow-x:auto}
+.tb{padding:14px 28px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.tb.on{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+.tp{display:none}
+.tp.on{display:block}
+
+/* CARDS */
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#e5e7eb;margin-top:48px}
+.gc{background:#fff;padding:44px 36px;transition:all .3s;border-top:3px solid transparent}
+.gc:hover{border-top-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.gcn{font-family:'Bebas Neue',sans-serif;font-size:52px;color:#edf0f6;line-height:1;margin-bottom:14px;letter-spacing:.04em}
+.gct{font-size:17px;font-weight:700;color:var(--text);margin-bottom:10px}
+.gcd{font-size:13.5px;color:var(--muted);line-height:1.7;font-weight:300}
+
+/* PRODUCT CARDS */
+.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:#e5e7eb;margin-top:48px}
+.pcard{background:#fff;padding:52px 44px;display:flex;gap:32px;align-items:flex-start;transition:all .3s;border-left:4px solid transparent}
+.pcard:hover{border-left-color:var(--accent);background:#fafbff}
+.pcbadge{flex-shrink:0;width:64px;height:64px;background:var(--dark);display:flex;align-items:center;justify-content:center;clip-path:polygon(0 0,calc(100%-10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100%-10px))}
+.pcbadge svg{width:30px;height:30px;color:var(--accent)}
+.pce{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--blue);letter-spacing:.1em;margin-bottom:6px}
+.pck{font-size:13px;color:var(--muted);margin-bottom:12px}
+.pcd{font-size:13.5px;color:var(--text);line-height:1.7;font-weight:300}
+.ptags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.ptag{font-size:10px;padding:4px 10px;border:1px solid #dde0e8;color:var(--muted);border-radius:2px;letter-spacing:.06em;font-weight:500}
+
+/* CERT */
+.certgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#e5e7eb;margin-top:48px}
+.ccard{background:#fff;padding:44px;text-align:center}
+.cicon{width:72px;height:72px;background:var(--off);border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.ctit{font-size:18px;font-weight:700;color:var(--text);margin-bottom:10px}
+.cdsc{font-size:13.5px;color:var(--muted);line-height:1.7;font-weight:300}
+
+/* TIMELINE */
+.tl{margin-top:48px;display:flex;flex-direction:column}
+.tlr{display:grid;grid-template-columns:120px 1px 1fr;gap:0 32px;align-items:start;padding:28px 0;border-bottom:1px solid #f0f1f4}
+.tlr:last-child{border-bottom:none}
+.tly{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--blue);letter-spacing:.06em;padding-top:4px}
+.tll{background:#e5e7eb;position:relative}
+.tll::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 0 0 2px var(--accent)}
+.tlm{font-size:11px;color:var(--accent);letter-spacing:.1em;font-weight:600;margin-bottom:4px}
+.tlt{font-size:14px;color:var(--text);line-height:1.7}
+
+/* CONTACT */
+.ctgrid{display:grid;grid-template-columns:1fr 1.4fr;gap:2px;background:#e5e7eb;margin-top:48px}
+.ctinfo{background:var(--dark);padding:52px 44px}
+.ctinfo h3{font-family:'Bebas Neue',sans-serif;font-size:36px;color:#fff;margin-bottom:32px;letter-spacing:.06em}
+.cir{display:flex;gap:16px;margin-bottom:22px;align-items:flex-start}
+.ciic{width:36px;height:36px;background:rgba(41,121,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:2px}
+.ciic svg{width:16px;height:16px;color:var(--accent)}
+.cilbl{font-size:10px;letter-spacing:.15em;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:4px}
+.civ{font-size:14px;color:rgba(255,255,255,.75);line-height:1.5;font-weight:300}
+.mapph{background:#1c1f28;min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:40px}
+.mapph p{color:rgba(255,255,255,.3);font-size:13px}
+
+/* RECRUIT */
+.rgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:#e5e7eb;margin-top:48px}
+.rcard{background:#fff;padding:48px 44px}
+.rcn{font-family:'Bebas Neue',sans-serif;font-size:64px;color:#edf0f6;line-height:1;margin-bottom:16px}
+.rct{font-size:20px;font-weight:700;color:var(--text);margin-bottom:14px}
+.rcd{font-size:14px;color:var(--muted);line-height:1.8;font-weight:300}
+.bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:#e5e7eb;margin-top:48px}
+.ben{background:#fff;padding:32px 24px;text-align:center}
+.bei{font-size:32px;margin-bottom:12px}
+.bet{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+.bed{font-size:12px;color:var(--muted);line-height:1.6;font-weight:300}
+
+/* HOME SECTIONS */
+.ha{padding:100px 0;background:#fff}
+.hai{max-width:1480px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.anr{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#e5e7eb;margin-top:48px}
+.anum{background:#fff;padding:32px 28px;border-top:3px solid transparent;transition:border-color .3s}
+.anum:hover{border-top-color:var(--accent)}
+.anv{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--text);line-height:1;letter-spacing:.04em}
+.anv span{color:var(--accent);font-size:30px}
+.anl{font-size:12px;color:var(--muted);margin-top:6px;letter-spacing:.06em}
+.hp{padding:100px 0;background:var(--off)}
+.hpi{max-width:1480px;margin:0 auto;padding:0 48px}
+.hpg{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#d8dae0;margin-top:52px}
+.hpc{background:#fff;overflow:hidden;cursor:pointer;transition:all .3s;position:relative}
+.hpc:hover{transform:translateY(-4px);box-shadow:0 20px 48px rgba(0,0,0,.1)}
+.hpth{height:180px;background:var(--dark);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hpgrad{position:absolute;inset:0}
+.gb{background:linear-gradient(135deg,#0a0f1e,#0038a8 80%)}
+.ge{background:linear-gradient(135deg,#0d1a0d,#1a4a1a 70%,#2d8a2d)}
+.gs{background:linear-gradient(135deg,#1a0a0a,#6b1a1a 70%,#a02020)}
+.gp{background:linear-gradient(135deg,#1a1200,#6b4a00 70%,#c48800)}
+.gd{background:linear-gradient(135deg,#0e0a1a,#3a1a6b 70%,#6633cc)}
+.gt{background:linear-gradient(135deg,#0a1a1a,#1a4a4a 70%,#2a8a8a)}
+.hptl{position:relative;z-index:1;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.25em;color:rgba(255,255,255,.4);text-transform:uppercase}
+.hpb{padding:28px}
+.hpen{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--blue);letter-spacing:.08em;margin-bottom:6px}
+.hpd{font-size:13px;color:var(--muted);line-height:1.65;font-weight:300}
+.hpar{position:absolute;bottom:20px;right:20px;width:32px;height:32px;background:var(--off);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;transition:all .3s}
+.hpc:hover .hpar{background:var(--accent);color:#fff}
+.hq{padding:100px 0;background:var(--dark)}
+.hqi{max-width:1480px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.hqbd{margin-top:40px;display:flex;gap:2px;background:rgba(255,255,255,.06)}
+.hqb{flex:1;padding:28px 20px;text-align:center;border-right:1px solid rgba(255,255,255,.06)}
+.hqb:last-child{border-right:none}
+.hqbi{font-size:28px;margin-bottom:8px}
+.hqbn{font-size:11px;font-weight:700;color:#fff;letter-spacing:.08em;text-transform:uppercase}
+.hqbs{font-size:11px;color:rgba(255,255,255,.3);margin-top:3px}
+.hqr{display:flex;flex-direction:column;gap:2px;background:rgba(255,255,255,.04)}
+.hqit{padding:28px 32px;display:flex;gap:20px;align-items:center;border-bottom:1px solid rgba(255,255,255,.05);cursor:default;transition:background .2s}
+.hqit:hover{background:rgba(41,121,255,.06)}
+.hqit:last-child{border-bottom:none}
+.hqin{font-family:'Bebas Neue',sans-serif;font-size:32px;color:rgba(255,255,255,.12);flex-shrink:0;width:48px;line-height:1}
+.hqit h4{font-size:15px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:4px}
+.hqit p{font-size:13px;color:rgba(255,255,255,.35);line-height:1.5;font-weight:300}
+
+/* SECTION */
+.seye{font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.stit{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,4vw,58px);color:var(--text);line-height:1;letter-spacing:.05em;margin-bottom:18px}
+.sdsc{font-size:15px;line-height:1.85;color:var(--muted);font-weight:300;max-width:520px}
+
+/* FOOTER */
+footer{background:#0a0b0d;border-top:1px solid rgba(255,255,255,.06);padding:60px 0 32px}
+.ft{max-width:1480px;margin:0 auto;padding:0 48px}
+.fttop{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:52px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:32px}
+.ftlw{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.ftli{width:36px;height:36px;background:var(--accent);display:flex;align-items:center;justify-content:center;clip-path:polygon(0 0,100% 0,100% 75%,75% 100%,0 100%)}
+.ftln{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;letter-spacing:.12em}
+.fttag{font-size:12px;color:rgba(255,255,255,.28);line-height:1.7;font-weight:300;margin-bottom:20px}
+.ftci{font-size:12px;color:rgba(255,255,255,.3);margin-bottom:6px;line-height:1.5}
+.ftci strong{color:rgba(255,255,255,.5)}
+.ftcol h5{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+.ftcol ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ftcol ul li a{font-size:13px;color:rgba(255,255,255,.3);text-decoration:none;transition:color .2s;cursor:pointer;font-weight:300}
+.ftcol ul li a:hover{color:var(--accent)}
+.ftbot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.ftleg{display:flex;gap:20px}
+.ftleg a{font-size:11px;color:rgba(255,255,255,.2);text-decoration:none;transition:color .2s}
+.ftleg a:hover{color:rgba(255,255,255,.5)}
+.ftcpy{font-size:11px;color:rgba(255,255,255,.15);letter-spacing:.04em}
+
+/* QUICK ACCESS */
+.qa{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:500;display:flex;flex-direction:column;background:rgba(10,11,13,.95);border-left:2px solid var(--accent)}
+.qab{padding:16px 12px;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;writing-mode:vertical-rl;color:rgba(255,255,255,.4);cursor:pointer;border-bottom:1px solid rgba(255,255,255,.06);transition:all .2s}
+.qab:last-child{border-bottom:none}
+.qab:hover{color:var(--accent);background:rgba(41,121,255,.08)}
+
+/* AOS */
+[data-a]{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+[data-a].vis{opacity:1;transform:translateY(0)}
+[data-a="r"]{transform:translateX(-28px)}
+[data-a="r"].vis{transform:translateX(0)}
+[data-a="l"]{transform:translateX(28px)}
+[data-a="l"].vis{transform:translateX(0)}
+
+/* BACK TOP */
+.btop{position:fixed;bottom:32px;right:72px;width:44px;height:44px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;opacity:0;pointer-events:none;transition:all .3s;z-index:400;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)}
+.btop.show{opacity:1;pointer-events:all}
+.btop:hover{background:var(--accent);transform:translateY(-3px)}
+</style>
+</head>
+<body>
+
+<div class="sbar" id="sbar"></div>
+
+<!-- SEARCH -->
+<div class="sov" id="sov">
+  <div class="scl" onclick="closeSearch()">✕</div>
+  <div class="sf">
+    <span class="slbl">검색어를 입력하세요</span>
+    <div class="srow">
+      <input class="sinp" id="sinp" type="text" placeholder="제품, 회사정보, 채용...">
+      <button class="sgo" onclick="doSearch()">→</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header id="hdr" class="top">
+  <div class="hi">
+    <a class="logo" onclick="gp('home')">
+      <div class="licon"><svg viewBox="0 0 22 22" fill="none" width="22" height="22"><path d="M3 4L11 2L19 4V12C19 17 11 21 11 21C11 21 3 17 3 12V4Z" fill="white" opacity=".9"/><path d="M7 10L10 13L15 8" stroke="#0038a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="lwm"><span class="lm">SEOULIND</span><span class="ls">서울산업(주)</span></div>
+    </a>
+    <nav>
+      <div class="ni" id="n0" onclick="tm(0)">기업정보<div class="ndot"></div></div>
+      <div class="ni" id="n1" onclick="tm(1)">제품정보<div class="ndot"></div></div>
+      <div class="ni" id="n2" onclick="tm(2)">품질보증<div class="ndot"></div></div>
+      <div class="ni" id="n3" onclick="tm(3)">연구개발<div class="ndot"></div></div>
+      <div class="ni" id="n4" onclick="tm(4)">채용정보<div class="ndot"></div></div>
+    </nav>
+    <div class="hr">
+      <div class="lang on">KOR</div>
+      <div class="lang" onclick="alert('영문 페이지로 이동합니다.')">ENG</div>
+      <div class="sbtn" onclick="openSearch()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+    </div>
+  </div>
+  <!-- Mega 0 -->
+  <div class="mega" id="m0"><div class="mi"><div class="mc">
+    <div class="mct">기업정보</div>
+    <a class="ml" onclick="gp('about','ceo')"><span class="mln">01</span>CEO 인사말</a>
+    <a class="ml" onclick="gp('about','history')"><span class="mln">02</span>회사연혁</a>
+    <a class="ml" onclick="gp('about','org')"><span class="mln">03</span>조직도</a>
+    <a class="ml" onclick="gp('about','location')"><span class="mln">04</span>찾아오시는길</a>
+    <a class="ml" onclick="gp('about','notice')"><span class="mln">05</span>공지사항</a>
+  </div></div></div>
+  <!-- Mega 1 -->
+  <div class="mega" id="m1"><div class="mi"><div class="mc">
+    <div class="mct">제품정보</div>
+    <a class="ml" onclick="gp('product','bsm')"><span class="mln">01</span>Balance Shaft Module</a>
+    <a class="ml" onclick="gp('product','ev')"><span class="mln">02</span>Electric Vehicle</a>
+    <a class="ml" onclick="gp('product','st')"><span class="mln">03</span>Steering</a>
+    <a class="ml" onclick="gp('product','pt')"><span class="mln">04</span>Powertrain</a>
+    <a class="ml" onclick="gp('product','dl')"><span class="mln">05</span>Driveline</a>
+    <a class="ml" onclick="gp('product','etc')"><span class="mln">06</span>etc.</a>
+  </div></div></div>
+  <!-- Mega 2 -->
+  <div class="mega" id="m2"><div class="mi"><div class="mc">
+    <div class="mct">품질보증</div>
+    <a class="ml" onclick="gp('quality','policy')"><span class="mln">01</span>품질방침</a>
+    <a class="ml" onclick="gp('quality','system')"><span class="mln">02</span>품질시스템</a>
+    <a class="ml" onclick="gp('quality','prevention')"><span class="mln">03</span>예방품질활동</a>
+  </div></div></div>
+  <!-- Mega 3 -->
+  <div class="mega" id="m3"><div class="mi"><div class="mc">
+    <div class="mct">연구개발</div>
+    <a class="ml" onclick="gp('rnd','parts')"><span class="mln">01</span>부품개발</a>
+  </div></div></div>
+  <!-- Mega 4 -->
+  <div class="mega" id="m4"><div class="mi"><div class="mc">
+    <div class="mct">채용정보</div>
+    <a class="ml" onclick="gp('recruit','info')"><span class="mln">01</span>채용정보</a>
+    <a class="ml" onclick="gp('recruit','welfare')"><span class="mln">02</span>복지제도</a>
+  </div></div></div>
+</header>
+
+<!-- ═══ HOME ═══ -->
+<div class="page active" id="page-home">
+<div class="hero" id="hero-wrap" style="position:relative;overflow:hidden;background:#080a10">
+  <!-- Three.js canvas -->
+  <canvas id="hero3d" style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
+  <!-- SVG connector lines overlay -->
+  <svg id="hsv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5"></svg>
+  <!-- Hotspot HTML labels -->
+  <div id="hspots" style="position:absolute;inset:0;z-index:6;pointer-events:none"></div>
+
+  <!-- Text overlay bottom-left -->
+  <div style="position:absolute;left:48px;bottom:80px;z-index:10;pointer-events:none">
+    <p class="heye" style="opacity:1;animation:none;margin-bottom:12px">Automotive Parts Manufacturer · Est. 1993</p>
+    <h1 class="htit" style="opacity:1;animation:none;font-size:clamp(48px,6vw,96px)">PRECISION<br>IN <em>MOTION</em></h1>
+    <p class="hsub" style="opacity:1;animation:none;margin-bottom:24px;font-size:14px">자동차 핵심 부품의 설계부터 양산까지.<br>서울산업(주)은 글로벌 OEM에 공급합니다.</p>
+    <div class="hact" style="opacity:1;animation:none;pointer-events:all">
+      <button class="bp" onclick="gp('product')">제품 보기 →</button>
+      <button class="bg" onclick="gp('about')">회사소개</button>
+    </div>
+  </div>
+
+  <!-- Stats top-right -->
+  <div class="hstats" style="z-index:10">
+    <div class="hst"><div class="hstv">30<span>+</span></div><div class="hstl">Years of Experience</div></div>
+    <div class="hst"><div class="hstv">6<span>+</span></div><div class="hstl">Product Lines</div></div>
+    <div class="hst"><div class="hstv">IATF<span>16949</span></div><div class="hstl">Certified Quality</div></div>
+  </div>
+
+  <!-- Part detail panel -->
+  <div id="hpanel" style="position:absolute;top:0;right:0;width:320px;height:100%;z-index:20;pointer-events:none;transform:translateX(100%);transition:transform .5s cubic-bezier(.77,0,.18,1);background:linear-gradient(to left,rgba(8,10,16,.98),rgba(8,10,16,.85));backdrop-filter:blur(12px);border-left:1px solid rgba(41,121,255,.2);display:flex;flex-direction:column;justify-content:center;padding:48px 36px">
+    <div id="hpanel-close" style="position:absolute;top:20px;right:20px;display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);cursor:pointer;color:rgba(255,255,255,.8);font-size:12px;font-weight:600;letter-spacing:.08em;pointer-events:all;transition:all .2s;text-transform:uppercase" onmouseenter="this.style.background='rgba(41,121,255,.25)';this.style.borderColor='#2979ff'" onmouseleave="this.style.background='rgba(255,255,255,.08)';this.style.borderColor='rgba(255,255,255,.2)'" onclick="closeHPanel()">← 돌아가기</div>
+    <p id="hp-eye" style="font-size:10px;letter-spacing:.22em;color:#2979ff;text-transform:uppercase;font-weight:600;margin-bottom:12px"></p>
+    <h3 id="hp-name" style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:#fff;letter-spacing:.08em;margin-bottom:16px;line-height:1"></h3>
+    <p id="hp-kr" style="font-size:13px;color:rgba(255,255,255,.4);margin-bottom:20px;letter-spacing:.04em"></p>
+    <p id="hp-desc" style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;font-weight:300;margin-bottom:28px"></p>
+    <div id="hp-tags" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px"></div>
+    <button id="hp-btn" style="display:inline-flex;align-items:center;gap:8px;padding:13px 24px;background:var(--accent);color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:none;pointer-events:all;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));transition:all .2s">제품 상세 보기 →</button>
+    <div style="margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,.07)">
+      <p style="font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.1em;text-transform:uppercase">클릭하여 3D 확대 · 드래그로 회전</p>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="hscrl" style="z-index:10;pointer-events:all" onclick="document.getElementById('hsec').scrollIntoView({behavior:'smooth'})">
+    <div class="strk"><div class="sfill"></div></div><span>Scroll</span>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+'use strict';
+const canvas = document.getElementById('hero3d');
+const heroWrap = document.getElementById('hero-wrap');
+const svg = document.getElementById('hsv');
+const hspots = document.getElementById('hspots');
+
+let W = heroWrap.offsetWidth, H = heroWrap.offsetHeight;
+
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+renderer.setSize(W, H);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(42, W/H, 0.1, 200);
+
+// --- MATERIALS ---
+function mat(hex, emHex, emInt, op, wire){
+  return new THREE.MeshPhongMaterial({
+    color:hex, emissive:emHex||0x000000, emissiveIntensity:emInt||0,
+    transparent: op<1, opacity: op===undefined?1:op,
+    wireframe: wire||false, shininess:60
+  });
+}
+const M = {
+  bodyWire: mat(0x1e3a7a, 0x000000, 0, 0.7, true),
+  bodyGlass: mat(0x0d2060, 0x000820, 0.1, 0.12),
+  chassis: mat(0x1a2540, 0x0d1a30, 0.1, 0.9),
+  subframe: mat(0x202d44, 0x0d1a30, 0.05, 1),
+  engine: mat(0x2a3550, 0x101828, 0.1, 1),
+  bsm: mat(0x2979ff, 0x1045cc, 0.5, 1),
+  ev: mat(0x00b84c, 0x005a24, 0.5, 1),
+  steering: mat(0xff6b35, 0x7a2a10, 0.4, 1),
+  powertrain: mat(0xf5a623, 0x7a4a00, 0.4, 1),
+  driveline: mat(0x9b59b6, 0x4a1a6b, 0.4, 1),
+  etc: mat(0x00bcd4, 0x004d60, 0.4, 1),
+  axle: mat(0x445566, 0x000000, 0, 1),
+  wheel: mat(0x111120, 0x000000, 0, 1),
+  rim: mat(0x8899aa, 0x334455, 0.1, 1),
+  floor: mat(0x0d1020, 0x000000, 0, 0.4),
+};
+
+// --- LIGHTS ---
+scene.add(new THREE.AmbientLight(0x0a1530, 3));
+const sun = new THREE.DirectionalLight(0x6090ff, 1.2);
+sun.position.set(4, 8, 4);
+sun.castShadow = true;
+scene.add(sun);
+[[-2,1.5,2, 0x2979ff, 3, 7],[2,2,-2, 0x4060aa, 1.5, 8],[0,3,0, 0x1a3060, 1, 12]].forEach(([x,y,z,c,i,d])=>{
+  const pl = new THREE.PointLight(c, i, d);
+  pl.position.set(x,y,z);
+  scene.add(pl);
+});
+
+// --- GRID FLOOR ---
+const grid = new THREE.GridHelper(24, 24, 0x1a2a4a, 0x111828);
+grid.position.y = -0.85;
+grid.material.transparent = true;
+grid.material.opacity = 0.5;
+scene.add(grid);
+
+// Floor plane
+const floorGeo = new THREE.PlaneGeometry(24, 24);
+const floorMesh = new THREE.Mesh(floorGeo, M.floor);
+floorMesh.rotation.x = -Math.PI/2;
+floorMesh.position.y = -0.86;
+scene.add(floorMesh);
+
+// --- CAR GROUP ---
+const carGroup = new THREE.Group();
+scene.add(carGroup);
+carGroup.rotation.y = 0.3;
+
+// Helper: add mesh to group and return it
+function addBox(g, mat, w, h, d, x, y, z){
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat);
+  m.position.set(x,y,z);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  g.add(m);
+  return m;
+}
+function addCyl(g, mat, rt, rb, h, x, y, z, rx, ry, rz, segs){
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,segs||16), mat);
+  m.position.set(x,y,z);
+  if(rx) m.rotation.x = rx;
+  if(ry) m.rotation.y = ry;
+  if(rz) m.rotation.z = rz;
+  m.castShadow = true;
+  g.add(m);
+  return m;
+}
+
+// -- BODY SHELL (wireframe + glass) --
+const bodyG = new THREE.Group();
+carGroup.add(bodyG);
+// Cabin wireframe box (main passenger area)
+addBox(bodyG, M.bodyWire, 2.2, 0.85, 1.72, 0.1, 0.42, 0);
+addBox(bodyG, M.bodyGlass, 2.2, 0.85, 1.72, 0.1, 0.42, 0);
+// Roof
+addBox(bodyG, M.bodyWire, 1.6, 0.08, 1.6, 0.1, 0.9, 0);
+// Hood
+addBox(bodyG, M.bodyWire, 1.55, 0.07, 1.65, -1.35, 0.08, 0);
+// Trunk
+addBox(bodyG, M.bodyWire, 0.85, 0.07, 1.65, 1.55, 0.08, 0);
+// Windshield plane (tilted)
+const wsG = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.85), M.bodyWire);
+wsG.position.set(-0.78, 0.42, 0);
+wsG.rotation.z = Math.PI/2 * 0.35;
+wsG.rotation.y = Math.PI/2;
+bodyG.add(wsG);
+
+// -- CHASSIS --
+const chassisG = new THREE.Group();
+carGroup.add(chassisG);
+addBox(chassisG, M.chassis, 4.3, 0.1, 1.78, 0, -0.32, 0);  // main floor
+addBox(chassisG, M.subframe, 1.3, 0.07, 1.55, -1.45, -0.18, 0); // front subframe
+addBox(chassisG, M.subframe, 1.1, 0.07, 1.55, 1.5, -0.18, 0);  // rear subframe
+// Firewall
+addBox(chassisG, M.subframe, 0.07, 0.6, 1.72, -0.7, 0.1, 0);
+// Rear bulkhead
+addBox(chassisG, M.subframe, 0.07, 0.5, 1.72, 1.1, 0.08, 0);
+
+// -- ENGINE BLOCK (Powertrain) --
+const ptGroup = new THREE.Group();
+carGroup.add(ptGroup);
+ptGroup.userData = {id:'powertrain', origPos:[0,0,0]};
+const engineMesh = addBox(ptGroup, M.engine, 0.85, 0.52, 0.72, -1.45, 0.12, 0); // block
+addBox(ptGroup, M.engine, 0.55, 0.38, 0.55, -0.82, 0.06, 0); // transmission
+addBox(ptGroup, M.powertrain, 0.8, 0.08, 0.65, -1.45, 0.38, 0); // intake manifold
+addCyl(ptGroup, M.powertrain, 0.12, 0.12, 0.5, -1.45, 0.18, 0.22, Math.PI/2, 0, 0); // cylinder L
+addCyl(ptGroup, M.powertrain, 0.12, 0.12, 0.5, -1.45, 0.18, -0.22, Math.PI/2, 0, 0); // cylinder R
+
+// -- BSM --
+const bsmGroup = new THREE.Group();
+carGroup.add(bsmGroup);
+bsmGroup.userData = {id:'bsm', origPos:[0,0,0]};
+addCyl(bsmGroup, M.bsm, 0.11, 0.11, 0.46, -1.45, 0.1, 0.44, Math.PI/2, 0, 0);
+addCyl(bsmGroup, M.bsm, 0.11, 0.11, 0.46, -1.45, 0.1, -0.44, Math.PI/2, 0, 0);
+addCyl(bsmGroup, M.bsm, 0.06, 0.06, 0.42, -1.45, 0.1, 0.44, 0, 0, 0); // shaft inside L
+addCyl(bsmGroup, M.bsm, 0.06, 0.06, 0.42, -1.45, 0.1, -0.44, 0, 0, 0); // shaft inside R
+
+// -- EV BATTERY --
+const evGroup = new THREE.Group();
+carGroup.add(evGroup);
+evGroup.userData = {id:'ev', origPos:[0,0,0]};
+addBox(evGroup, M.ev, 2.85, 0.17, 1.5, 0.15, -0.25, 0);
+addCyl(evGroup, M.ev, 0.17, 0.17, 0.28, -1.32, 0.1, 0, 0, 0, Math.PI/2); // front motor
+addCyl(evGroup, M.ev, 0.14, 0.14, 0.24, 1.42, -0.06, 0, 0, 0, Math.PI/2); // rear motor
+// Battery cells (decorative)
+for(let i=-3; i<=3; i++){
+  addBox(evGroup, mat(0x007a30, 0x003a14, 0.2, 0.8), 0.32, 0.12, 0.08, 0.15+i*0.38, -0.18, 0);
+}
+
+// -- STEERING --
+const stGroup = new THREE.Group();
+carGroup.add(stGroup);
+stGroup.userData = {id:'steering', origPos:[0,0,0]};
+addBox(stGroup, M.steering, 0.07, 0.07, 1.35, -1.42, 0.0, 0); // rack
+addBox(stGroup, M.steering, 0.5, 0.04, 0.04, -1.2, 0.0, 0.65); // tie rod L
+addBox(stGroup, M.steering, 0.5, 0.04, 0.04, -1.2, 0.0, -0.65); // tie rod R
+addCyl(stGroup, M.steering, 0.038, 0.038, 0.65, -1.38, 0.32, -0.4, 0.38, 0, 0); // column
+// Steering wheel
+const swRing = new THREE.Mesh(new THREE.TorusGeometry(0.19, 0.025, 8, 20), M.steering);
+swRing.position.set(-1.28, 0.58, -0.52);
+swRing.rotation.x = 0.35;
+swRing.rotation.z = 0.1;
+stGroup.add(swRing);
+
+// -- DRIVELINE --
+const dlGroup = new THREE.Group();
+carGroup.add(dlGroup);
+dlGroup.userData = {id:'driveline', origPos:[0,0,0]};
+addCyl(dlGroup, M.driveline, 0.038, 0.038, 2.1, 0.35, -0.16, 0, 0, 0, Math.PI/2); // propshaft
+addBox(dlGroup, M.driveline, 0.28, 0.22, 0.3, 1.48, -0.15, 0); // diff
+addCyl(dlGroup, M.axle, 0.04, 0.04, 0.66, -1.62, -0.3, 0.62, 0, 0, Math.PI/2); // front axle L
+addCyl(dlGroup, M.axle, 0.04, 0.04, 0.66, -1.62, -0.3, -0.62, 0, 0, Math.PI/2);
+addCyl(dlGroup, M.axle, 0.04, 0.04, 0.6, 1.62, -0.27, 0.62, 0, 0, Math.PI/2); // rear axle L
+addCyl(dlGroup, M.axle, 0.04, 0.04, 0.6, 1.62, -0.27, -0.62, 0, 0, Math.PI/2);
+
+// -- ETC (misc parts) --
+const etcGroup = new THREE.Group();
+carGroup.add(etcGroup);
+etcGroup.userData = {id:'etc', origPos:[0,0,0]};
+addBox(etcGroup, M.etc, 0.55, 0.22, 0.42, -1.45, -0.06, -0.3); // alternator/pump
+addCyl(etcGroup, M.etc, 0.08, 0.08, 0.35, 1.55, 0.05, 0.35, 0, 0, Math.PI/2); // sensor
+addBox(etcGroup, M.etc, 0.45, 0.18, 0.3, 1.55, 0.05, -0.3); // module box
+
+// -- WHEELS --
+const whlGroup = new THREE.Group();
+carGroup.add(whlGroup);
+function addWheel(x, z){
+  const g = new THREE.Group();
+  const tire = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.36, 0.22, 24), M.wheel);
+  tire.rotation.z = Math.PI/2;
+  g.add(tire);
+  const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.24, 10), M.rim);
+  rim.rotation.z = Math.PI/2;
+  g.add(rim);
+  // Spokes
+  for(let i=0;i<5;i++){
+    const sp = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.035, 0.035), M.rim);
+    sp.rotation.z = (i/5)*Math.PI*2;
+    sp.position.x = 0.001;
+    g.add(sp);
+  }
+  g.position.set(x, -0.34, z);
+  whlGroup.add(g);
+  return g;
+}
+const wheels = [
+  addWheel(-1.62, 0.95), addWheel(-1.62,-0.95),
+  addWheel(1.62, 0.95), addWheel(1.62,-0.95)
+];
+
+// Exhaust pipes
+addCyl(carGroup, M.axle, 0.04, 0.04, 0.5, 1.88, -0.28, 0.22, 0, 0, Math.PI/2);
+addCyl(carGroup, M.axle, 0.04, 0.04, 0.5, 1.88, -0.28, -0.22, 0, 0, Math.PI/2);
+
+// -- HOTSPOT DATA --
+const HOTSPOTS = [
+  {
+    id:'bsm', group: bsmGroup,
+    label:'Balance Shaft Module', kr:'밸런스 샤프트 모듈',
+    desc:'엔진 2차 진동을 상쇄하는 핵심 모듈. 정밀 가공으로 소음과 진동을 최소화합니다.',
+    tags:['ENGINE','VIBRATION','OEM'],
+    color:'#2979ff',
+    worldPos: new THREE.Vector3(-1.45, 0.55, 0.75),
+    camPos: {x:-1.2, y:1.2, z:2.5},
+    lookAt: {x:-1.45, y:0.1, z:0.44},
+    page:'product', tab:'bsm',
+    explodeDir: new THREE.Vector3(0, 0.3, 0.4)
+  },
+  {
+    id:'ev', group: evGroup,
+    label:'Electric Vehicle', kr:'전기차 구동 부품',
+    desc:'전기차 구동 모터 및 감속기용 정밀 부품. 경량화와 고강도를 동시에 실현합니다.',
+    tags:['EV','MOTOR','LIGHTWEIGHT'],
+    color:'#00b84c',
+    worldPos: new THREE.Vector3(0.15, 0.2, 1.0),
+    camPos: {x:0.5, y:1.5, z:3.0},
+    lookAt: {x:0.15, y:-0.2, z:0},
+    page:'product', tab:'ev',
+    explodeDir: new THREE.Vector3(0, -0.4, 0)
+  },
+  {
+    id:'steering', group: stGroup,
+    label:'Steering', kr:'조향 부품',
+    desc:'조향 시스템의 핵심 컬럼 및 랙·피니언 부품. 고정밀 선삭 가공으로 제작됩니다.',
+    tags:['STEERING','EPS','PRECISION'],
+    color:'#ff6b35',
+    worldPos: new THREE.Vector3(-1.45, 0.7, -0.9),
+    camPos: {x:-0.8, y:1.0, z:2.0},
+    lookAt: {x:-1.42, y:0.15, z:-0.4},
+    page:'product', tab:'st',
+    explodeDir: new THREE.Vector3(0, 0.2, -0.4)
+  },
+  {
+    id:'powertrain', group: ptGroup,
+    label:'Powertrain', kr:'파워트레인 부품',
+    desc:'변속기·크랭크샤프트 등 파워트레인 계열 고강도 정밀 부품을 공급합니다.',
+    tags:['TRANSMISSION','ENGINE','HIGH-STRENGTH'],
+    color:'#f5a623',
+    worldPos: new THREE.Vector3(-1.0, 0.9, -0.7),
+    camPos: {x:-0.8, y:1.5, z:2.8},
+    lookAt: {x:-1.2, y:0.12, z:0},
+    page:'product', tab:'pt',
+    explodeDir: new THREE.Vector3(-0.2, 0.4, 0)
+  },
+  {
+    id:'driveline', group: dlGroup,
+    label:'Driveline', kr:'드라이브라인 부품',
+    desc:'드라이브샤프트·디퍼런셜 등 구동계 핵심 부품. 고토크 환경에 최적화된 설계.',
+    tags:['DRIVESHAFT','DIFFERENTIAL','4WD'],
+    color:'#9b59b6',
+    worldPos: new THREE.Vector3(0.8, 0.3, 1.0),
+    camPos: {x:1.0, y:1.2, z:3.0},
+    lookAt: {x:0.5, y:-0.15, z:0},
+    page:'product', tab:'dl',
+    explodeDir: new THREE.Vector3(0, -0.3, 0.4)
+  },
+  {
+    id:'etc', group: etcGroup,
+    label:'etc.', kr:'기타 정밀 부품',
+    desc:'고객 도면에 따른 맞춤형 자동차 정밀 부품 가공 및 공급이 가능합니다.',
+    tags:['CUSTOM','PRECISION','OEM'],
+    color:'#00bcd4',
+    worldPos: new THREE.Vector3(1.6, 0.5, 0.7),
+    camPos: {x:2.0, y:1.2, z:2.8},
+    lookAt: {x:1.55, y:0.05, z:0},
+    page:'product', tab:'etc',
+    explodeDir: new THREE.Vector3(0.3, 0.3, 0.3)
+  }
+];
+
+// -- CAMERA STATE --
+const camState = {
+  pos: {x:5.5, y:3.2, z:5.8},
+  lookAt: {x:0, y:0, z:0},
+  autoRot: true
+};
+camera.position.set(5.5, 3.2, 5.8);
+
+// -- HOTSPOT HTML ELEMENTS --
+HOTSPOTS.forEach((hs, i) => {
+  const el = document.createElement('div');
+  el.id = 'hs-'+hs.id;
+  el.style.cssText = 'position:absolute;pointer-events:all;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:0';
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;background:rgba(8,10,16,.85);border:1px solid ${hs.color}44;border-radius:2px;backdrop-filter:blur(8px);transition:all .25s;white-space:nowrap" onmouseenter="this.style.background='rgba(8,10,16,.95)';this.style.borderColor='${hs.color}'" onmouseleave="this.style.background='rgba(8,10,16,.85)';this.style.borderColor='${hs.color}44'">
+      <div style="width:8px;height:8px;border-radius:50%;background:${hs.color};box-shadow:0 0 6px ${hs.color};animation:hspulse 2s ease infinite;animation-delay:${i*0.3}s"></div>
+      <span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:.08em;font-family:'DM Sans',sans-serif;text-transform:uppercase">${hs.label}</span>
+    </div>
+    <div style="width:1px;height:18px;background:${hs.color};opacity:0.5"></div>
+  `;
+  el.addEventListener('click', ()=>focusHotspot(hs));
+  hspots.appendChild(el);
+});
+
+// Pulse animation CSS
+const styleEl = document.createElement('style');
+styleEl.textContent = '@keyframes hspulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}';
+document.head.appendChild(styleEl);
+
+// -- FOCUSED STATE --
+// Store original materials PER MESH before any modification
+let focused = null;
+const allGroups = [bsmGroup, evGroup, stGroup, ptGroup, dlGroup, etcGroup];
+const origPositions = {};
+const origMaterials = new Map(); // mesh -> original material
+
+allGroups.forEach(g => {
+  origPositions[g.userData.id] = g.position.clone();
+  g.traverse(c => { if(c.isMesh) origMaterials.set(c, c.material); });
+});
+bodyG.traverse(c => { if(c.isMesh) origMaterials.set(c, c.material); });
+
+function setMeshOpacity(mesh, opacity, emBoost){
+  // Always work on a clone so we never dirty the original
+  const orig = origMaterials.get(mesh);
+  if(!orig) return;
+  const m = orig.clone();
+  if(opacity < 1){
+    m.transparent = true;
+    m.opacity = opacity;
+  } else {
+    m.transparent = orig.transparent || false;
+    m.opacity = 1;
+    if(emBoost) m.emissiveIntensity = (orig.emissiveIntensity||0) + emBoost;
+  }
+  mesh.material = m;
+}
+
+function restoreMesh(mesh){
+  mesh.material = origMaterials.get(mesh) || mesh.material;
+}
+
+function focusHotspot(hs){
+  // Toggle off if same hotspot clicked again
+  if(focused && focused.id === hs.id){ closeHPanel(); return; }
+  focused = hs;
+  camState.autoRot = false;
+  camState.pos = {...hs.camPos};
+  camState.lookAt = {...hs.lookAt};
+
+  allGroups.forEach(g => {
+    const isFocused = g.userData.id === hs.id;
+    g.traverse(c => {
+      if(!c.isMesh) return;
+      if(isFocused) setMeshOpacity(c, 1, 0.6);
+      else          setMeshOpacity(c, 0.08);
+    });
+    if(isFocused){
+      const tgt = origPositions[g.userData.id].clone().add(hs.explodeDir.clone().multiplyScalar(0.55));
+      animateVec3(g.position, tgt, 650);
+    } else {
+      animateVec3(g.position, origPositions[g.userData.id], 650);
+    }
+  });
+  // Body dim
+  bodyG.traverse(c => { if(c.isMesh) setMeshOpacity(c, 0.18); });
+
+  showHPanel(hs);
+}
+
+function closeHPanel(){
+  focused = null;
+  camState.autoRot = true;
+  camState.pos = {x:5.5, y:3.2, z:5.8};
+  camState.lookAt = {x:0, y:0, z:0};
+
+  // Restore ALL meshes from saved originals
+  allGroups.forEach(g => {
+    g.traverse(c => { if(c.isMesh) restoreMesh(c); });
+    animateVec3(g.position, origPositions[g.userData.id], 650);
+  });
+  bodyG.traverse(c => { if(c.isMesh) restoreMesh(c); });
+
+  const panel = document.getElementById('hpanel');
+  panel.style.transform = 'translateX(100%)';
+  panel.style.pointerEvents = 'none';
+}
+// Expose globally so onclick="closeHPanel()" in HTML works
+window.closeHPanel = closeHPanel;
+// ESC key also closes
+document.addEventListener('keydown', e => { if(e.key==='Escape' && focused) closeHPanel(); });
+
+function showHPanel(hs){
+  const panel = document.getElementById('hpanel');
+  document.getElementById('hp-eye').textContent = 'Product · ' + hs.id.toUpperCase();
+  document.getElementById('hp-name').textContent = hs.label;
+  document.getElementById('hp-kr').textContent = hs.kr;
+  document.getElementById('hp-desc').textContent = hs.desc;
+  document.getElementById('hp-tags').innerHTML = hs.tags.map(t=>`<span style="font-size:10px;padding:3px 8px;border:1px solid #333;color:#888;border-radius:2px;letter-spacing:.06em">${t}</span>`).join('');
+  document.getElementById('hp-btn').onclick = ()=>{ closeHPanel(); gp(hs.page, hs.tab); };
+  panel.style.transform = 'translateX(0)';
+  panel.style.pointerEvents = 'all';
+}
+
+// -- VECTOR3 ANIMATION --
+function animateVec3(vec, target, duration){
+  const start = vec.clone();
+  const t0 = performance.now();
+  function step(){
+    const t = Math.min((performance.now()-t0)/duration, 1);
+    const ease = t<.5 ? 2*t*t : -1+(4-2*t)*t;
+    vec.lerpVectors(start, target, ease);
+    if(t<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// -- HOTSPOT SCREEN POSITION UPDATE --
+const tmpVec = new THREE.Vector3();
+function updateHotspots(){
+  HOTSPOTS.forEach(hs => {
+    const el = document.getElementById('hs-'+hs.id);
+    if(!el) return;
+    // Get world position accounting for car rotation
+    const wp = hs.worldPos.clone();
+    wp.applyEuler(carGroup.rotation);
+    wp.add(carGroup.position);
+    tmpVec.copy(wp);
+    tmpVec.project(camera);
+    const x = (tmpVec.x*0.5+0.5)*W;
+    const y = (-tmpVec.y*0.5+0.5)*H;
+    if(tmpVec.z > 1){ el.style.display='none'; return; }
+    el.style.display = 'flex';
+    el.style.left = (x - el.offsetWidth/2) + 'px';
+    el.style.top = (y - el.offsetHeight) + 'px';
+    // Scale by depth
+    const depth = 1 - Math.max(0, Math.min(0.5, (tmpVec.z)));
+    el.style.opacity = focused ? (focused.id===hs.id ? '1':'0.15') : '1';
+  });
+}
+
+// -- ANIMATION LOOP --
+const clock = new THREE.Clock();
+let rotY = 0.3;
+
+function animate(){
+  requestAnimationFrame(animate);
+  const dt = clock.getDelta();
+
+  // Auto rotate
+  if(camState.autoRot){
+    rotY += dt * 0.28;
+    carGroup.rotation.y = rotY;
+  }
+
+  // Wheel spin
+  wheels.forEach(w => { w.rotation.z += dt * 1.2; });
+
+  // Lerp camera
+  camera.position.x += (camState.pos.x - camera.position.x) * 0.06;
+  camera.position.y += (camState.pos.y - camera.position.y) * 0.06;
+  camera.position.z += (camState.pos.z - camera.position.z) * 0.06;
+  const la = new THREE.Vector3(camState.lookAt.x, camState.lookAt.y, camState.lookAt.z);
+  // Apply car rotation to lookAt when auto-rotating
+  if(camState.autoRot){
+    camera.lookAt(0, 0.1, 0);
+  } else {
+    // lookAt target in world space accounting for car position
+    const worldLa = la.clone().applyEuler(carGroup.rotation).add(carGroup.position);
+    camera.lookAt(worldLa);
+  }
+
+  updateHotspots();
+  renderer.render(scene, camera);
+}
+animate();
+
+// -- RESIZE --
+window.addEventListener('resize', ()=>{
+  W = heroWrap.offsetWidth; H = heroWrap.offsetHeight;
+  camera.aspect = W/H;
+  camera.updateProjectionMatrix();
+  renderer.setSize(W, H);
+});
+
+})();
+</script>
+
+<!-- 회사소개 -->
+<div class="ha" id="hsec">
+  <div class="hai">
+    <div data-a="r">
+      <p class="seye">About SEOULIND</p>
+      <h2 class="stit">정밀 가공의<br>선두 기업</h2>
+      <p class="sdsc">서울산업(주)는 1993년 설립 이래 자동차 핵심 부품 제조 분야에서 30년 이상의 기술력을 축적해왔습니다. Balance Shaft Module, 전기차 부품, Steering, Powertrain, Driveline 등 다양한 제품군을 통해 글로벌 OEM에 공급하고 있습니다.</p>
+      <br><br>
+      <button class="bp" onclick="gp('about')">자세히 보기 →</button>
+    </div>
+    <div data-a="l">
+      <div class="anr">
+        <div class="anum"><div class="anv">1993</div><div class="anl">설립연도</div></div>
+        <div class="anum"><div class="anv">30<span>+</span></div><div class="anl">업력 (년)</div></div>
+        <div class="anum"><div class="anv">6<span>+</span></div><div class="anl">제품 라인</div></div>
+      </div>
+      <div style="margin-top:2px;background:var(--dark);padding:32px 28px;border-top:3px solid var(--accent)">
+        <div class="anv" style="color:#fff;font-size:20px">경기도 화성시 양감면 요당길 320번길 51</div>
+        <div class="anl" style="color:rgba(255,255,255,.35);margin-top:8px">TEL. +82-31-366-1141</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 제품 -->
+<div class="hp">
+  <div class="hpi">
+    <div data-a><p class="seye">Products</p><h2 class="stit">핵심 제품 라인업</h2><p class="sdsc">자동차 핵심 부품을 설계·개발·양산하는 서울산업의 주요 제품을 소개합니다.</p></div>
+    <div class="hpg" data-a>
+      <div class="hpc" onclick="gp('product','bsm')"><div class="hpth"><div class="hpgrad gb"></div><span class="hptl">BSM</span></div><div class="hpb"><div class="hpen">Balance Shaft Module</div><div class="hpd">엔진 진동을 저감하는 밸런스 샤프트 모듈 전문 생산</div></div><div class="hpar">→</div></div>
+      <div class="hpc" onclick="gp('product','ev')"><div class="hpth"><div class="hpgrad ge"></div><span class="hptl">EV</span></div><div class="hpb"><div class="hpen">Electric Vehicle</div><div class="hpd">전기차 핵심 구동계 부품 설계 및 양산</div></div><div class="hpar">→</div></div>
+      <div class="hpc" onclick="gp('product','st')"><div class="hpth"><div class="hpgrad gs"></div><span class="hptl">STEERING</span></div><div class="hpb"><div class="hpen">Steering</div><div class="hpd">조향 시스템 핵심 정밀 부품 제조</div></div><div class="hpar">→</div></div>
+      <div class="hpc" onclick="gp('product','pt')"><div class="hpth"><div class="hpgrad gp"></div><span class="hptl">POWERTRAIN</span></div><div class="hpb"><div class="hpen">Powertrain</div><div class="hpd">파워트레인 계열 고강도 정밀 부품</div></div><div class="hpar">→</div></div>
+      <div class="hpc" onclick="gp('product','dl')"><div class="hpth"><div class="hpgrad gd"></div><span class="hptl">DRIVELINE</span></div><div class="hpb"><div class="hpen">Driveline</div><div class="hpd">드라이브라인 핵심 부품 가공 및 공급</div></div><div class="hpar">→</div></div>
+      <div class="hpc" onclick="gp('product','etc')"><div class="hpth"><div class="hpgrad gt"></div><span class="hptl">ETC</span></div><div class="hpb"><div class="hpen">etc.</div><div class="hpd">기타 자동차 정밀 부품 라인업</div></div><div class="hpar">→</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 품질 -->
+<div class="hq">
+  <div class="hqi">
+    <div data-a="r">
+      <p class="seye" style="color:rgba(255,255,255,.4)">Quality Assurance</p>
+      <h2 class="stit" style="color:#fff">품질이<br>경쟁력입니다</h2>
+      <p class="sdsc" style="color:rgba(255,255,255,.45)">글로벌 자동차 부품 품질 기준을 충족하는 인증 체계와 예방 품질 활동으로 신뢰를 구축합니다.</p>
+      <div class="hqbd">
+        <div class="hqb"><div class="hqbi">🏆</div><div class="hqbn">IATF</div><div class="hqbs">16949</div></div>
+        <div class="hqb"><div class="hqbi">✅</div><div class="hqbn">ISO</div><div class="hqbs">9001</div></div>
+        <div class="hqb"><div class="hqbi">🌿</div><div class="hqbn">ISO</div><div class="hqbs">14001</div></div>
+      </div>
+    </div>
+    <div class="hqr" data-a="l">
+      <div class="hqit"><div class="hqin">01</div><div><h4>품질방침</h4><p>고객 만족을 최우선으로 하는 전사적 품질 경영 방침</p></div></div>
+      <div class="hqit"><div class="hqin">02</div><div><h4>품질시스템</h4><p>IATF 16949 기반의 체계적인 품질 관리 프로세스 운영</p></div></div>
+      <div class="hqit"><div class="hqin">03</div><div><h4>예방품질활동</h4><p>APQP, PPAP, FMEA 등 선행 품질 기법 적용</p></div></div>
+      <div class="hqit" style="cursor:pointer" onclick="gp('quality')"><div class="hqin" style="color:var(--accent)">→</div><div><h4 style="color:var(--accent)">품질보증 전체 보기</h4><p>자세한 품질 인증 및 시스템 확인</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer><div class="ft">
+  <div class="fttop">
+    <div>
+      <div class="ftlw"><div class="ftli"><svg viewBox="0 0 22 22" fill="none" width="18" height="18"><path d="M3 4L11 2L19 4V12C19 17 11 21 11 21C11 21 3 17 3 12V4Z" fill="white" opacity=".9"/></svg></div><span class="ftln">SEOULIND</span></div>
+      <p class="fttag">서울산업(주) · Automotive Parts Manufacturer<br>정밀 부품으로 더 나은 이동을 만듭니다.</p>
+      <div class="ftci"><strong>주소</strong> 경기도 화성시 양감면 요당길 320번길 51</div>
+      <div class="ftci"><strong>TEL</strong> +82-31-366-1141 &nbsp;|&nbsp; <strong>FAX</strong> +82-31-366-1150</div>
+    </div>
+    <div class="ftcol"><h5>기업정보</h5><ul>
+      <li><a onclick="gp('about','ceo')">CEO 인사말</a></li>
+      <li><a onclick="gp('about','history')">회사연혁</a></li>
+      <li><a onclick="gp('about','org')">조직도</a></li>
+      <li><a onclick="gp('about','location')">찾아오시는길</a></li>
+      <li><a onclick="gp('about','notice')">공지사항</a></li>
+    </ul></div>
+    <div class="ftcol"><h5>제품정보</h5><ul>
+      <li><a onclick="gp('product','bsm')">Balance Shaft Module</a></li>
+      <li><a onclick="gp('product','ev')">Electric Vehicle</a></li>
+      <li><a onclick="gp('product','st')">Steering</a></li>
+      <li><a onclick="gp('product','pt')">Powertrain</a></li>
+      <li><a onclick="gp('product','dl')">Driveline</a></li>
+    </ul></div>
+    <div class="ftcol"><h5>품질보증</h5><ul>
+      <li><a onclick="gp('quality','policy')">품질방침</a></li>
+      <li><a onclick="gp('quality','system')">품질시스템</a></li>
+      <li><a onclick="gp('quality','prevention')">예방품질활동</a></li>
+    </ul></div>
+    <div class="ftcol"><h5>채용 / R&amp;D</h5><ul>
+      <li><a onclick="gp('rnd','parts')">부품개발</a></li>
+      <li><a onclick="gp('recruit','info')">채용정보</a></li>
+      <li><a onclick="gp('recruit','welfare')">복지제도</a></li>
+    </ul></div>
+  </div>
+  <div class="ftbot">
+    <div class="ftleg"><a href="#">개인정보처리방침</a><a href="#">이용약관</a></div>
+    <p class="ftcpy">© 2024 Seoul Industry Co., Ltd. All rights reserved.</p>
+  </div>
+</div></footer>
+</div><!-- /home -->
+
+<!-- ═══ 기업정보 ═══ -->
+<div class="page" id="page-about"><div class="ptwrap">
+  <div class="subhero"><div class="shgeo"></div><div class="shi">
+    <div class="bc"><span class="bci" onclick="gp('home')">홈</span><span class="bcs">›</span><span class="bcc">기업정보</span></div>
+    <h1>기업 <em>정보</em></h1><p class="shdesc">서울산업(주)의 경영철학과 역사, 조직, 위치 정보를 안내드립니다.</p>
+  </div></div>
+  <div class="subc">
+    <div class="tnav">
+      <div class="tb on" onclick="st(this,'ab1')" id="t-ceo">CEO 인사말</div>
+      <div class="tb" onclick="st(this,'ab2')" id="t-history">회사연혁</div>
+      <div class="tb" onclick="st(this,'ab3')" id="t-org">조직도</div>
+      <div class="tb" onclick="st(this,'ab4')" id="t-location">찾아오시는길</div>
+      <div class="tb" onclick="st(this,'ab5')" id="t-notice">공지사항</div>
+    </div>
+    <div class="tp on" id="ab1">
+      <div style="max-width:760px">
+        <p class="seye">CEO Message</p>
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--text);letter-spacing:.06em;margin-bottom:28px">대표이사 <em style="color:var(--blue)">인사말</em></h3>
+        <p style="font-size:15px;line-height:2;color:var(--muted);font-weight:300;margin-bottom:18px">서울산업(주) 홈페이지를 방문해 주신 여러분께 진심으로 감사드립니다.</p>
+        <p style="font-size:15px;line-height:2;color:var(--muted);font-weight:300;margin-bottom:18px">저희 서울산업(주)은 1993년 창립 이래 자동차 정밀 부품 제조 분야에서 꾸준한 성장을 이어왔습니다. Balance Shaft Module, 전기차 부품, 조향 및 구동계 부품 등 핵심 자동차 부품을 공급하며 글로벌 자동차 산업의 한 축을 담당하고 있습니다.</p>
+        <p style="font-size:15px;line-height:2;color:var(--muted);font-weight:300">앞으로도 품질 제일주의와 기술 혁신을 바탕으로 고객 여러분의 기대에 부응하는 기업이 되겠습니다. 감사합니다.</p>
+        <div style="margin-top:36px;padding-top:28px;border-top:1px solid #eee">
+          <p style="font-size:13px;color:var(--muted)">서울산업(주) 대표이사</p>
+          <p style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--text);letter-spacing:.08em;margin-top:6px">Seoul Industry Co., Ltd.</p>
+        </div>
+      </div>
+    </div>
+    <div class="tp" id="ab2">
+      <div class="tl">
+        <div class="tlr"><div class="tly">2024</div><div class="tll"></div><div><div class="tlm">지속 성장</div><div class="tlt">전기차 부품 라인업 확대, 신규 OEM 거래처 개발</div></div></div>
+        <div class="tlr"><div class="tly">2020</div><div class="tll"></div><div><div class="tlm">품질 고도화</div><div class="tlt">IATF 16949 인증 취득, 예방품질활동 시스템 구축</div></div></div>
+        <div class="tlr"><div class="tly">2015</div><div class="tll"></div><div><div class="tlm">사업 확장</div><div class="tlt">경기도 화성시 양감면 현 공장 이전 및 설비 증설</div></div></div>
+        <div class="tlr"><div class="tly">2010</div><div class="tll"></div><div><div class="tlm">제품 다각화</div><div class="tlt">Steering, Powertrain, Driveline 제품군 추가</div></div></div>
+        <div class="tlr"><div class="tly">2000</div><div class="tll"></div><div><div class="tlm">성장기</div><div class="tlt">Balance Shaft Module 양산 본격화, 주요 완성차 OEM 공급 시작</div></div></div>
+        <div class="tlr"><div class="tly">1993</div><div class="tll"></div><div><div class="tlm">창립</div><div class="tlt">서울산업(주) 설립 — 자동차 정밀 부품 제조업 시작</div></div></div>
+      </div>
+    </div>
+    <div class="tp" id="ab3">
+      <div style="background:var(--off);padding:52px;text-align:center;border-top:3px solid var(--accent)">
+        <p class="seye">Organization Chart</p>
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--text);margin-bottom:36px;letter-spacing:.06em">조직도</h3>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+          <div style="background:var(--blue);color:white;padding:16px 40px;font-weight:700;font-size:15px;border-radius:2px">대표이사</div>
+          <div style="width:1px;height:32px;background:#d0d3dc"></div>
+          <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap;justify-content:center">
+            <div style="display:flex;flex-direction:column;align-items:center"><div style="background:var(--dark);color:white;padding:12px 24px;font-size:14px;font-weight:500;white-space:nowrap">생산부</div><div style="width:1px;height:20px;background:#d0d3dc"></div><div style="background:white;border:1px solid #e0e2e8;padding:9px 18px;font-size:13px;color:var(--muted)">생산관리팀</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center"><div style="background:var(--dark);color:white;padding:12px 24px;font-size:14px;font-weight:500;white-space:nowrap">품질부</div><div style="width:1px;height:20px;background:#d0d3dc"></div><div style="background:white;border:1px solid #e0e2e8;padding:9px 18px;font-size:13px;color:var(--muted)">품질관리팀</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center"><div style="background:var(--dark);color:white;padding:12px 24px;font-size:14px;font-weight:500;white-space:nowrap">개발부</div><div style="width:1px;height:20px;background:#d0d3dc"></div><div style="background:white;border:1px solid #e0e2e8;padding:9px 18px;font-size:13px;color:var(--muted)">R&amp;D팀</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center"><div style="background:var(--dark);color:white;padding:12px 24px;font-size:14px;font-weight:500;white-space:nowrap">영업부</div><div style="width:1px;height:20px;background:#d0d3dc"></div><div style="background:white;border:1px solid #e0e2e8;padding:9px 18px;font-size:13px;color:var(--muted)">영업팀</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center"><div style="background:var(--dark);color:white;padding:12px 24px;font-size:14px;font-weight:500;white-space:nowrap">경영지원</div><div style="width:1px;height:20px;background:#d0d3dc"></div><div style="background:white;border:1px solid #e0e2e8;padding:9px 18px;font-size:13px;color:var(--muted)">총무·인사팀</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tp" id="ab4">
+      <div class="ctgrid">
+        <div class="ctinfo">
+          <h3>FIND US</h3>
+          <div class="cir"><div class="ciic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="cilbl">주소</div><div class="civ">경기도 화성시 양감면<br>요당길 320번길 51 서울산업(주)</div></div></div>
+          <div class="cir"><div class="ciic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><div><div class="cilbl">연락처</div><div class="civ">TEL: +82-31-366-1141<br>FAX: +82-31-366-1150</div></div></div>
+        </div>
+        <div class="mapph">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <p>경기도 화성시 양감면 요당길 320번길 51</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.2)">지도 API 연동 시 표시됩니다</p>
+        </div>
+      </div>
+    </div>
+    <div class="tp" id="ab5">
+      <div style="display:flex;flex-direction:column;gap:1px;background:#e5e7eb">
+        <div style="background:#fff;padding:24px 32px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;border-left:3px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.background='#f8f9ff'" onmouseout="this.style.borderColor='transparent';this.style.background='#fff'">
+          <div><div style="font-size:10px;color:var(--accent);letter-spacing:.12em;margin-bottom:6px;font-weight:600">NOTICE</div><div style="font-size:16px;font-weight:700;color:var(--text)">서울산업 웹사이트가 새롭게 리뉴얼 되었습니다.</div></div>
+          <div style="font-size:12px;color:var(--muted)">2024.01</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══ 제품정보 ═══ -->
+<div class="page" id="page-product"><div class="ptwrap">
+  <div class="subhero"><div class="shgeo"></div><div class="shi">
+    <div class="bc"><span class="bci" onclick="gp('home')">홈</span><span class="bcs">›</span><span class="bcc">제품정보</span></div>
+    <h1>제품 <em>정보</em></h1><p class="shdesc">서울산업(주)의 자동차 핵심 부품 라인업을 소개합니다.</p>
+  </div></div>
+  <div class="subc">
+    <div class="tnav">
+      <div class="tb on" onclick="st(this,'p1')" id="t-bsm">Balance Shaft Module</div>
+      <div class="tb" onclick="st(this,'p2')" id="t-ev">Electric Vehicle</div>
+      <div class="tb" onclick="st(this,'p3')" id="t-st">Steering</div>
+      <div class="tb" onclick="st(this,'p4')" id="t-pt">Powertrain</div>
+      <div class="tb" onclick="st(this,'p5')" id="t-dl">Driveline</div>
+      <div class="tb" onclick="st(this,'p6')" id="t-etc">etc.</div>
+    </div>
+    <div class="tp on" id="p1"><div class="pgrid">
+      <div class="pcard"><div class="pcbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></div><div><div class="pce">Balance Shaft Module</div><div class="pck">밸런스 샤프트 모듈</div><div class="pcd">엔진 내 2차 진동을 상쇄하는 밸런스 샤프트 모듈. 고정밀 가공 기술로 소음과 진동을 최소화합니다.</div><div class="ptags"><span class="ptag">ENGINE</span><span class="ptag">VIBRATION</span><span class="ptag">OEM</span></div></div></div>
+      <div class="pcard"><div class="pcbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></div><div><div class="pce">BSM Housing</div><div class="pck">밸런스 샤프트 하우징</div><div class="pcd">알루미늄 다이캐스팅 공법으로 제작되는 고강도 BSM 하우징 부품.</div><div class="ptags"><span class="ptag">DIE-CAST</span><span class="ptag">ALUMINUM</span></div></div></div>
+    </div></div>
+    <div class="tp" id="p2"><div class="pgrid">
+      <div class="pcard"><div class="pcbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div><div class="pce">EV Drive Unit Parts</div><div class="pck">전기차 구동 부품</div><div class="pcd">전기차 구동 모터 및 감속기용 정밀 부품. 경량화와 고강도를 동시에 실현합니다.</div><div class="ptags"><span class="ptag">EV</span><span class="ptag">MOTOR</span><span class="ptag">LIGHTWEIGHT</span></div></div></div>
+      <div class="pcard"><div class="pcbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="8" width="20" height="12" rx="2"/><path d="M7 8V6a2 2 0 014 0v2M13 8V6a2 2 0 014 0v2"/></svg></div><div><div class="pce">EV Reducer Housing</div><div class="pck">전기차 감속기 하우징</div><div class="pcd">전기차 전용 감속기 하우징. 알루미늄 정밀 가공으로 경량화를 실현합니다.</div><div class="ptags"><span class="ptag">REDUCER</span><span class="ptag">HOUSING</span></div></div></div>
+    </div></div>
+    <div class="tp" id="p3"><div class="pgrid">
+      <div class="pcard"><div class="pcbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l4 4"/></svg></div><div><div class="pce">Steering Column Parts</div><div class="pck">조향 컬럼 부품</div><div class="pcd">조향 시스템의 핵심 컬럼 부품. 고정밀 선삭 및 연삭 가공으로 제작됩니다.</div><div class="ptags"><span class="ptag">STEERING</span><span class="ptag">COLUMN</span></div></div></div>
+      <div class="pcard"><div class="pcbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3a9 9 0 100 18A9 9 0 0012 3z"/></svg></div><div><div class="pce">EPS Housing</div><div class="pck">전동 조향 하우징</div><div class="pcd">전동식 파워스티어링(EPS) 시스템용 하우징 부품.</div><div class="ptags"><span class="ptag">EPS</span><span class="ptag">ELECTRIC</span></div></div></div>
+    </div></div>
+    <div class="tp" id="p4"><div class="pgrid">
+      <div class="pcard"><div class="pcbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div><div class="pce">Transmission Parts</div><div class="pck">변속기 부품</div><div class="pcd">자동·수동 변속기용 핵심 정밀 부품. 내구성과 정밀도를 최우선으로 제작합니다.</div><div class="ptags"><span class="ptag">TRANSMISSION</span><span class="ptag">GEAR</span></div></div></div>
+      <div class="pcard"><div class="pcbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12"/></svg></div><div><div class="pce">Crankshaft Parts</div><div class="pck">크랭크샤프트 관련 부품</div><div class="pcd">엔진 핵심 크랭크샤프트 및 관련 부품. 고강도 소재와 정밀 가공으로 생산됩니다.</div><div class="ptags"><span class="ptag">ENGINE</span><span class="ptag">CRANKSHAFT</span></div></div></div>
+    </div></div>
+    <div class="tp" id="p5"><div class="pgrid">
+      <div class="pcard"><div class="pcbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3"/></svg></div><div><div class="pce">Driveshaft Parts</div><div class="pck">드라이브샤프트 부품</div><div class="pcd">전·후륜 구동 차량용 드라이브샤프트 핵심 부품. 고토크 환경에 최적화된 설계.</div><div class="ptags"><span class="ptag">DRIVESHAFT</span><span class="ptag">4WD</span></div></div></div>
+      <div class="pcard"><div class="pcbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 12h4v8h12v-8h4L12 2z"/></svg></div><div><div class="pce">Differential Parts</div><div class="pck">디퍼런셜 부품</div><div class="pcd">좌우 구동력을 분배하는 디퍼런셜 기어 및 케이스 부품.</div><div class="ptags"><span class="ptag">DIFFERENTIAL</span><span class="ptag">GEAR</span></div></div></div>
+    </div></div>
+    <div class="tp" id="p6"><div class="pgrid">
+      <div class="pcard"><div class="pcbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div><div><div class="pce">Misc. Precision Parts</div><div class="pck">기타 정밀 부품</div><div class="pcd">상기 카테고리 외 자동차 정밀 부품 가공 및 공급. 고객 도면에 따른 맞춤 생산 가능.</div><div class="ptags"><span class="ptag">CUSTOM</span><span class="ptag">PRECISION</span><span class="ptag">OEM</span></div></div></div>
+    </div></div>
+  </div>
+</div></div>
+
+<!-- ═══ 품질보증 ═══ -->
+<div class="page" id="page-quality"><div class="ptwrap">
+  <div class="subhero"><div class="shgeo"></div><div class="shi">
+    <div class="bc"><span class="bci" onclick="gp('home')">홈</span><span class="bcs">›</span><span class="bcc">품질보증</span></div>
+    <h1>품질 <em>보증</em></h1><p class="shdesc">글로벌 자동차 품질 기준을 충족하는 체계적인 품질 관리 시스템을 운영합니다.</p>
+  </div></div>
+  <div class="subc">
+    <div class="tnav">
+      <div class="tb on" onclick="st(this,'q1')" id="t-policy">품질방침</div>
+      <div class="tb" onclick="st(this,'q2')" id="t-system">품질시스템</div>
+      <div class="tb" onclick="st(this,'q3')" id="t-prevention">예방품질활동</div>
+    </div>
+    <div class="tp on" id="q1">
+      <div style="background:var(--dark);padding:52px;border-top:3px solid var(--accent);margin-bottom:2px">
+        <p style="font-size:10px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase;margin-bottom:16px;font-weight:600">Quality Policy</p>
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#fff;letter-spacing:.06em;margin-bottom:24px">품질방침</h3>
+        <p style="font-size:16px;line-height:2;color:rgba(255,255,255,.6);font-weight:300;max-width:640px">고객에게 최고의 품질과 서비스를 제공하고, 지속적인 개선을 통해 기업 경쟁력을 강화함으로써 신뢰받는 기업이 되겠습니다.</p>
+      </div>
+      <div class="certgrid">
+        <div class="ccard"><div class="cicon">🏆</div><div class="ctit">IATF 16949</div><div class="cdsc">자동차 산업 국제 품질경영시스템 인증. 글로벌 OEM 공급을 위한 필수 품질 기준.</div></div>
+        <div class="ccard"><div class="cicon">✅</div><div class="ctit">ISO 9001</div><div class="cdsc">국제표준 품질경영시스템. 전사적 품질 관리 프로세스의 기반.</div></div>
+        <div class="ccard"><div class="cicon">🌿</div><div class="ctit">ISO 14001</div><div class="cdsc">환경경영시스템 인증. 지속가능한 생산 환경을 위한 환경 관리 체계.</div></div>
+      </div>
+    </div>
+    <div class="tp" id="q2"><div class="cgrid">
+      <div class="gc"><div class="gcn">01</div><div class="gct">수입검사</div><div class="gcd">원자재 및 반제품 입고 시 품질 기준에 따른 체계적 수입 검사 진행</div></div>
+      <div class="gc"><div class="gcn">02</div><div class="gct">공정검사</div><div class="gcd">생산 공정 중 주요 공정별 품질 관리 포인트 설정 및 정기 검사</div></div>
+      <div class="gc"><div class="gcn">03</div><div class="gct">출하검사</div><div class="gcd">완제품 출하 전 최종 품질 확인 및 고객사 요구 기준 충족 여부 검증</div></div>
+      <div class="gc"><div class="gcn">04</div><div class="gct">측정장비 관리</div><div class="gcd">3D CMM, 조도계, 진원도 측정기 등 정밀 측정 장비의 주기적 교정 관리</div></div>
+      <div class="gc"><div class="gcn">05</div><div class="gct">SPC 통계적 관리</div><div class="gcd">통계적 공정 관리(SPC)를 통한 공정 능력 분석 및 지속 개선</div></div>
+      <div class="gc"><div class="gcn">06</div><div class="gct">내부심사</div><div class="gcd">정기적인 내부 품질 심사를 통한 품질경영시스템 유효성 검증</div></div>
+    </div></div>
+    <div class="tp" id="q3"><div class="cgrid">
+      <div class="gc"><div class="gcn">APQP</div><div class="gct">선행제품품질계획</div><div class="gcd">신규 부품 개발 단계에서 품질 리스크를 사전에 식별하고 관리하는 체계적 접근</div></div>
+      <div class="gc"><div class="gcn">PPAP</div><div class="gct">양산부품승인절차</div><div class="gcd">고객사 양산 승인을 위한 표준 문서 패키지 제출 프로세스</div></div>
+      <div class="gc"><div class="gcn">FMEA</div><div class="gct">고장형태영향분석</div><div class="gcd">잠재적 고장 원인을 사전에 분석하여 예방 대책을 수립하는 품질 기법</div></div>
+      <div class="gc"><div class="gcn">MSA</div><div class="gct">측정시스템분석</div><div class="gcd">측정 시스템의 신뢰성과 정확성을 검증하는 통계적 분석 활동</div></div>
+      <div class="gc"><div class="gcn">8D</div><div class="gct">8D 문제해결</div><div class="gcd">품질 문제 발생 시 8단계 체계적 문제 해결 방법론 적용</div></div>
+      <div class="gc"><div class="gcn">CP</div><div class="gct">관리계획서</div><div class="gcd">각 공정별 관리 항목, 주기, 방법을 체계화한 Control Plan 운영</div></div>
+    </div></div>
+  </div>
+</div></div>
+
+<!-- ═══ 연구개발 ═══ -->
+<div class="page" id="page-rnd"><div class="ptwrap">
+  <div class="subhero"><div class="shgeo"></div><div class="shi">
+    <div class="bc"><span class="bci" onclick="gp('home')">홈</span><span class="bcs">›</span><span class="bcc">연구개발</span></div>
+    <h1>연구 <em>개발</em></h1><p class="shdesc">지속적인 기술 혁신으로 미래 자동차 부품 시장을 선도합니다.</p>
+  </div></div>
+  <div class="subc">
+    <div class="tnav">
+      <div class="tb on" onclick="st(this,'r1')" id="t-parts">부품개발</div>
+    </div>
+    <div class="tp on" id="r1">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#e5e7eb;margin-bottom:2px">
+        <div style="background:var(--dark);padding:52px 44px"><p style="font-size:10px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase;margin-bottom:14px;font-weight:600">R&amp;D Capability</p><h3 style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#fff;letter-spacing:.06em;margin-bottom:20px">부품 개발 역량</h3><p style="font-size:14px;line-height:1.9;color:rgba(255,255,255,.5);font-weight:300">고객사 도면 기반 개발부터 자체 설계·해석·시작품 제작까지 일괄 대응 가능한 개발 체계를 갖추고 있습니다.</p></div>
+        <div style="background:var(--off);padding:52px 44px"><p style="font-size:10px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase;margin-bottom:14px;font-weight:600">Process</p><h3 style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--text);letter-spacing:.06em;margin-bottom:20px">개발 프로세스</h3><div style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;gap:14px;align-items:center"><div style="width:28px;height:28px;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">01</div><span style="font-size:14px;color:var(--text)">고객 요구사항 분석 및 사양 확정</span></div><div style="display:flex;gap:14px;align-items:center"><div style="width:28px;height:28px;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">02</div><span style="font-size:14px;color:var(--text)">CAD 설계 및 CAE 구조해석</span></div><div style="display:flex;gap:14px;align-items:center"><div style="width:28px;height:28px;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">03</div><span style="font-size:14px;color:var(--text)">시작품 제작 및 성능 시험</span></div><div style="display:flex;gap:14px;align-items:center"><div style="width:28px;height:28px;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">04</div><span style="font-size:14px;color:var(--text)">PPAP 제출 및 양산 전환</span></div></div></div>
+      </div>
+      <div class="cgrid" style="margin-top:2px">
+        <div class="gc"><div class="gcn">CAD</div><div class="gct">3D 설계</div><div class="gcd">CATIA, SolidWorks 기반 3D 부품 및 금형 설계</div></div>
+        <div class="gc"><div class="gcn">CAE</div><div class="gct">구조해석</div><div class="gcd">유한요소해석(FEA)을 통한 강도·내구·진동 해석</div></div>
+        <div class="gc"><div class="gcn">CMM</div><div class="gct">정밀 측정</div><div class="gcd">3D CMM 장비를 활용한 시작품 치수 정밀 측정 및 검증</div></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══ 채용정보 ═══ -->
+<div class="page" id="page-recruit"><div class="ptwrap">
+  <div class="subhero"><div class="shgeo"></div><div class="shi">
+    <div class="bc"><span class="bci" onclick="gp('home')">홈</span><span class="bcs">›</span><span class="bcc">채용정보</span></div>
+    <h1>채용 <em>정보</em></h1><p class="shdesc">서울산업(주)과 함께 성장할 인재를 모집합니다.</p>
+  </div></div>
+  <div class="subc">
+    <div class="tnav">
+      <div class="tb on" onclick="st(this,'rc1')" id="t-info">채용정보</div>
+      <div class="tb" onclick="st(this,'rc2')" id="t-welfare">복지제도</div>
+    </div>
+    <div class="tp on" id="rc1">
+      <div class="rgrid">
+        <div class="rcard"><div class="rcn">01</div><div class="rct">생산·품질 분야</div><div class="rcd">자동차 부품 생산 공정 관리, 품질 검사 및 관리 업무. 관련 전공자 및 경험자 우대.</div></div>
+        <div class="rcard"><div class="rcn">02</div><div class="rct">연구개발 분야</div><div class="rcd">자동차 부품 설계·해석·개발 업무. 기계공학 관련 전공자 우대.</div></div>
+        <div class="rcard"><div class="rcn">03</div><div class="rct">영업·관리 분야</div><div class="rcd">국내외 거래처 영업 및 납기·원가 관리 업무.</div></div>
+        <div class="rcard"><div class="rcn">04</div><div class="rct">경영지원 분야</div><div class="rcd">총무·인사·구매 등 경영 지원 전반 업무.</div></div>
+      </div>
+      <div style="margin-top:48px;background:var(--off);padding:40px;border-left:4px solid var(--accent)">
+        <h4 style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:12px">지원 방법</h4>
+        <p style="font-size:14px;color:var(--muted);line-height:1.8;font-weight:300">이력서 및 자기소개서를 이메일로 제출해 주세요. 서류 검토 후 개별 연락 드립니다.<br>채용 관련 문의: <strong style="color:var(--blue)">+82-31-366-1141</strong></p>
+      </div>
+    </div>
+    <div class="tp" id="rc2">
+      <div class="bgrid">
+        <div class="ben"><div class="bei">🏥</div><div class="bet">4대 보험</div><div class="bed">국민연금·건강보험<br>고용·산재보험 지원</div></div>
+        <div class="ben"><div class="bei">🎉</div><div class="bet">경조사 지원</div><div class="bed">결혼·출산·상조<br>경조사 지원금</div></div>
+        <div class="ben"><div class="bei">🏖️</div><div class="bet">연차·휴가</div><div class="bed">법정 연차 및<br>하계휴가 지원</div></div>
+        <div class="ben"><div class="bei">📈</div><div class="bet">성과급</div><div class="bed">회사 성과에 따른<br>인센티브 지급</div></div>
+        <div class="ben"><div class="bei">🍱</div><div class="bet">식대 지원</div><div class="bed">중식 제공 또는<br>식대 지원</div></div>
+        <div class="ben"><div class="bei">🎓</div><div class="bet">교육 지원</div><div class="bed">직무 관련<br>교육비 지원</div></div>
+        <div class="ben"><div class="bei">🚗</div><div class="bet">교통 지원</div><div class="bed">통근 차량 운행<br>(노선 해당자)</div></div>
+        <div class="ben"><div class="bei">🎂</div><div class="bet">명절 선물</div><div class="bed">설·추석 명절<br>선물 제공</div></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- QUICK ACCESS -->
+<div class="qa">
+  <div class="qab" onclick="gp('product')">제품정보</div>
+  <div class="qab" onclick="gp('quality')">품질보증</div>
+  <div class="qab" onclick="gp('recruit')">채용정보</div>
+  <div class="qab" onclick="gp('about','location')">오시는길</div>
+</div>
+<div class="btop" id="btop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+<script>
+// Header
+const hdr=document.getElementById('hdr');
+window.addEventListener('scroll',()=>{
+  const s=window.scrollY>60;
+  hdr.classList.toggle('scrolled',s);
+  hdr.classList.toggle('top',!s);
+  document.getElementById('btop').classList.toggle('show',window.scrollY>400);
+});
+
+// Mega menus
+let om=-1;
+function tm(i){
+  const ms=document.querySelectorAll('.mega'),ns=document.querySelectorAll('.ni');
+  if(om===i){cm();return;}
+  ms.forEach(m=>m.classList.remove('open'));ns.forEach(n=>n.classList.remove('on'));
+  ms[i].classList.add('open');ns[i].classList.add('on');hdr.classList.add('mopen');om=i;
+}
+function cm(){document.querySelectorAll('.mega').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));hdr.classList.remove('mopen');om=-1;}
+document.addEventListener('click',e=>{if(!hdr.contains(e.target))cm();});
+
+// Page routing
+let busy=false;
+const sbar=document.getElementById('sbar');
+const tabMap={
+  about:{ceo:'ab1',history:'ab2',org:'ab3',location:'ab4',notice:'ab5'},
+  product:{bsm:'p1',ev:'p2',st:'p3',pt:'p4',dl:'p5',etc:'p6'},
+  quality:{policy:'q1',system:'q2',prevention:'q3'},
+  rnd:{parts:'r1'},
+  recruit:{info:'rc1',welfare:'rc2'}
+};
+const tabBtnMap={
+  about:{ceo:'t-ceo',history:'t-history',org:'t-org',location:'t-location',notice:'t-notice'},
+  product:{bsm:'t-bsm',ev:'t-ev',st:'t-st',pt:'t-pt',dl:'t-dl',etc:'t-etc'},
+  quality:{policy:'t-policy',system:'t-system',prevention:'t-prevention'},
+  rnd:{parts:'t-parts'},
+  recruit:{info:'t-info',welfare:'t-welfare'}
+};
+
+function gp(id,tab){
+  cm();
+  const next=document.getElementById('page-'+id);
+  if(!next)return;
+  const cur=document.querySelector('.page.active');
+  if(cur===next){
+    if(tab)activateTab(id,tab);
+    window.scrollTo({top:0,behavior:'smooth'});return;
+  }
+  if(busy)return;busy=true;
+  sbar.classList.add('go');
+  // Capture current scroll so the fixed cur page stays visually aligned
+  const scrollY=window.scrollY;
+  // Make current page fixed at current scroll position
+  if(cur){
+    cur.classList.remove('active');
+    cur.classList.add('sl-cur');
+    cur.style.top='-'+scrollY+'px';
+  }
+  // Place next page off-screen right, also fixed
+  next.classList.add('sl-nxt');
+  next.scrollTop=0;
+  // Trigger both slides simultaneously on next frame
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    if(cur)cur.classList.add('go');
+    next.classList.add('go');
+  }));
+  setTimeout(()=>{
+    // Clean up cur
+    if(cur){
+      cur.classList.remove('sl-cur','go');
+      cur.style.top='';
+    }
+    // Settle next into normal flow
+    next.classList.remove('sl-nxt','go');
+    next.classList.add('active');
+    sbar.classList.remove('go');
+    window.scrollTo(0,0);
+    busy=false;
+    if(tab)activateTab(id,tab);
+    aos();
+  },680);
+}
+
+function activateTab(pageId,tabKey){
+  const pid=tabMap[pageId]?.[tabKey];
+  const bid=tabBtnMap[pageId]?.[tabKey];
+  if(!pid)return;
+  const page=document.getElementById('page-'+pageId);
+  if(!page)return;
+  page.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  page.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));
+  document.getElementById(pid)?.classList.add('on');
+  if(bid)document.getElementById(bid)?.classList.add('on');
+}
+
+function st(btn,pid){
+  const w=btn.closest('.subc');
+  w.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  w.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById(pid)?.classList.add('on');
+}
+
+// Search
+function openSearch(){document.getElementById('sov').classList.add('open');setTimeout(()=>document.getElementById('sinp').focus(),300);}
+function closeSearch(){document.getElementById('sov').classList.remove('open');}
+function doSearch(){const q=document.getElementById('sinp').value;if(q){closeSearch();alert('"'+q+'" 검색 결과 페이지로 이동합니다.');}}
+document.getElementById('sinp').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();if(e.key==='Escape')closeSearch();});
+
+// AOS
+function aos(){
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.1});
+  document.querySelectorAll('.page.active [data-a]').forEach(el=>{el.classList.remove('vis');io.observe(el);});
+}
+aos();
+</script>
+</body>
+</html>
